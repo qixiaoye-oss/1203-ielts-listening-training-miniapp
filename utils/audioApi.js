@@ -45,7 +45,7 @@ function initAudio(src, onProgress) {
       }
     })
     // 监听下载进度
-    if (onProgress) {
+    if (onProgress && downloadTask && downloadTask.onProgressUpdate) {
       downloadTask.onProgressUpdate((res) => {
         onProgress(res.progress)
       })
