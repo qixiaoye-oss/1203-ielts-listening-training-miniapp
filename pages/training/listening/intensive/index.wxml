@@ -1,0 +1,78 @@
+<import src="/templates/loading-progress.wxml"/>
+<template is="loadingProgress" data="{{loading, loadProgress}}"/>
+<!-- 圆饼进度 -->
+<view class="audio-loading-mask" wx:if="{{audioDownProgress < 100}}">
+  <view class="pie-progress" style="background: conic-gradient(#3478F6 {{audioDownProgress * 3.6}}deg, #f5f5f5 {{audioDownProgress * 3.6}}deg);"></view>
+  <view class="audio-loading-text">音频加载中...</view>
+</view>
+<view class="page-wrapper">
+  <view class="base-container">
+    <view class="progress-cell">
+      <view class="progress-bg"></view>
+      <view class="progress-sel-bg" style="width: {{schedule+'%'}};"></view>
+      <view style="margin-left: calc({{schedule+'%'}} - 22px);">{{swiperCurrent+1}}/{{list.length}}</view>
+    </view>
+  </view>
+  <view class="body">
+    <view class="label-container">
+      <view class="paragraph-cell">
+      <view class="paragraph-content-cell {{baseShowArticle?'':showArticle?'':'hidden_text'}}">
+        <text bindtap="listenSentenceAgain" class="intensive_sentence_text {{playingSmallIndex == index? 'intensive_sentence_text_active':''}}" id='T{{index}}' wx:for="{{list[swiperCurrent].list}}" wx:key="idx" data-idx="{{index}}">{{item.content}}<text class="narrator {{item.narratorSex == '1'?'narrator_man':'narrator_woman'}}" wx:if="{{item.narrator}}">{{item.narrator}}</text></text>
+      </view>
+      <view class="writing-cell">
+        <view class="writing-label">我的听写</view>
+        <textarea value="{{list[swiperCurrent].label}}" style="top:{{areaTop}}px;left: {{areaLeft}}px;" confirm-type="return" bindinput="inputVal" bindfocus="textareaFocus" bindblur="textareaBlur" maxlength="1000"></textarea>
+        <view class="pl-class" wx:if="{{showPl && !list[swiperCurrent].label}}">请输入你的回答...</view>
+      </view>
+    </view>
+  </view>
+</view>
+</view>
+<view class="btn-page-bottom">
+  <view class="btn-group-layout-split">
+    <view class="btn-group-layout-split__header">
+      <view class="btn-action btn--audio" bindtap="listenAgain" hover-class="tap-active" hover-stay-time="100">
+        <view>重播</view>
+        <image src="/images/v2/replay.png"></image>
+      </view>
+      <view class="btn-action btn--audio" wx:if="{{audioState === 'none'}}" bindtap="playAudio" hover-class="tap-active" hover-stay-time="100">
+        <view>播放</view>
+        <image src="/images/v2/play.png"></image>
+      </view>
+      <view class="btn-action btn--audio" wx:if="{{audioState === 'playing'}}" bindtap="stopAudio" hover-class="tap-active" hover-stay-time="100">
+        <view>暂停</view>
+        <image src="/images/v2/pause.png"></image>
+      </view>
+      <view class="btn-action btn--audio" wx:if="{{!completelyOver && audioState === 'stop'}}" bindtap="nextSentence" hover-class="tap-active" hover-stay-time="100">
+        <view>下句</view>
+        <image src="/images/v2/next.png"></image>
+      </view>
+      <view class="btn-action btn--audio" wx:if="{{completelyOver && audioState === 'stop'}}" bindtap="toExam" hover-class="tap-active" hover-stay-time="100">
+        <view>保存</view>
+        <image src="/images/v2/submit.png"></image>
+      </view>
+      <view class="btn-action btn--correct {{list[swiperCurrent].label || list[swiperCurrent].status == 0 ?'_dis' :''}}" bind:tap="nextSentence2" hover-class="tap-active" hover-stay-time="100">
+        <view>听懂</view>
+        <image src="/images/v2/correct.png"></image>
+      </view>
+    </view>
+    <view class="btn-group-layout-split__divider"></view>
+    <view class="btn-group-layout-split__footer">
+      <view class="btn-action-icon btn--setting" bindtap="playSet" hover-class="tap-active" hover-stay-time="100">
+        <image src="/images/v2/setting.png"></image>
+      </view>
+      <view class="btn-action-icon btn--visible" wx:if="{{baseShowArticle}}">
+        <image src="/images/v2/visible.png"></image>
+      </view>
+      <view class="btn-action-icon btn--visible" wx:if="{{!baseShowArticle}}">
+        <image wx:if="{{!showArticle}}" src="/images/v2/hidden.png" bindtap="showArticle"></image>
+        <image wx:if="{{showArticle}}" src="/images/v2/visible.png" bindtap="showArticle"></image>
+      </view>
+      <view class="btn-action btn--list" bindtap="toList" hover-class="tap-active" hover-stay-time="100">
+        <view>句子列表</view>
+        <image src="/images/v2/list.png" class="but-img-2"></image>
+      </view>
+    </view>
+  </view>
+</view>
+<mp-actionSheet bindactiontap="btnClick" show="{{showActionsheet}}" actions="{{groups}}"></mp-actionSheet>

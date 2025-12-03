@@ -1,0 +1,15 @@
+/* 页面容器 */
+.article-page {
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* 内容区域 - 给底部留出按钮组的空间，避免被遮挡 */
+.article-page__content {
+  padding-bottom: 82px; /* 按钮组高度67px + sub-item底部与按钮组顶部间距15px = 82px */
+}
+
+.tag {
+  border: 1px solid transparent;
+  background-color: rgba(0, 0, 0, 0.15);
+}

@@ -1,0 +1,76 @@
+<import src="/templates/loading-progress.wxml" />
+<template is="loadingProgress" data="{{loading, loadProgress}}" />
+<!-- 圆饼进度 -->
+<view class="audio-loading-mask" wx:if="{{audioDownProgress < 100}}">
+  <view class="pie-progress" style="background: conic-gradient(#3478F6 {{audioDownProgress * 3.6}}deg, #f5f5f5 {{audioDownProgress * 3.6}}deg);"></view>
+  <view class="audio-loading-text">音频加载中...</view>
+</view>
+<wxs src="/utils/util.wxs" module="wxsUtil" />
+<view class="explain">
+  <view class="explain__question">
+    <view>
+      <view class="tag tag--transparent">题目</view>
+    </view>
+    <view class="explain__question--option">
+      <view><text user-select='true'>{{wxsUtil.formatNull(question.content,'')}}</text></view>
+      <image wx:if="{{question.imageUrl}}" src="{{question.imageUrl}}" style="width: 560rpx;" mode='widthFix' bind:tap="checkImg"></image>
+      <view wx:for="{{question.options}}" wx:key="item">
+        <text style="margin-right :10px">{{item.choice}}</text>
+        <text user-select='true'>{{wxsUtil.formatNull(item.content,'')}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="explain__article" wx:if="{{question.sentenceList.length > 0}}">
+    <view>
+      <view class="tag tag--transparent">原文</view>
+    </view>
+    <view class="explain__article--content">
+      <view wx:for="{{question.sentenceList}}" wx:key="item" wx:for-item="sentence">
+        <view class="{{showHidden?'':'hidden_text'}} lh18">
+          <text user-select="true">
+            <text wx:key="item" wx:for="{{sentence.list}}" wx:for-item="val" class="intensive_sentence_text">{{val.content}}<text class="narrator {{val.narratorSex == '1'?'narrator_man':'narrator_woman'}}" wx:if="{{val.narrator}}">{{val.narrator}}</text></text>
+          </text>
+        </view>
+        <view class="mt20 translate {{showHidden?'':'hidden_text'}}">
+          <text user-select='true'>{{sentence.translate}}</text>
+        </view>
+        <view class="font_color_base mt20" wx:if="{{sentence.keyPoints}}">{{wxsUtil.formatNull(sentence.keyPoints,'')}}</view>
+        <view class="sentence_analysis_cell" wx:if="{{sentence.analysisList.length > 0}}">
+          <view wx:for="{{sentence.analysisList}}" wx:for-item="analysis" wx:key="item" class="layout_flex ">
+            <view class="left_cell model_name">
+              <text user-select="{{true}}" class="col1" wx:if="{{analysis.labelsOne}}">{{analysis.labelsOne}}</text>
+              <text user-select="{{true}}" class="col2" wx:if="{{analysis.labelsTwo}}">{{analysis.labelsTwo}}</text>
+            </view>
+            <view class="content {{'plv_' + analysis.level}}"><text user-select='true'>{{analysis.content}}</text></view>
+          </view>
+        </view>
+      </view>
+      <view class="btn-group-embedded">
+        <view class="btn-action-icon btn--audio" hover-class="tap-active" hover-stay-time="100">
+          <image src="/images/v2/play.png" wx:if="{{!audioPlay}}" bindtap="play"></image>
+          <image src="/images/v2/pause.png" wx:if="{{audioPlay}}" bindtap="stopAudio"></image>
+        </view>
+        <view class="btn-action-icon btn--visible" bind:tap="showHidden" hover-class="tap-active" hover-stay-time="100">
+          <image wx:if="{{!showHidden}}" src="/images/v2/hidden.png"></image>
+          <image wx:else src="/images/v2/visible.png"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="explain__analysis" wx:if="{{question.analysisList.length > 0}}">
+    <view wx:for="{{question.analysisList}}" wx:key="item" wx:for-item="analysis" class="layout_flex" style="gap: 10px;">
+      <view style="min-width: 36px;">
+        <view class="tag col1" user-select='true' wx:if="{{analysis.labelsOne}}">{{analysis.labelsOne}}</view>
+        <view class="tag col2" user-select='true' wx:if="{{analysis.labelsTwo}}">{{analysis.labelsTwo}}</view>
+      </view>
+      <view class="right_cell content {{'plv_' + analysis.level}}"><text user-select='true'>{{analysis.content}}</text></view>
+    </view>
+  </view>
+  <view class="explain__analysis--ordinary" wx:else>
+    <view class="tag tag--transparent">解析</view>
+    <view class="content">
+      <!-- <text user-select='true'>{{wxsUtil.formatNull(question.analysisText,'')}}</text> -->
+      <rich-text nodes="{{question.analysisText}}"></rich-text>
+    </view>
+  </view>
+</view>

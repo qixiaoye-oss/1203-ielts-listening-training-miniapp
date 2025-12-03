@@ -1,0 +1,71 @@
+const api = getApp().api
+const loadingProgress = require('../../behaviors/loadingProgress')
+
+Page({
+  behaviors: [loadingProgress],
+  data: {
+    url: {
+      "TRAINING": "/pages/training/list/album/index"
+    },
+    popularScience: {
+      url: []
+    }
+  },
+  // ===========生命周期 Start===========
+  onShow() { },
+  onShowLogin() {
+    this.startLoading()
+    this.listData()
+    this.listPopularScienceData()
+  },
+  onShareAppMessage() {
+    return api.share('不刷语料库', this)
+  },
+  // ===========生命周期 End===========
+  // ===========业务操作 Start===========
+  toChildPage({
+    currentTarget: {
+      dataset: {
+        id,
+        type
+      }
+    }
+  }) {
+    const {
+      url
+    } = this.data
+    wx.navigateTo({
+      url: `${url[type]}?subjectId=${id}`
+    })
+  },
+  // 进入补充说明列表
+  toNoticeListPage() {
+    wx.navigateTo({
+      url: '../notice/list/index',
+    })
+  },
+  // 进入补充说明详情
+  toNoticePage(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `../notice/detail/index?id=${id}`,
+    })
+  },
+  // 点击说明徽章（暂未连接API）
+  onNoticeTap() {
+    // TODO: 待连接API后实现跳转逻辑
+  },
+  // ===========业务操作 End===========
+  // ===========数据获取 Start===========
+  listData() {
+    api.request(this, '/home/v1/list', {}, true).then(() => {
+      this.finishLoading()
+    }).catch(() => {
+      this.finishLoading()
+    })
+  },
+  listPopularScienceData() {
+    api.request(this, '/popular/science/v1/miniapp/home', {}, true)
+  },
+  // ===========数据获取 End===========
+})
