@@ -13,9 +13,9 @@ Page({
   // ===========生命周期 End===========
   // ===========业务操作 Start===========
   returnPage() {
-    const { subjectId, albumId } = this.options
+    const { subjectId, moduleId } = this.options
     wx.redirectTo({
-      url: `/pages/training/list/set/index?subjectId=${subjectId}&albumId=${albumId}`
+      url: `/pages/training/list/set/index?subjectId=${subjectId}&moduleId=${moduleId}`
     })
   },
   change(e) {

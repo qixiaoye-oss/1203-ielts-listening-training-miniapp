@@ -20,17 +20,5 @@
     "bigPackageSizeSupport": false,
     "useIsolateContext": false
   },
-  "condition": {
-    "miniprogram": {
-      "list": [
-        {
-          "name": "pages/training/listening/intensive/index",
-          "pathName": "pages/training/listening/intensive/index",
-          "query": "unitId=1993935481164865537&moduleId=1993935289548087297&subjectId=1993934991819612162&partId=1993933162251624449",
-          "scene": null,
-          "launchMode": "default"
-        }
-      ]
-    }
-  }
+  "condition": {}
 }

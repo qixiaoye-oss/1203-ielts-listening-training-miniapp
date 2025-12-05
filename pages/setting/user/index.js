@@ -4,23 +4,14 @@ Page({
     checked: false
   },
   onReady() {
-    this.setData({
-      user: wx.getStorageSync('user')
-    })
-  },
-  getUserInfo: function () {
-    api.saveUser(this).then(res => {
-      wx.navigateBack({
-        delta: 1,
-      })
-    })
+    api.request(this, '/user/v1/user/info', {}, true)
   },
   onChooseAvatar(e) {
     const {
       avatarUrl
     } = e.detail
     const _this = this
-    api.upload(avatarUrl, '/head/', this).then(res => {
+    api.uploadFileToOSS(avatarUrl, '/head/', this).then(res => {
       _this.setData({
         [`user.headUrl`]: res
       })
@@ -47,12 +38,10 @@ Page({
     _this.updateUser(headUrl, nickName);
   },
   updateUser(headUrl, nickName) {
-    api.request(this, '/user/updateUser', {
-      uid: api.getUserId(),
+    api.request(this, '/user/v1/user/update', {
       nickName: nickName,
       avatarUrl: headUrl
-    }, true).then(res => {
-      wx.setStorageSync('user', res.user)
+    }, true, "POST").then(res => {
       wx.navigateBack({
         delta: 1,
       })

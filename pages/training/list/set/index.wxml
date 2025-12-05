@@ -18,7 +18,7 @@
           <view class="sub-item__title" style="background: {{chapter.colorRgba}};">
             <image class="sub-item__title--icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
             <view class="sub-item__title--text" wx:if="{{chapter.title}}">{{chapter.title}}</view>
-            <view class="sub-item__type-badge">简</view>
+            <!-- <view class="sub-item__type-badge">简</view> -->
           </view>
         </view>
         <view class="sub-item__intervals" style="background: {{chapter.colorRgb}};"></view>
