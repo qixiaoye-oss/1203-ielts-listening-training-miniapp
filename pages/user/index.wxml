@@ -1,20 +1,13 @@
-<import src="/templates/loading-progress.wxml"/>
-<template is="loadingProgress" data="{{loading, loadProgress}}"/>
+<import src="/templates/loading-progress.wxml" />
+<template is="loadingProgress" data="{{loading, loadProgress}}" />
 <view class="user-page">
   <view class="user-info">
-    <image class="user__avatar" src="{{user.headUrl || '/image/wechat.png'}}" mode="cover" />
+    <image class="user__avatar" src="{{user.headUrl}}" mode="cover" />
     <view class="user__nickname">
       <view>{{user.nickName || '微信用户'}}</view>
       <view class="user__no">（{{user.no}}）</view>
     </view>
   </view>
   <view class="menu-item menu-item--access" bind:tap="toUpdateUserInfo" hover-class="tap-active" hover-stay-time="100">修改用户信息</view>
-  <view class="menu-item menu-item--access" bind:tap="updataHome" hover-class="tap-active" hover-stay-time="100">首页显示内容</view>
-  <view class="menu-item menu-item--access" bind:tap="showRole" hover-class="tap-active" hover-stay-time="100">查看权限有效期</view>
-  <block wx:if="{{user.isManager == 1}}">
-    <view class="menu-item menu-item--access" bind:tap="toUpdateAuth" hover-class="tap-active" hover-stay-time="100">用户权限管理</view>
-    <view class="menu-item menu-item--access" bind:tap="checkUser" hover-class="tap-active" hover-stay-time="100">用户切换</view>
-  </block>
 </view>
 <view class="version">版本：{{version || '2.2.2'}}</view>
-<role_info_popup show="{{showPopup}}" roles="{{role}}" tags="{{tags}}"></role_info_popup>

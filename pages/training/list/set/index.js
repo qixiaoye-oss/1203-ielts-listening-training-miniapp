@@ -23,7 +23,7 @@ Page({
     if (!this.verifyPermissions(item)) {
       return
     }
-    let param = `?unitId=${item.id}&moduleId=${list[moduleIndex].id}&subjectId=${subjectId}`
+    let param = { unitId: item.id, moduleId: list[moduleIndex].id, subjectId: subjectId }
     this.createActionSheet(item, param)
   },
   // 权限验证
@@ -42,24 +42,93 @@ Page({
     return true
   },
   createActionSheet(item, param) {
-    const menus = ['泛听/做题模式']
-    const menuUrls = [`/pages/training/listening/extensive/index${param}`]
+    const options = [
+      {
+        title: "泛听/做题模式",
+        param: { ...param },
+        function: "handleGeneralMode"
+      },
+    ];
     const parts = item.list || []
     parts.forEach(part => {
-      menus.push(`精听模式（${part.partNum}）`)
-      menuUrls.push(`/pages/training/listening/intensive/index${param}&partId=${part.id}`)
-    })
-    if (item.resultId) {
-      menus.push(`答题记录`)
-      menuUrls.push(`/pages/training/listening/report-card/index?resultId=${item.resultId}`)
-    }
-    wx.showActionSheet({
-      itemList: menus,
-      success(res) {
-        wx.navigateTo({
-          url: menuUrls[res.tapIndex],
+      options.push({
+        title: `精听模式（${part.partNum}）`,
+        param: { ...param, partId: part.id, progressId: part.uncompletedProgressId || '' },
+        function: "handleIntensiveMode"
+      })
+      if (part.completedProgressId) {
+        options.push({
+          title: `标注（${part.partNum}）`,
+          param: { ...param, partId: part.id, progressId: part.completedProgressId },
+          function: "handleIntensiveLabelMode"
         })
       }
+    })
+    if (item.resultId) {
+      options.push({
+        title: `答题记录`,
+        param: { ...param, resultId: item.resultId },
+        function: "handleAnswerRecord"
+      })
+    }
+    const titles = options.map(item => item.title);
+    wx.showActionSheet({
+      itemList: titles,
+      success: (res) => {
+        const selectedIndex = res.tapIndex;
+        if (selectedIndex >= 0 && selectedIndex < options.length) {
+          const selectedOption = options[selectedIndex];
+          // 根据 function 字段调用对应方法，并传入 param
+          this[selectedOption.function](selectedOption.param);
+        }
+      }
+    })
+  },
+  // 泛听/做题模式处理函数
+  handleGeneralMode(params) {
+    console.log('执行泛听/做题模式，参数：', params);
+    wx.navigateTo({
+      url: '/pages/training/listening/extensive/index' + api.parseParams(params),
+    })
+  },
+  // 精听模式处理函数（支持多个模式，可判断 resultId 是否存在）
+  handleIntensiveMode(params) {
+    console.log('执行精听模式，参数：', params);
+    // 判断是否存在历史记录
+    if (params.progressId) {
+      wx.showModal({
+        title: '',
+        content: '存在未完成记录是否继续上次？',
+        cancelText: "重新开始",
+        confirmText: "继续上次",
+        complete: (res) => {
+          if (res.cancel) {
+            this.delListeningProgress(params)
+          }
+          if (res.confirm) {
+            this.toIntensivePage(params)
+          }
+        }
+      })
+      return
+    }
+    this.toIntensivePage(params)
+  },
+  // 答题记录处理函数
+  handleAnswerRecord(params) {
+    console.log('查看答题记录，参数：', params);
+    wx.navigateTo({
+      url: '/pages/training/listening/report-card/index' + api.parseParams(params),
+    })
+  },
+  toIntensivePage(params) {
+    wx.navigateTo({
+      url: '/pages/training/listening/intensive/index' + api.parseParams(params),
+    })
+  },
+  handleIntensiveLabelMode(params) {
+    wx.navigateTo({
+      url: '/pages/training/listening/label/index' + api.parseParams(params),
     })
   },
   // 跳转到设置页面
@@ -80,5 +149,12 @@ Page({
       this.finishLoading()
     })
   },
+  // 删除记录
+  delListeningProgress(params) {
+    api.request(this, `/record/v1/del/progress/${params.progressId}`, {}, true).then(() => {
+      delete params['progressId']
+      this.toIntensivePage(params)
+    })
+  }
   // ===========数据获取 End===========
 })

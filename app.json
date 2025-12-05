@@ -15,12 +15,11 @@
     "pages/training/listening/explanation/index",
     "pages/training/listening/sentence/index",
     "pages/training/listening/unclear/index",
+    "pages/training/listening/label/index",
+    "pages/training/listening/label-edit/index",
     "pages/user/index",
     "pages/setting/user/index",
-    "pages/setting/module/index",
-    "pages/teacher/widget/index",
-    "pages/teacher/privilege/index",
-    "pages/teacher/user_role/index"
+    "pages/setting/module/index"
   ],
   "window": {
     "backgroundColor": "#ffffff",
@@ -36,7 +35,8 @@
     "selectedColor": "#000000",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
-    "list": [{
+    "list": [
+      {
         "pagePath": "pages/home/index",
         "text": "听力",
         "iconPath": "images/v2/listening.png",

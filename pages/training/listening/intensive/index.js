@@ -30,6 +30,7 @@ Page({
       }
     ],
     showPl: true,
+    saveFlag: false
   },
   // 生命周期函数==============
   onLoad: function (options) {
@@ -54,8 +55,6 @@ Page({
       })
       this.stopAudio()
       this.playAudio()
-      // 保存进度
-      this.saveCurrent()
     }
   },
   onHide: function () {
@@ -149,18 +148,15 @@ Page({
       audioEndTime: audioApi.millis2Seconds(paragraph.endTimeMillis),
       playType: 'whole',
     })
-    // 保存播放记录
-    this.saveRecord()
+    // 记一次句子播放记录
+    this.saveSentencePlayingRecord()
   },
   // 切换下一个大句子
   nextSentence() {
+    // 停止播放当前句子
     this.stopAudio()
-    // 保存输入内容
-    this.saveLabel()
     // 播放下一个句子
     this.nextAudio()
-    // 保存进度
-    this.saveCurrent()
   },
   // 切换下一句-完全听懂
   nextSentence2() {
@@ -169,18 +165,23 @@ Page({
     if (list[swiperCurrent].status == 0 || list[swiperCurrent].label) {
       return
     }
+    // 修改该句子标注状态
+    list[swiperCurrent].status = '2'
+    wx.setStorageSync('listenings', list)
+    this.setData({
+      [`list[${swiperCurrent}].status`]: '2',
+    })
     // 停止播放当前句子
     this.stopAudio()
-    // 保存输入内容
-    this.saveLabel2()
+    // 播放下一个句子
     this.nextAudio()
-    // 保存进度
-    this.saveCurrent()
   },
   //播放下一个
   nextAudio() {
+    // 切换之前先保存一下标注
+    this.validationLabel()
     let { swiperCurrent, list } = this.data
-    if (swiperCurrent >= list.length) {
+    if (swiperCurrent >= (list.length - 1)) {
       api.toast('已经最后一句啦！')
       return
     }
@@ -215,6 +216,7 @@ Page({
     this.stopAudio()
     this.playAudio()
   },
+  //停止播放
   stopAudio() {
     if (!audioContext.paused) {
       audioContext.stop()
@@ -233,7 +235,7 @@ Page({
     })
   },
   toExam() {
-    this.saveLabel3()
+    this.overIntensice()
   },
   textareaFocus() {
     this.setData({ showPl: false })
@@ -247,14 +249,16 @@ Page({
     let { swiperCurrent } = this.data
     let list = wx.getStorageSync('listenings')
     list[swiperCurrent].label = detail.value
+    list[swiperCurrent].status = '3'
     wx.setStorageSync('listenings', list)
     this.setData({
       [`list[${swiperCurrent}].label`]: detail.value,
+      [`list[${swiperCurrent}].status`]: '3',
     })
     // 定时
     clearTimeout(inputTimer)
     inputTimer = setTimeout(() => {
-      _this.saveLabel()
+      _this.validationLabel()
     }, 500);
   },
   showArticle: function () {
@@ -291,7 +295,7 @@ Page({
   // 获取数据
   listListening(isPull) {
     let _this = this
-    api.request(this, `/part/v1/sentence/${this.options.partId}`, {}, isPull, true).then(res => {
+    api.request(this, `/part/v1/sentence`, { ...this.options }, isPull, true).then(res => {
       wx.setStorageSync('listenings', res.list)
       this.setData({
         schedule: (((res.swiperCurrent + 1) / res.list.length) * 100),
@@ -311,73 +315,60 @@ Page({
       _this.setData({ audioDownProgress: 100 })
     })
   },
-  // 保存标注
-  saveLabel() {
-    // let { swiperCurrent, list } = this.data
-    // api.request(this, '/intensiveListening/addLabelRecord', {
-    //   content: list[swiperCurrent].label,
-    //   albumId: this.options.aid,
-    //   setId: this.options.sid,
-    //   sentenceId: list[swiperCurrent].id,
-    //   userId: api.getUserId(),
-    //   recordId: this.data.recordId
-    // }, false, false, 'POST')
+  // 标注先期验证
+  validationLabel() {
+    // 判断是否存在进度ID
+    const { progressId } = this.data
+    if (!api.isEmpty(progressId)) {
+      this.saveSentenceLabel()
+    } else {
+      this.createProgress()
+    }
   },
-  // 完全听懂标注
-  saveLabel2() {
-    // let { swiperCurrent, list } = this.data
-    // api.request(this, '/intensiveListening/addLabelRecord', {
-    //   status: 1,
-    //   albumId: this.options.aid,
-    //   setId: this.options.sid,
-    //   sentenceId: list[swiperCurrent].id,
-    //   userId: api.getUserId(),
-    //   recordId: this.data.recordId
-    // }, false, false, 'POST')
-  },
-  // 保存所有标注
-  saveLabel3() {
-    // let list = wx.getStorageSync('listenings')
-    // let recordDetail = []
-    // for (let i = 0; i < list.length; i++) {
-    //   recordDetail.push({
-    //     recordId: this.data.recordId,
-    //     sentenceId: list[i].id,
-    //     content: list[i].label
-    //   })
-    // }
-    // api.request(this, '/intensiveListening/saveLabelRecord', {
-    //   albumId: this.options.aid,
-    //   setId: this.options.sid,
-    //   userId: api.getUserId(),
-    //   recordId: this.data.recordId,
-    //   recordDetails: recordDetail
-    // }, false, false, 'POST').then(res => {
-    //   wx.redirectTo({
-    //     url: '../intensive_record/intensive_record?recordId=' + this.data.recordId + '&setId=' + this.options.sid,
-    //   })
-    // })
-  },
-  // 保存播放记录
-  saveRecord() {
-    let { swiperCurrent, list } = this.data
-    api.request(this, '/record/v1/save/record', {
-      ...this.options,
-      sentenceId: list[swiperCurrent].id,
-    }, false, 'POST').then(res => {
-      let list = wx.getStorageSync('listenings')
-      list[swiperCurrent].status = 1
-      wx.setStorageSync('listenings', list)
-      this.setData({
-        [`list[${swiperCurrent}].status`]: 1
-      })
+  // 创建进度后保存标注
+  createProgress() {
+    api.request(this, '/record/v1/create/progress', { ...this.options }, false, 'POST').then(() => {
+      this.saveSentenceLabel()
     })
   },
-  // 保存进度
-  saveCurrent() {
-    api.request(this, '/record/v1/save/progress', {
-      ...this.options,
-      currentIndex: this.data.swiperCurrent,
-    }, false, "POST")
+  // 保存句子标注
+  saveSentenceLabel() {
+    const { progressId, swiperCurrent, list } = this.data
+    api.request(this, '/record/v1/save/label', {
+      progressId: progressId,
+      sentenceId: list[swiperCurrent].id,
+      status: list[swiperCurrent].status,
+      content: list[swiperCurrent].label,
+      currentIndex: swiperCurrent
+    }, false, 'POST')
   },
+  // 保存句子播放状态
+  saveSentencePlayingRecord() {
+    const { swiperCurrent, list } = this.data
+    const state = list[swiperCurrent].status
+    list[swiperCurrent].status = state == '0' ? '1' : state
+    wx.setStorageSync('listenings', list)
+    this.setData({
+      [`list[${swiperCurrent}].status`]: state == '0' ? '1' : state,
+    })
+    api.request(this, '/record/v1/sentence/playing', {
+      ...this.options,
+      sentenceId: list[swiperCurrent].id
+    }, false, 'POST')
+  },
+  // 完成精听
+  overIntensice() {
+    const { progressId } = this.data
+    // 保存一下最后一个句子的标注
+    this.saveSentenceLabel()
+    // 提交完成状态
+    api.request(this, `/record/v1/complete/progress/${this.data.progressId}`, {}, false).then(() => {
+      wx.redirectTo({
+        url: '../label/index' + api.parseParams({
+          ...this.options,
+          progressId: progressId,
+        }),
+      })
+    })
+  }
 })

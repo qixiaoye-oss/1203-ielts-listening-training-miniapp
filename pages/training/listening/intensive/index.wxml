@@ -1,5 +1,5 @@
-<import src="/templates/loading-progress.wxml"/>
-<template is="loadingProgress" data="{{loading, loadProgress}}"/>
+<import src="/templates/loading-progress.wxml" />
+<template is="loadingProgress" data="{{loading, loadProgress}}" />
 <!-- 圆饼进度 -->
 <view class="audio-loading-mask" wx:if="{{audioDownProgress < 100}}">
   <view class="pie-progress" style="background: conic-gradient(#3478F6 {{audioDownProgress * 3.6}}deg, #f5f5f5 {{audioDownProgress * 3.6}}deg);"></view>
@@ -16,17 +16,17 @@
   <view class="body">
     <view class="label-container">
       <view class="paragraph-cell">
-      <view class="paragraph-content-cell {{baseShowArticle?'':showArticle?'':'hidden_text'}}">
-        <text bindtap="listenSentenceAgain" class="intensive_sentence_text {{playingSmallIndex == index? 'intensive_sentence_text_active':''}}" id='T{{index}}' wx:for="{{list[swiperCurrent].list}}" wx:key="idx" data-idx="{{index}}">{{item.content}}<text class="narrator {{item.narratorSex == '1'?'narrator_man':'narrator_woman'}}" wx:if="{{item.narrator}}">{{item.narrator}}</text></text>
-      </view>
-      <view class="writing-cell">
-        <view class="writing-label">我的听写</view>
-        <textarea value="{{list[swiperCurrent].label}}" style="top:{{areaTop}}px;left: {{areaLeft}}px;" confirm-type="return" bindinput="inputVal" bindfocus="textareaFocus" bindblur="textareaBlur" maxlength="1000"></textarea>
-        <view class="pl-class" wx:if="{{showPl && !list[swiperCurrent].label}}">请输入你的回答...</view>
+        <view class="paragraph-content-cell {{baseShowArticle?'':showArticle?'':'hidden_text'}}">
+          <text bindtap="listenSentenceAgain" class="intensive_sentence_text {{playingSmallIndex == index? 'intensive_sentence_text_active':''}}" id='T{{index}}' wx:for="{{list[swiperCurrent].list}}" wx:key="idx" data-idx="{{index}}">{{item.content}}<text class="narrator {{item.narratorSex == '1'?'narrator_man':'narrator_woman'}}" wx:if="{{item.narrator}}">{{item.narrator}}</text></text>
+        </view>
+        <view class="writing-cell">
+          <view class="writing-label">我的听写</view>
+          <textarea value="{{list[swiperCurrent].label}}" style="top:{{areaTop}}px;left: {{areaLeft}}px;" confirm-type="return" bindinput="inputVal" bindfocus="textareaFocus" bindblur="textareaBlur" maxlength="1000"></textarea>
+          <view class="pl-class" wx:if="{{showPl && !list[swiperCurrent].label}}">请输入你的回答...</view>
+        </view>
       </view>
     </view>
   </view>
-</view>
 </view>
 <view class="btn-page-bottom">
   <view class="btn-group-layout-split">
@@ -51,7 +51,7 @@
         <view>保存</view>
         <image src="/images/v2/submit.png"></image>
       </view>
-      <view class="btn-action btn--correct {{list[swiperCurrent].label || list[swiperCurrent].status == 0 ?'_dis' :''}}" bind:tap="nextSentence2" hover-class="tap-active" hover-stay-time="100">
+      <view class="btn-action btn--correct {{list[swiperCurrent].label || list[swiperCurrent].status == 0 ?'dis' :''}}" bind:tap="nextSentence2" hover-class="tap-active" hover-stay-time="100">
         <view>听懂</view>
         <image src="/images/v2/correct.png"></image>
       </view>

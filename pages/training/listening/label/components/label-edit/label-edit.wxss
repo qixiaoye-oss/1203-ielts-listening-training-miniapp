@@ -1,0 +1,154 @@
+@import "/style/iconfont.wxss";
+
+.edit-base-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.question-container {
+  border: 1px solid var(--solid-border-color);
+  border-radius: 9px;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* 句子部分 */
+.sentence-cell {
+  margin: 15px;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+/* 我的听写 */
+.answer-cell {
+  flex: 1;
+  margin-inline: 15px;
+  margin-bottom: 15px;
+  border: 1px dashed var(--dashed-border-color);
+  padding: 15px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.answer-title {
+  font-size: 12px;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.3);
+  margin-bottom: 10px;
+}
+
+.user-answer {
+  line-height: 1.4;
+  font-size: 16px;
+}
+
+/* 富文本 */
+.toolbar {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 13px;
+  padding-block: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  gap: 15px;
+}
+
+.toolbar image {
+  width: 22px;
+  height: 22px;
+}
+
+.toolbar i {
+  font-size: 20px;
+  position: relative;
+}
+
+.candidate-color {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.candidate-colors-cell {
+  position: absolute;
+  top: 50px;
+  left: -15px;
+  background: #f8f8f8;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  border-radius: 9px;
+  gap: 15px;
+  z-index: 1;
+}
+
+.candidate-colors-cell::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  /* 调整箭头水平位置到左侧10% */
+  bottom: 100%;
+  /* 箭头位于气泡正上方 */
+  margin-left: -9px;
+  /* 根据箭头大小调整，使箭头更准确地定位在左侧10% */
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-bottom-color: #f8f8f8;
+  /* 箭头颜色与气泡背景色相同 */
+}
+
+.bg-candidate-colors-cell {
+  left: 17px;
+}
+
+/* 富文本主体 */
+.editor-point {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+#editor {
+  position: relative;
+  z-index: 1;
+  line-height: 1.4;
+  height: 100%;
+}
+
+.pl_ {
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  position: absolute;
+  top: -2px;
+  z-index: -1;
+}
+
+.fun-cell {
+  margin-top: 15px;
+}
+
+.no-data {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--color-5);
+}

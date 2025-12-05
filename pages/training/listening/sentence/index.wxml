@@ -6,10 +6,8 @@
       <view id="ID{{item.id}}" class="list_container {{item.status == 0?'list_undone':''}}  {{scrollIntoId === 'ID'+item.id ? 'select' : ''}}">
         <view class="listening_header ">
           <view class="list_index">{{idx+1}}/{{list.length}}</view>
-          <view wx:if="{{item.status == 1}}">
-          </view>
+          <view wx:if="{{item.status == 1}}"></view>
           <view wx:if="{{item.status == 0}}">未收听</view>
-          <image class="label_flag" wx:if="{{item.label}}" src="/images/no_callout.png"></image>
         </view>
         <view class="listening_content">
           <view class="listening_content_text">
@@ -18,6 +16,9 @@
           <view class="chinese">{{item.chinese}}</view>
         </view>
         <view style="display: flex;align-items: center;justify-content: flex-end;">
+          <view class="btn-action-icon " wx:if="{{item.label}}">
+            <image class="label_flag" src="/images/v2/flag.png"></image>
+          </view>
           <view class="btn-action-icon btn--audio" hover-class="tap-active" hover-stay-time="100">
             <image src="/images/v2/pause.png" wx:if="{{item.audioPlay =='play'}}"></image>
             <image src="/images/v2/play.png" wx:else bindtap="playAudio" data-idx="{{idx}}"></image>
