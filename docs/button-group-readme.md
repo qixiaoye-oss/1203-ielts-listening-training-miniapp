@@ -229,7 +229,7 @@ padding-bottom = 按钮组高度 + 15px(内容与按钮组间距)
 
 ```css
 /* app.wxss */
-@import "style/button-group/button-group.wxss";
+@import "style/button-group.wxss";
 ```
 
 ---
@@ -291,12 +291,6 @@ padding-bottom = 按钮组高度 + 15px(内容与按钮组间距)
 
 ---
 
-## 更新日志
-
-查看 [CHANGELOG.md](./CHANGELOG.md) 了解详细的版本更新记录。
-
----
-
 ## 相关文档
 
-- [按钮组样式规范文档](../../docs/button-group-style-guide.md)
+- [按钮组样式规范文档](./button-group-style-guide.md)

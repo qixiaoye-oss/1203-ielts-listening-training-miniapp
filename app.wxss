@@ -1,7 +1,7 @@
 @import "style/default-styles.wxss";
 @import "style/theme.wxss";
 @import "style/loading-progress.wxss";
-@import "style/button-group/button-group.wxss";
+@import "style/button-group.wxss";
 
 page {
   background-color: #ffffff;

@@ -135,7 +135,7 @@ page {
   color: #FFB02D;
 }
 
-/* 固定页面底部按钮容器已迁移至 style/button-group/button-group.wxss */
+/* 固定页面底部按钮容器已迁移至 style/button-group.wxss */
 /* 使用 .btn-page-bottom 类即可，详见按钮组组件文档 */
 
 .btn-corner-mark {

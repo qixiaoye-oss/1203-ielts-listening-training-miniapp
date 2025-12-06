@@ -373,9 +373,8 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 
 ## 九、参考资源
 
-- **组件样式**：`style/button-group/button-group.wxss`
-- **使用文档**：`style/button-group/README.md`
-- **更新日志**：`style/button-group/CHANGELOG.md`
+- **组件样式**：`style/button-group.wxss`
+- **使用文档**：`docs/button-group-readme.md`
 
 ---
 
