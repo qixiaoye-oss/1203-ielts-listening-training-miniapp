@@ -1,12 +1,18 @@
 /**
  * 按钮组样式库 (Button Group Styles)
- * @version 1.5.0
- * @date 2025-11-30
+ * @version 1.6.0
+ * @date 2025-12-06
  * @description 微信小程序通用按钮组 CSS 样式工具类库，包含固定底部容器、多种布局模式和蒙版功能
  * @author 开发团队
  * @note 这是一个纯 CSS 样式库，不是微信小程序自定义组件。通过 @import 引入后直接使用类名即可。
  *
+ * @构建流程
+ *   Step 1: 选择层数 - 一层(inline-center) 或 两层(split)
+ *   Step 2: 定义按钮 - 指定icon(自动应用主色) + 指定位置(居中/左1/左2/右1/右2)
+ *   Step 3: 自动蒙版 - 使用.btn-page-bottom容器自动获得蒙版A和蒙版B
+ *
  * @changelog
+ *   v1.6.0 (2025-12-06) - 添加按钮位置类，预留icon颜色映射机制，重构构建流程
  *   v1.5.0 (2025-11-30) - 从 components/ 迁移至 style/，明确定位为样式工具类库
  *   v1.4.0 (2025-11-30) - 修正边框颜色为0.3，按钮改为15%透明度背景+主色文字
  *   v1.3.0 (2025-11-30) - 统一所有页面使用.btn-page-bottom容器类，消除外部依赖
@@ -266,7 +272,75 @@ page {
   opacity: 0.3;
 }
 
-/* ==================== 6. 辅助类 ==================== */
+/* ==================== 6. 按钮位置类 ==================== */
+
+/**
+ * 按钮位置规范：
+ * - 居中（单按钮）：常规居中，无需额外类
+ * - 居中（双按钮）：两按钮间距15px，间距中点居中
+ * - 左1/左2：靠左排列，距边缘15px
+ * - 右1/右2：靠右排列，距边缘15px
+ * - 按钮与按钮之间间距：15px
+ */
+
+/* 双按钮居中容器：两按钮关于中心对称 */
+.btn-pos-dual-center {
+  display: flex;
+  justify-content: center;
+  gap: var(--button-group-gap);
+}
+
+/* 靠左第1个按钮 */
+.btn-pos-left-1 {
+  margin-right: auto;
+}
+
+/* 靠左第2个按钮（紧跟左1，间距15px由gap控制） */
+.btn-pos-left-2 {
+  /* 配合 left-1 使用，自动跟随 */
+}
+
+/* 靠右第1个按钮 */
+.btn-pos-right-1 {
+  margin-left: auto;
+}
+
+/* 靠右第2个按钮（紧跟右1，间距15px由gap控制） */
+.btn-pos-right-2 {
+  /* 配合 right-1 使用，自动跟随 */
+}
+
+/* 组合：左侧按钮组 + 右侧按钮组 */
+.btn-pos-left-group {
+  display: flex;
+  gap: var(--button-group-gap);
+  margin-right: auto;
+}
+
+.btn-pos-right-group {
+  display: flex;
+  gap: var(--button-group-gap);
+  margin-left: auto;
+}
+
+/* ==================== 7. icon颜色映射（预留） ==================== */
+
+/**
+ * icon → 颜色映射机制
+ * 使用 data-icon 属性指定 icon 名称，自动应用对应主色
+ * 颜色映射表待配置后启用
+ *
+ * 使用示例：
+ * <view class="btn-action" data-icon="play">
+ *   <view>播放</view>
+ *   <image src="/images/play.png"></image>
+ * </view>
+ *
+ * 映射规则将在颜色表确定后添加：
+ * .btn-action[data-icon="play"] { color: #00A6ED; background: rgba(0,166,237,0.15); }
+ */
+
+/* ==================== 8. 辅助类 ==================== */
 
 /* 按钮角标（用于显示数字或状态） */
 .btn-corner-mark {
