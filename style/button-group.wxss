@@ -384,3 +384,12 @@ page {
   transform: scale(0.98);
   transition: all 0.1s ease-out;
 }
+
+/* ==================== 10. Header 文字样式 ==================== */
+
+/* 评语/提示文字居中显示（用于 header 层纯文字内容） */
+.scoring_reviews {
+  padding-inline: 60px;
+  padding-block: 15px;
+  text-align: center;
+}
