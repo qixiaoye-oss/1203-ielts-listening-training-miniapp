@@ -56,7 +56,10 @@
     }
   },
   "resizable": true,
-  "usingComponents": {},
+  "usingComponents": {
+    "btn-action": "/components/btn-action/index",
+    "btn-action-icon": "/components/btn-action-icon/index"
+  },
   "sitemapLocation": "sitemap.json",
   "useExtendedLib": {
     "kbone": true,

@@ -90,9 +90,4 @@ view {
   color: rgba(0, 0, 0, 0) !important;
 }
 
-/* 轻量点击动效 */
-.tap-active {
-  opacity: 0.7;
-  transform: scale(0.98);
-  transition: all 0.1s ease-out;
-}
+/* 点击动效 .tap-active 已在 style/button-group.wxss 中定义 */
