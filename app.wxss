@@ -16,8 +16,8 @@ page {
   --solid-border-color: rgba(0, 0, 0, 0.3);
   --dashed-border-color: rgba(0, 0, 0, 0.3);
   /* 用户页-主题色 */
-  --theme-color: rgba(0, 123, 255, 1);
-  --theme-bcakground-color: rgba(0, 123, 255, 0.15);
+  --theme-color: rgba(0, 166, 237, 1);
+  --theme-bcakground-color: rgba(0, 166, 237, 0.15);
   /* 练习页主要颜色 */
   --question-color: rgba(0, 166, 237, 1);
   --question-bcakground-color: rgba(0, 166, 237, 0.15)
