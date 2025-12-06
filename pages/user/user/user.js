@@ -1,5 +1,5 @@
 const api = getApp().api
-const loadingProgress = require('../../behaviors/loadingProgress')
+const loadingProgress = require('../../../behaviors/loadingProgress')
 
 Page({
   behaviors: [loadingProgress],
@@ -22,7 +22,7 @@ Page({
   },
   toUpdateUserInfo() {
     wx.navigateTo({
-      url: '/pages/setting/user/index',
+      url: '/pages/user/login/login',
     })
   },
   getUser() {
