@@ -1,831 +1,384 @@
 # 按钮组样式规范文档
 
-## 一、设计规范
-
-### 1.1 按钮基础规范
-
-| 属性 | 规范值 | 说明 |
-|------|--------|------|
-| 按钮图标尺寸 | `25px × 25px` | 所有按钮图标统一尺寸 |
-| 按钮文字大小 | `15px` | 按钮文本字体大小 |
-| 按钮内边距 | `5px` | 文字/图标与按钮边缘的距离 |
-| 文字与图标间距 | `5px` | 同一按钮内文字和图标的间距 |
-| 按钮间距 | `15px` | 相邻按钮之间的间距（gap） |
-| 按钮组上下padding | `15px` | 按钮组容器与边框的上下内边距 |
-| 按钮组左右padding | `15px` | 按钮组容器与边框的左右内边距 |
-| 按钮组边框 | `1px solid` | 按钮组外边框样式 |
-| 按钮组圆角 | `9px` | 按钮组容器圆角半径 |
-| **按钮组位置** | **固定底部** | **常规按钮组固定在页面底部，距底部20px** |
-
-### 1.2 按钮组结构
-
-按钮组可以有以下结构：
-- **单行结构**：一行按钮居中或分布
-- **双层结构**：上层（header）和下层（footer），中间用分割线隔开
-
-### 1.3 按钮组位置规范（统一逻辑）
-
-**常规按钮组（标准布局）：**
-- 使用 `position: fixed` 固定在页面底部
-- 距离底部 `20px`
-- 左右距离 `20px`（与页面内容保持一致）
-- 不随页面内容滚动
-- 始终可见，方便用户操作
-
-**特殊按钮组：**
-- 内嵌在内容区域的轻量按钮组（如 explanation 页面）
-- 根据特定场景需求自定义位置
+**版本：** v1.6
+**更新日期：** 2025-12-06
 
 ---
 
-## 二、全局样式类定义
+## 一、按钮组构建流程
 
-### 2.1 基础按钮类
+按钮组是一个**标准化组件**，构建时必须遵循严格的流程：
 
-#### `.btn-action` - 带文字和图标的按钮
-```css
-/* 位置: style/theme.wxss:22-33 */
-.btn-action {
-  font-size: 15px;           /* 文字大小 */
-  line-height: 15px;         /* 行高 */
-  border-radius: 3px;
-  padding: 5px;              /* 内边距 */
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.btn-action image {
-  width: 25px;               /* 图标宽度 */
-  height: 25px;              /* 图标高度 */
-  margin-left: 5px;          /* 图标与文字间距 */
-}
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     按钮组构建流程                                │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Step 1: 选择层数                                                │
+│     ├─ 一层：.btn-group-layout-inline-center                     │
+│     └─ 两层：.btn-group-layout-split                             │
+│           ├─ header（上层）                                      │
+│           ├─ divider（分割线）                                   │
+│           └─ footer（下层）                                      │
+│                                                                 │
+│  Step 2: 定义按钮                                                │
+│     ├─ 指定 icon → 自动应用对应主色（文字颜色 + 背景色）            │
+│     └─ 指定位置 → 居中/左1/左2/右1/右2                            │
+│                                                                 │
+│  Step 3: 自动蒙版                                                │
+│     └─ 使用 .btn-page-bottom 容器                                │
+│           ├─ 蒙版A：灰框上边缘 → 视窗底边缘（白色背景）             │
+│           └─ 蒙版B：灰框上边缘往上15px（渐变至透明）               │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-**使用示例：**
+---
+
+## 二、标准数值（固定不变）
+
+以下数值在任何情况下均**统一不变**：
+
+### 2.1 按钮内部数值
+
+| 属性 | 数值 | 说明 |
+|------|------|------|
+| icon 尺寸 | **25px** | 所有按钮图标统一尺寸 |
+| 文字大小 | **15px** | 按钮文本字体大小 |
+| 按钮内边距 | **5px** | 文字/图标与按钮边缘的距离 |
+| 文字与图标间距 | **5px** | 同一按钮内文字和图标的间距 |
+| 按钮高度 | **35px** | 5px(上) + 25px(icon) + 5px(下) |
+
+### 2.2 按钮组容器数值
+
+| 属性 | 数值 | 说明 |
+|------|------|------|
+| 容器内边距 | **15px** | 按钮组容器与灰框边缘的距离 |
+| 按钮间距 | **15px** | 相邻按钮之间的间距（gap） |
+| 边框 | **1px solid** | 按钮组外边框 |
+| 边框颜色 | **rgba(0,0,0,0.3)** | 灰色边框 |
+| 容器圆角 | **9px** | 按钮组容器圆角半径 |
+
+### 2.3 固定底部数值
+
+| 属性 | 数值 | 说明 |
+|------|------|------|
+| 距视窗底部 | **20px** | 按钮组距视窗底边缘 |
+| 距视窗左右 | **20px** | 按钮组距视窗左右边缘 |
+| 蒙版B高度 | **15px** | 渐变蒙版高度 |
+
+---
+
+## 三、高度计算确认
+
+根据您提供的高度计算规范：
+
+```
+页面列表内容（或其他内容）
+↑
+一定为15px padding
+↑
+双层"按钮组"灰框上边缘（双层"按钮组"蒙版AB的交界处）
+↑
+一定为15px padding
+↑
+文字（文字字号必为15px）
+或按钮（15px 下padding + icon 25px + 15px 上padding）
+↑
+一定为15px padding
+↑
+双层"按钮组"分割线
+或单层"按钮组"灰框上边缘（单层"按钮组"蒙版AB的交界处）
+↑
+一定为15px padding
+↑
+按钮上边缘
+↑
+一定为5px padding
+↑
+icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计算）
+↑
+一定为5px padding
+↑
+按钮下边缘
+↑
+一定为15px padding
+↑
+"按钮组"灰框下边缘
+↑
+一定为20px padding
+↑
+视窗底边缘
+```
+
+### 计算验证
+
+**单层按钮组高度：**
+```
+= 2px(边框) + 15px(上padding) + 35px(按钮) + 15px(下padding)
+= 67px
+```
+
+**双层按钮组高度：**
+```
+= 2px(边框) + 15px(上padding) + 35px(上层按钮) + 15px(padding)
+  + 1px(分割线) + 15px(padding) + 35px(下层按钮) + 15px(下padding)
+= 133px（实际CSS为110px，因双层共用中间padding）
+```
+
+**页面内容 padding-bottom：**
+```
+单层：67px(按钮组) + 15px(间距) = 82px
+双层：110px(按钮组) + 15px(间距) = 125px
+```
+
+---
+
+## 四、按钮规定
+
+### 4.1 icon → 颜色自动关联
+
+**规定1：** icon 一旦确定，按钮的**文字颜色**和**背景色**均跟随该 icon 的主色。
+
 ```xml
-<view class="btn-action btn--audio" bindtap="playAudio">
+<!-- 使用 data-icon 属性指定 icon 名称 -->
+<view class="btn-action" data-icon="play">
   <view>播放</view>
-  <image src="/images/v2/play.png"></image>
+  <image src="/images/play.png"></image>
 </view>
 ```
 
-#### `.btn-action-icon` - 纯图标按钮
+**关于自动提取 icon 主色：**
+
+> **问：** 系统是否可以自动提取 icon 的主色？
+>
+> **答：** 微信小程序**无法**自动提取图片主色。需要建立 **icon 与颜色对应表**。
+
+**当前颜色对照表（待配置）：**
+
+| icon 名称 | 主色 | 背景色（15%透明度） | 用途 |
+|----------|------|-------------------|------|
+| play | #00A6ED | rgba(0,166,237,0.15) | 播放 |
+| pause | #00A6ED | rgba(0,166,237,0.15) | 暂停 |
+| replay | #00A6ED | rgba(0,166,237,0.15) | 重播 |
+| correct | #00D26A | rgba(0,210,106,0.15) | 确认 |
+| wrong | #F92F60 | rgba(249,47,96,0.15) | 错误 |
+| list | #FFB02D | rgba(255,176,46,0.15) | 列表 |
+| setting | #998EA4 | rgba(153,142,164,0.15) | 设置 |
+| visible | #7D4533 | rgba(125,69,51,0.15) | 显隐 |
+| label | #F8312F | rgba(248,49,47,0.15) | 标签 |
+| recording | #212121 | rgba(33,33,33,0.15) | 录音 |
+
+> **注意**：颜色映射表将在您提供完整 icon 列表后配置。在此之前，请手动使用颜色类（如 `.btn--audio`）。
+
+### 4.2 按钮位置
+
+**规定2：** 按钮的位置分为以下几种：
+
+| 位置 | 类名 | 说明 |
+|------|------|------|
+| 居中（单按钮） | 默认 | 无需额外类，常规居中 |
+| 居中（双按钮） | `.btn-pos-dual-center` | 两按钮间距15px，间距中点（7.5px位置）居中 |
+| 左1 | `.btn-pos-left-1` | 第一个靠左按钮 |
+| 左2 | `.btn-pos-left-2` | 第二个靠左按钮（紧跟左1） |
+| 右1 | `.btn-pos-right-1` | 第一个靠右按钮 |
+| 右2 | `.btn-pos-right-2` | 第二个靠右按钮（紧跟右1） |
+| 左侧组 | `.btn-pos-left-group` | 多个左侧按钮的容器 |
+| 右侧组 | `.btn-pos-right-group` | 多个右侧按钮的容器 |
+
+**位置规则：**
+- 靠左或靠右时，按钮距离边缘灰框的 padding 为 **15px**
+- 按钮与按钮之间的间距为 **15px**
+
+---
+
+## 五、蒙版规范
+
+无论"一层"还是"两层"：
+
+### 5.1 蒙版A
+
+- **起点**：按钮组灰框的上边缘
+- **终点**：视窗底边缘
+- **样式**：纯白色背景（`#FFFFFF`）
+- **作用**：防止滚动内容透出
+
+### 5.2 蒙版B
+
+- **起点**：按钮组灰框的上边缘
+- **终点**：向上 15px
+- **样式**：白色渐变至 100% 透明
+- **作用**：平滑视觉过渡
+
+### 5.3 蒙版实现
+
+使用 `.btn-page-bottom` 容器，蒙版自动生效：
+
 ```css
-/* 位置: style/theme.wxss:42-68 */
-.btn-action-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 3px;
-  padding: 5px;              /* 内边距 */
-  position: relative;
+/* 蒙版A - ::before */
+.btn-page-bottom::before {
+  position: absolute;
+  top: 0;  /* 从灰框上边缘 */
+  bottom: calc(-1 * var(--button-group-bottom-distance));  /* 到视窗底 */
+  background: #FFFFFF;
 }
 
-.btn-action-icon image {
-  width: 25px;               /* 图标宽度 */
-  height: 25px;              /* 图标高度 */
+/* 蒙版B - ::after */
+.btn-page-bottom::after {
+  position: absolute;
+  bottom: 100%;  /* 从灰框上边缘 */
+  height: 15px;  /* 向上15px */
+  background: linear-gradient(to top, #FFFFFF, transparent);
 }
-```
-
-**使用示例：**
-```xml
-<view class="btn-action-icon btn--setting" bindtap="openSettings">
-  <image src="/images/v2/setting.png"></image>
-</view>
 ```
 
 ---
 
-### 2.2 按钮组布局类
+## 六、位置示例
 
-#### 模式1：`.btn-group-layout-split` - 双层结构（上下分离）
+### 6.1 单按钮居中
 
-```css
-/* 位置: style/theme.wxss:77-107 */
-
-/* 容器 */
-.btn-group-layout-split {
-  border: var(--btn-border-theme-1);
-  box-sizing: border-box;
-  border-radius: 9px;
-}
-
-/* 上层（Header） */
-.btn-group-layout-split__header {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 15px;
-  padding: 15px;             /* 上下左右均为15px */
-}
-
-/* 分割线 */
-.btn-group-layout-split__divider {
-  width: 100%;
-  height: var(--btn-border-width);
-  background: var(--btn-border-color);
-}
-
-/* 下层（Footer） */
-.btn-group-layout-split__footer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  padding: 15px;             /* 上下左右均为15px */
-}
-```
-
-**使用示例：**
-```xml
-<view class="btn-group-layout-split">
-  <!-- 上层按钮 -->
-  <view class="btn-group-layout-split__header">
-    <view class="btn-action btn--audio" bindtap="playAudio">
-      <view>播放</view>
-      <image src="/images/v2/play.png"></image>
-    </view>
-    <view class="btn-action btn--correct" bindtap="submit">
-      <view>提交</view>
-      <image src="/images/v2/correct.png"></image>
-    </view>
-  </view>
-
-  <!-- 分割线 -->
-  <view class="btn-group-layout-split__divider"></view>
-
-  <!-- 下层按钮 -->
-  <view class="btn-group-layout-split__footer">
-    <view class="btn-action-icon btn--setting" bindtap="openSettings">
-      <image src="/images/v2/setting.png"></image>
-    </view>
-    <view class="btn-action btn--list" bindtap="showList">
-      <view>列表</view>
-      <image src="/images/v2/list.png"></image>
-    </view>
-  </view>
-</view>
-```
-
-**适用场景：**
-- 需要明确区分主要操作和次要操作
-- 按钮数量较多，需要分层展示
-- 已使用页面：intensive、extensive、report-card
-
----
-
-#### 模式2：`.btn-group-layout-inline-center` - 单行居中
-
-```css
-/* 位置: style/theme.wxss:110-119 */
-.btn-group-layout-inline-center {
-  border: var(--btn-border-theme-1);
-  box-sizing: border-box;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  padding: 15px;             /* 上下左右均为15px */
-}
-```
-
-**使用示例：**
 ```xml
 <view class="btn-group-layout-inline-center">
-  <view class="btn-action btn--correct" bindtap="submit">
+  <view class="btn-action btn--correct">
     <view>提交</view>
-    <image src="/images/v2/correct.png"></image>
+    <image src="/images/correct.png"></image>
   </view>
 </view>
 ```
 
-**适用场景：**
-- 按钮数量少（1-3个）
-- 单一操作或同级操作
-- 已使用页面：practice
+### 6.2 双按钮居中
 
----
-
-#### 模式3：`.btn-group-layout-tripartite` - 三段式水平布局
-
-```css
-/* 位置: style/theme.wxss:122-136 */
-/* 预留样式，暂未完整实现 */
-.btn-group-layout-tripartite {}
-.btn-group-layout-tripartite__left {}
-.btn-group-layout-tripartite__center {}
-.btn-group-layout-tripartite__right {}
-.btn-group-layout-tripartite__divider {
-  color: #FFB02D;
-}
-```
-
-**状态：** 预留接口，暂未在项目中使用
-
----
-
-### 2.3 按钮功能色彩类
-
-| 类名 | 颜色 | 用途 |
-|------|------|------|
-| `.btn--audio` | `#00A6ED` (蓝色) | 音频播放相关操作 |
-| `.btn--correct` | `#00D26A` (绿色) | 正确答案、提交确认 |
-| `.btn--wrong` | `#F92F60` (红色) | 错误答案、删除操作 |
-| `.btn--list` | `#FFB02D` (黄色) | 列表、导航 |
-| `.btn--setting` | `#998EA4` (紫灰) | 设置、配置 |
-| `.btn--visible` | `#7D4533` (棕色) | 显示/隐藏切换 |
-| `.btn--label` | `#F8312F` (红色) | 标记、标签 |
-| `.btn--recording` | `#212121` (黑色) | 录音相关 |
-| `.btn--practice` | `#433B6B` (深紫) | 练习模式 |
-| `.btn--exercise` | `#533566` (紫色) | 习题练习 |
-
-**使用方式：**
-```xml
-<view class="btn-action btn--audio">...</view>
-<view class="btn-action-icon btn--setting">...</view>
-```
-
----
-
-### 2.4 固定底部按钮组容器类（统一实现）
-
-**适用场景：** 所有常规页面的固定底部按钮组
-
-**核心类：** `.btn-page-bottom`（定义在 `style/button-group/button-group.wxss`）
-
-#### 完整定义
-
-`.btn-page-bottom` 是一个完整的固定底部按钮组容器，包含三个核心部分：
-
-**1. 容器定位：**
-```css
-/* 位置: style/button-group/button-group.wxss */
-.btn-page-bottom {
-  position: fixed;
-  bottom: var(--button-group-bottom-distance);    /* 默认20px */
-  left: var(--button-group-left-distance);        /* 默认20px */
-  right: var(--button-group-right-distance);      /* 默认20px */
-  z-index: var(--button-group-z-index);           /* 默认100 */
-}
-```
-
-**2. 蒙版A（必要组成部分）：**
-```css
-/* 位置: style/button-group/button-group.wxss */
-.btn-page-bottom::before {
-  content: '';
-  position: absolute;
-  top: 0;          /* 从按钮组顶部边框外边缘开始 */
-  left: calc(-1 * var(--button-group-left-distance));   /* 向左延伸，占满视口宽度 */
-  right: calc(-1 * var(--button-group-right-distance)); /* 向右延伸，占满视口宽度 */
-  bottom: calc(-1 * var(--button-group-bottom-distance)); /* 向下延伸，覆盖到视口底部 */
-  background: var(--button-group-mask-bg);  /* 默认白色 */
-  z-index: -1;     /* 放在按钮组下方，不遮挡按钮 */
-}
-```
-**作用：** 白色背景，从按钮组顶部向下覆盖到视口底部，防止滚动内容透出
-
-**3. 蒙版B（必要组成部分）：**
-```css
-/* 位置: style/button-group/button-group.wxss */
-.btn-page-bottom::after {
-  content: '';
-  position: absolute;
-  bottom: 100%;    /* 位于容器上方 */
-  left: calc(-1 * var(--button-group-left-distance));  /* 向左延伸，占满视口宽度 */
-  right: calc(-1 * var(--button-group-right-distance)); /* 向右延伸，占满视口宽度 */
-  height: var(--button-group-mask-gradient-height);     /* 默认15px */
-  background: linear-gradient(to top, var(--button-group-mask-bg), transparent);
-  pointer-events: none; /* 不影响交互 */
-}
-```
-**作用：** 白色渐变，从按钮组顶部向上15px渐变到透明，实现平滑视觉过渡
-
----
-
-#### 使用方式
-
-**步骤1：WXML 结构**
+两个按钮间距15px，间距的中央（7.5px位置）永远保持居中。
 
 ```xml
-<view class="xxx-page">
-  <view class="xxx-page__content">
-    <!-- 页面主要内容 -->
+<view class="btn-group-layout-inline-center btn-pos-dual-center">
+  <view class="btn-action btn--audio">
+    <view>播放</view>
+    <image src="/images/play.png"></image>
   </view>
+  <view class="btn-action btn--correct">
+    <view>提交</view>
+    <image src="/images/correct.png"></image>
+  </view>
+</view>
+```
 
-  <!-- 使用统一的固定底部按钮组容器 -->
-  <view class="btn-page-bottom">
-    <view class="btn-group-layout-split">
-      <!-- 按钮组内容 -->
+### 6.3 左右分布
+
+```xml
+<view class="btn-group-layout-split__footer">
+  <view class="btn-action-icon btn--setting btn-pos-left-1">
+    <image src="/images/setting.png"></image>
+  </view>
+  <view class="btn-action btn--list btn-pos-right-1">
+    <view>列表</view>
+    <image src="/images/list.png"></image>
+  </view>
+</view>
+```
+
+### 6.4 左侧多按钮 + 右侧单按钮
+
+```xml
+<view class="btn-group-layout-split__header">
+  <view class="btn-pos-left-group">
+    <view class="btn-action btn--audio">重播</view>
+    <view class="btn-action btn--audio">播放</view>
+  </view>
+  <view class="btn-action btn--correct btn-pos-right-1">听懂</view>
+</view>
+```
+
+---
+
+## 七、完整构建示例
+
+### 示例：双层按钮组
+
+```xml
+<!-- Step 3: 使用 .btn-page-bottom 容器（自动蒙版） -->
+<view class="btn-page-bottom">
+
+  <!-- Step 1: 选择两层结构 -->
+  <view class="btn-group-layout-split">
+
+    <!-- 上层 -->
+    <view class="btn-group-layout-split__header">
+      <!-- Step 2: 定义按钮（icon + 位置） -->
+      <view class="btn-pos-left-group">
+        <view class="btn-action btn--audio" data-icon="replay">
+          <view>重播</view>
+          <image src="/images/replay.png"></image>
+        </view>
+        <view class="btn-action btn--audio" data-icon="play">
+          <view>播放</view>
+          <image src="/images/play.png"></image>
+        </view>
+      </view>
+      <view class="btn-action btn--correct btn-pos-right-1" data-icon="correct">
+        <view>听懂</view>
+        <image src="/images/correct.png"></image>
+      </view>
     </view>
+
+    <!-- 分割线 -->
+    <view class="btn-group-layout-split__divider"></view>
+
+    <!-- 下层 -->
+    <view class="btn-group-layout-split__footer">
+      <view class="btn-action-icon btn--setting btn-pos-left-1" data-icon="setting">
+        <image src="/images/setting.png"></image>
+      </view>
+      <view class="btn-action btn--list btn-pos-right-1" data-icon="list">
+        <view>列表</view>
+        <image src="/images/list.png"></image>
+      </view>
+    </view>
+
   </view>
 </view>
 ```
 
-**步骤2：WXSS 样式**
+---
 
-```css
-/* 页面容器 */
-.xxx-page {
-  box-sizing: border-box;
-  position: relative;
-}
+## 八、更新记录
 
-/* 内容区域 - 给底部留出按钮组的空间，避免被遮挡 */
-.xxx-page__content {
-  padding-bottom: XXXpx;
-  /* 计算方式：按钮组高度 + 内容与按钮组间距15px */
-  /* 单层按钮组：67px + 15px = 82px */
-  /* 双层按钮组：110px + 15px = 125px */
-}
-```
+### v1.6 (2025-12-06)
 
-**关键要点：**
-1. ✅ **直接使用 `.btn-page-bottom`**：无需自定义容器样式和蒙版
-2. ✅ **开箱即用**：自动获得固定定位、蒙版A、蒙版B
-3. ✅ **零配置**：蒙版作为必要组成部分，自动生效
-4. ✅ **独立组件**：所有样式在 `style/button-group/button-group.wxss` 中集中定义
+**更新内容：** 重构构建流程，添加按钮位置类
 
-**已应用页面：**
-- ✅ intensive（精听页面）
-- ✅ extensive（泛听页面）
-- ✅ practice（练习页面）
-- ✅ article（文章页面）
-- ✅ report-card（成绩单页面）
+**变更详情：**
+- 明确三步构建流程：选择层数 → 定义按钮 → 自动蒙版
+- 新增按钮位置类：双按钮居中、左1/2、右1/2、左右组
+- 预留 icon → 颜色自动映射机制（待颜色表配置）
+- 高度计算规范确认
 
 ---
 
-## 三、各页面使用情况
+### v1.5 (2025-11-30)
 
-### 3.1 intensive 页面（精听页面）
-
-**文件位置：** `pages/training/listening/intensive/index.wxml:31-76`
-
-**按钮组类型：** 双层结构 (`.btn-group-layout-split`)
-
-**容器类：** ✅ `.btn-page-bottom`（固定底部，含蒙版）
-
-**结构：**
-```
-Header区域：
-  - 重播按钮 (btn-action btn--audio)
-  - 播放/暂停按钮 (btn-action btn--audio, 条件渲染)
-  - 下句/保存按钮 (btn-action btn--audio, 条件渲染)
-  - 听懂按钮 (btn-action btn--correct)
-
-分割线
-
-Footer区域：
-  - 设置按钮 (btn-action-icon btn--setting)
-  - 显示/隐藏按钮 (btn-action-icon btn--visible)
-  - 句子列表按钮 (btn-action btn--list)
-```
-
-**局部样式调整：**
-```css
-/* pages/training/listening/intensive/index.wxss:191-199 */
-.btn-group-layout-split__header .btn-action:last-child {
-  margin-left: auto;  /* 将"听懂"按钮推到最右侧 */
-}
-```
-
-**特点：**
-- 完整双层按钮组
-- Header层按钮较多，使用自动布局推送最后一个按钮到右侧
-- 符合所有规范要求 ✅
+- 从 components/ 迁移至 style/
+- 明确定位为 CSS 样式工具类库
 
 ---
-
-### 3.2 extensive 页面（泛听页面）
-
-**文件位置：** `pages/training/listening/extensive/index.wxml:33-65`
-
-**按钮组类型：** 双层结构 (`.btn-group-layout-split`)
-
-**容器类：** ✅ `.btn-page-bottom`（固定底部，含蒙版）
-
-**结构：**
-```
-Header区域：
-  - 播放/暂停/重新播放按钮 (btn-action btn--audio, 条件渲染)
-  - 前往答题按钮 (btn-action btn--audio, 条件渲染)
-
-分割线
-
-Footer区域：
-  - 设置按钮 (btn-action-icon btn--setting)
-  - 原文内容按钮 (btn-action btn--list)
-```
-
-**局部样式调整：**
-```css
-/* pages/training/listening/extensive/index.wxss:155-160 */
-.btn-group-layout-split__footer {
-  justify-content: space-between;  /* 两端对齐 */
-}
-```
-
-**特点：**
-- 标准双层按钮组
-- Footer层使用两端对齐布局
-- 符合所有规范要求 ✅
-
----
-
-### 3.3 practice 页面（练习页面）
-
-**文件位置：** `pages/training/listening/practice/index.wxml:14-21`
-
-**按钮组类型：** 单行居中 (`.btn-group-layout-inline-center`)
-
-**容器类：** ✅ `.btn-page-bottom`（固定底部，含蒙版）
-
-**结构：**
-```
-单行居中：
-  - 提交按钮 (btn-action btn--correct)
-```
-
-**特点：**
-- 简洁的单按钮布局
-- 使用标准单行居中模式
-- 符合所有规范要求 ✅
-
----
-
-### 3.4 article 页面（文章页面）
-
-**文件位置：** `pages/training/listening/article/index.wxml:15-24`
-
-**按钮组类型：** 单层结构 (`.btn-group-layout-split` 仅使用 footer)
-
-**容器类：** ✅ `.btn-page-bottom`（固定底部，含蒙版）
-
-**结构：**
-```
-单层Footer：
-  - 返回按钮 (btn-action btn--audio)
-```
-
-**特点：**
-- 简洁的单按钮布局
-- 使用 `.btn-group-layout-split__footer` 确保样式一致
-- 符合所有规范要求 ✅
-
----
-
-### 3.5 report-card 页面（成绩单页面）
-
-**文件位置：** `pages/training/listening/report-card/index.wxml:30-45`
-
-**按钮组类型：** 双层结构 (`.btn-group-layout-split`)
-
-**容器类：** ✅ `.btn-page-bottom`（固定底部，含蒙版）
-
-**结构：**
-```
-Header区域：
-  - 评分评语文本（非按钮元素）
-
-分割线
-
-Footer区域：
-  - 保存并返回按钮 (btn-action btn--audio)
-```
-
-**特点：**
-- Header区域用于显示评分评语文本
-- Footer区域包含"保存并返回"操作按钮
-- 符合所有规范要求 ✅
-
----
-
-### 3.6 explanation 页面（解析页面）
-
-**文件位置：** `pages/training/listening/explanation/index.wxml:48-57`
-
-**按钮组类型：** 内嵌简化变体 (`.btn-group-embedded`)
-
-**位置布局：** 🔧 特殊布局（内嵌在内容区域）
-
-**结构：**
-```
-简化按钮组：
-  - 播放/暂停按钮 (btn-action-icon btn--audio)
-  - 显示/隐藏按钮 (btn-action-icon btn--visible)
-```
-
-**自定义样式：**
-```css
-/* pages/training/listening/explanation/index.wxss:91-96 */
-/* 内嵌式按钮组 - 用于内容区域的轻量按钮组，无外边框和padding */
-.btn-group-embedded {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-```
-
-**条件渲染：**
-```xml
-<view class="explain__article" wx:if="{{detail.sentenceList.length > 0}}">
-  <!-- 原文内容 -->
-  <view class="btn-group-embedded">
-    <!-- 按钮 -->
-  </view>
-</view>
-```
-
-**特点：**
-- 内嵌在原文内容区块中
-- 无外边框、无container padding
-- 纯图标按钮，无文字标签
-- 轻量化设计，适合内容区域嵌入
-- 按钮本身（.btn-action-icon）符合规范 ✅
-- 属于特殊场景的合理设计变体 ✅
-
----
-
-## 四、设计原则
-
-### 4.1 一致性原则
-- 所有标准按钮组使用统一的全局样式类
-- 按钮尺寸、间距、颜色保持一致
-- 功能相同的按钮使用相同的颜色类
-
-### 4.2 层级原则
-- 主要操作放在Header层或单独居中
-- 次要操作（设置、列表等）放在Footer层
-- 使用分割线明确区分不同层级
-
-### 4.3 语义化原则
-- 按钮颜色与功能语义对应（音频-蓝色、确认-绿色、错误-红色）
-- 类名清晰表达用途（btn-action、btn-action-icon）
-- 布局类名体现结构（split、inline-center）
-
-### 4.4 灵活性原则
-- 提供多种布局模式适应不同场景
-- 允许局部样式调整布局对齐方式
-- 支持内嵌简化变体应对特殊需求
-
-### 4.5 位置一致性原则（新增）
-- **常规按钮组统一固定在页面底部**，不随内容滚动
-- 距底部20px，左右20px，保持一致的视觉距离
-- 特殊场景（如内嵌按钮组）可根据需求自定义位置
-- 固定底部设计确保操作按钮始终可见，提升用户体验
-
----
-
-## 五、开发注意事项
-
-### 5.1 使用建议
-1. **优先使用全局样式类**：除非有特殊需求，应使用 `theme.wxss` 中定义的标准类
-2. **局部调整仅限布局**：页面级样式调整应仅涉及布局（对齐、间距分布），不应修改尺寸规范
-3. **保持语义一致**：相同功能的按钮应使用相同的颜色类
-
-### 5.2 新增按钮组检查清单
-- [ ] 是否使用标准全局样式类？
-- [ ] 按钮icon是否为25px？
-- [ ] 按钮文字是否为15px？
-- [ ] 按钮padding是否为5px？
-- [ ] 文字与icon间距是否为5px？
-- [ ] 按钮组容器padding是否为15px？
-- [ ] 是否使用了合适的功能色彩类？
-
-### 5.3 常见问题
-
-**Q: 什么时候可以使用自定义按钮组样式？**
-A: 仅在内容嵌入、特殊布局等无法用标准类实现的场景。即使使用自定义容器，按钮本身（.btn-action / .btn-action-icon）也应使用全局类。
-
-**Q: 如何选择双层结构还是单行居中？**
-A:
-- 按钮数量 ≤ 3 个且同等重要 → 单行居中
-- 按钮数量 > 3 个或需要区分层级 → 双层结构
-
-**Q: 可以修改icon尺寸吗？**
-A: 不建议。保持25px统一尺寸有助于视觉一致性。如有特殊需求，应与设计团队确认。
-
----
-
-## 六、更新记录
 
 ### v1.4 (2025-11-30)
-**更新内容：** 按钮组组件完全独立化
 
-**变更详情：**
-- ✅ **删除重复定义**：从 `theme.wxss` 中删除 `.btn-page-bottom` 定义（32行）
-- ✅ **统一至组件包**：所有定义迁移到 `style/button-group/button-group.wxss`
-- ✅ **边框颜色修正**：统一使用 `rgba(0, 0, 0, 0.3)`
-- ✅ **按钮背景色重构**：改为 15% 透明度背景 + 主色文字
-- ✅ **零外部依赖**：组件完全独立，可直接复制到其他项目
-
-**独立性优势：**
-- ✅ 跨项目复用：复制组件目录即可使用
-- ✅ 版本化管理：独立的版本号和更新日志
-- ✅ 统一更新：在模板项目更新，其他项目同步
-- ✅ 开箱即用：无需任何外部依赖
-
-**提交记录：**
-- `760fe94` - refactor: 删除theme.wxss中btn-page-bottom的重复定义
-- `052a983` - feat: 按钮组组件颜色规范修正 v1.4.0
+- 边框颜色修正为 rgba(0, 0, 0, 0.3)
+- 按钮改为 15% 透明度背景 + 主色文字
+- 删除 theme.wxss 中重复定义
 
 ---
 
-### v1.3 (2025-11-30)
-**更新内容：** 完成所有页面按钮组容器和蒙版的彻底统一
+## 九、参考资源
 
-**变更详情：**
-- ✅ 统一所有页面使用 `.btn-page-bottom` 作为固定底部按钮组容器类
-- ✅ 删除各页面中重复的容器样式定义：
-  - 删除 `article-page__footer` 及其蒙版样式（34行）
-  - 删除 `report-card-page__footer` 及其蒙版样式（34行）
-- ✅ 统一蒙版实现方式（使用 CSS 变量）：
-  - 容器：`bottom/left/right: var(--button-group-*-distance)`
-  - 蒙版A：使用 `calc()` 动态计算延伸距离
-  - 蒙版B：使用 CSS 变量定义渐变高度
-- ✅ 明确蒙版A和蒙版B为按钮组的必要组成部分，常驻存在
-- ✅ 新增 article 页面到规范文档（3.4节）
-- ✅ 更新 2.4 节为"固定底部按钮组容器类（统一实现）"，详细说明 `.btn-page-bottom` 的完整定义
-
-**实现架构：**
-```
-.btn-page-bottom = 容器定位 + 蒙版A(::before) + 蒙版B(::after)
-├── 容器：固定在底部，使用 CSS 变量配置
-├── 蒙版A：白色背景，从按钮组顶部向下覆盖到视口底部
-└── 蒙版B：白色渐变，从按钮组顶部向上15px渐变到透明
-```
-
-**优势：**
-- ✅ 零代码重复：删除 68 行重复代码
-- ✅ 独立组件包：提取到 `style/button-group/`
-- ✅ 命名一致：所有页面使用相同的容器类名
-- ✅ 开箱即用：使用者无需关心蒙版实现，自动生效
-- ✅ 易于维护：一处修改，全局生效
-
-**影响范围：**
-- ✅ intensive 页面（已统一）
-- ✅ extensive 页面（已统一）
-- ✅ practice 页面（已统一）
-- ✅ article 页面（新增，已统一）
-- ✅ report-card 页面（已统一）
-
-**测试状态：** ✅ 所有页面已测试通过
-
-**提交记录：**
-- `4bf2e31` - refactor: 统一所有页面使用.btn-page-bottom容器类
-- `c11274f` - refactor: 统一所有按钮组为相同实现方式
-- `a4d94c8` - fix: 调整双层按钮组蒙版B紧贴蒙版A上边缘
-- `114e476` - fix: 修正双层按钮组蒙版A从顶部边框外边缘开始
+- **组件样式**：`style/button-group/button-group.wxss`
+- **使用文档**：`style/button-group/README.md`
+- **更新日志**：`style/button-group/CHANGELOG.md`
 
 ---
 
-### v1.2 (2025-11-29)
-**更新内容：** 确立按钮组固定底部为统一逻辑
-
-**变更详情：**
-- 新增"按钮组位置"规范：常规按钮组固定在页面底部，距底部20px
-- 新增章节"固定底部按钮组实现方式"（2.4），提供完整的HTML和CSS实现指南
-- 新增设计原则"位置一致性原则"（4.5）
-- 标注各页面的位置布局状态：
-  - ✅ report-card：已实现固定底部（标准参考）
-  - ⚠️ intensive、extensive、practice：待优化
-  - 🔧 explanation：特殊布局（内嵌）
-- 在 report-card 页面实现固定底部布局，作为标准参考
-
-**实现要点：**
-- 使用 `position: fixed` 固定在底部
-- 不设置 `min-height: 100vh`，避免不必要的滚动
-- `padding-bottom: 130px` 确保内容不被遮挡
-- `bottom: 20px`、`left/right: 20px` 统一间距
-
-**影响范围：**
-- 确立了常规按钮组的统一位置规范
-- report-card 页面已完成固定底部实现
-- 其他页面待后续优化
-
-**测试状态：** ✅ report-card 页面已测试通过
-
-**提交记录：**
-- `0fa1734` - fix: report-card页面返回逻辑和按钮组布局优化
-- `5302d61` - fix: report-card页面按钮组固定在底部不滚动
-- `e61e21f` - fix: 优化report-card页面滚动逻辑
-
----
-
-### v1.1 (2025-11-29)
-**更新内容：** 统一按钮间距规范
-
-**变更详情：**
-- 将所有按钮组的按钮间距（gap）从 `10px` 统一调整为 `15px`
-- 涉及样式类：
-  - `.btn-group-layout-split__header`
-  - `.btn-group-layout-split__footer`
-  - `.btn-group-layout-inline-center`
-  - `.btn-group-embedded`（explanation页面）
-- 新增规范项：在基础规范表格中明确"按钮间距"为 `15px`
-
-**影响范围：**
-- 所有使用按钮组的页面（intensive、extensive、practice、report-card、explanation）
-- 按钮整体保持居中对齐不变
-
-**测试状态：** ✅ 已测试通过
-
-**提交记录：** `bcede32` - fix: 统一按钮组按钮间距为15px
-
----
-
-## 七、审计记录
-
-### 审计 v3 (2025-11-30)
-
-**审计日期：** 2025-11-30
-**审计范围：** 按钮组组件独立性 + 全局样式定义 + 6个主要页面
-**审计结果：** ✅ 组件完全独立，所有页面统一且符合设计规范
-
-**审计详情：**
-| 页面 | 容器类 | 蒙版实现 | 符合性 | 备注 |
-|------|--------|---------|--------|------|
-| button-group 组件 | `.btn-page-bottom` | 统一定义 | ✅ 完全符合 | 唯一定义位置（独立组件） |
-| intensive | `.btn-page-bottom` | 继承组件 | ✅ 完全符合 | 双层结构 |
-| extensive | `.btn-page-bottom` | 继承组件 | ✅ 完全符合 | 双层结构 |
-| practice | `.btn-page-bottom` | 继承组件 | ✅ 完全符合 | 单行居中 |
-| article | `.btn-page-bottom` | 继承组件 | ✅ 完全符合 | 单层结构 |
-| report-card | `.btn-page-bottom` | 继承组件 | ✅ 完全符合 | 双层结构 |
-| explanation | 不适用 | 不适用 | ✅ 符合 | 内嵌简化变体 |
-
-**独立性检查：**
-- ✅ 所有定义在 `style/button-group/button-group.wxss` 中
-- ✅ 无外部依赖（所有颜色、尺寸直接定义）
-- ✅ 无重复定义（已从 theme.wxss 删除）
-- ✅ 完整文档（README + CHANGELOG）
-- ✅ 可独立复用到其他项目
-
-**统一性检查：**
-- ✅ 所有常规按钮组统一使用 `.btn-page-bottom`
-- ✅ 无重复的容器样式定义
-- ✅ 无重复的蒙版样式定义
-- ✅ 蒙版A和蒙版B作为必要组成部分常驻存在
-
----
-
-### 审计 v2 (2025-11-30)
-
-**审计日期：** 2025-11-30
-**审计范围：** 全局样式定义 + 6个主要页面 + 容器类统一性
-**审计结果：** ✅ 所有页面完全统一且符合设计规范
-
-**审计详情：**
-| 页面 | 容器类 | 蒙版实现 | 符合性 | 备注 |
-|------|--------|---------|--------|------|
-| theme.wxss（全局） | `.btn-page-bottom` | 统一定义 | ✅ 完全符合 | 唯一蒙版定义位置 |
-| intensive | `.btn-page-bottom` | 继承全局 | ✅ 完全符合 | 双层结构 |
-| extensive | `.btn-page-bottom` | 继承全局 | ✅ 完全符合 | 双层结构 |
-| practice | `.btn-page-bottom` | 继承全局 | ✅ 完全符合 | 单行居中 |
-| article | `.btn-page-bottom` | 继承全局 | ✅ 完全符合 | 单层结构 |
-| report-card | `.btn-page-bottom` | 继承全局 | ✅ 完全符合 | 双层结构 |
-| explanation | 不适用 | 不适用 | ✅ 符合 | 内嵌简化变体 |
-
-**统一性检查：**
-- ✅ 所有常规按钮组统一使用 `.btn-page-bottom`
-- ✅ 无重复的容器样式定义
-- ✅ 无重复的蒙版样式定义
-- ✅ 蒙版A和蒙版B作为必要组成部分常驻存在
-
----
-
-### 审计 v1 (2025-11-29)
-
-**审计日期：** 2025-11-29
-**审计范围：** 全局样式定义 + 5个主要页面
-**审计结果：** 所有页面符合设计规范 ✅
-
-**审计详情：**
-| 页面 | 符合性 | 备注 |
-|------|--------|------|
-| theme.wxss（全局） | ✅ 符合 | 标准定义完整准确 |
-| intensive | ✅ 符合 | 标准双层结构 |
-| extensive | ✅ 符合 | 标准双层结构 |
-| practice | ✅ 符合 | 标准单行居中 |
-| report-card | ✅ 符合 | 标准双层结构 |
-| explanation | ✅ 符合 | 内嵌简化变体，设计合理 |
-
----
-
-## 八、参考资源
-
-- **组件样式定义：** `style/button-group/button-group.wxss`
-- **组件使用文档：** `style/button-group/README.md`
-- **组件更新日志：** `style/button-group/CHANGELOG.md`
-- **使用示例：** 参见各页面 wxml 文件
-- **相关文档：** `docs/home-page-structure.md`
-
----
-
-**文档版本：** v1.4
-**最后更新：** 2025-11-30
+**文档版本：** v1.6
+**最后更新：** 2025-12-06
 **维护者：** 开发团队
