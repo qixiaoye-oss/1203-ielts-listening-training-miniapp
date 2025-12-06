@@ -121,11 +121,10 @@ page {
   box-sizing: border-box;
 }
 
-/* 上层（Header） */
+/* 上层（Header）- 仅提供基础布局，具体排列由 btn-pos-* 位置类控制 */
 .btn-group-layout-split__header {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   gap: var(--button-group-gap);
   padding: var(--button-group-padding);
 }
@@ -276,14 +275,20 @@ page {
 
 /**
  * 按钮位置规范：
- * - 居中（单按钮）：常规居中，无需额外类
- * - 居中（双按钮）：两按钮间距15px，间距中点居中
+ * - 居中（任意按钮）：使用 btn-pos-center 类包裹，按钮间距15px，整体居中
  * - 左1/左2：靠左排列，距边缘15px
  * - 右1/右2：靠右排列，距边缘15px
  * - 按钮与按钮之间间距：15px
  */
 
-/* 双按钮居中容器：两按钮关于中心对称 */
+/* 按钮居中容器：任意数量按钮居中对齐 */
+.btn-pos-center {
+  display: flex;
+  justify-content: center;
+  gap: var(--button-group-gap);
+}
+
+/* 双按钮居中（别名，向后兼容） */
 .btn-pos-dual-center {
   display: flex;
   justify-content: center;
