@@ -17,8 +17,8 @@
     "pages/training/listening/unclear/index",
     "pages/training/listening/label/index",
     "pages/training/listening/label-edit/index",
-    "pages/user/index",
-    "pages/setting/user/index",
+    "pages/user/user/user",
+    "pages/user/login/login",
     "pages/setting/module/index"
   ],
   "window": {
@@ -43,7 +43,7 @@
         "selectedIconPath": "images/v2/listening_.png"
       },
       {
-        "pagePath": "pages/user/index",
+        "pagePath": "pages/user/user/user",
         "text": "我",
         "iconPath": "images/v2/me.png",
         "selectedIconPath": "images/v2/me_.png"

@@ -9,7 +9,12 @@
       <view class="remind">修改之前，请先完善用户信息</view>
     </view>
   </view>
-  <view class="save-botton">
-    <button size="default" formType="submit" class="save" hover-class="tap-active">保存</button>
+  <view class="btn-page-bottom">
+    <view class="btn-group-layout-inline-center">
+      <button formType="submit" class="btn-action btn--audio" hover-class="tap-active">
+        <view>保存</view>
+        <image src="/images/v2/save_but.png"></image>
+      </button>
+    </view>
   </view>
 </form>
