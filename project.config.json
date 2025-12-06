@@ -48,7 +48,7 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.25.3",
+  "libVersion": "3.12.0",
   "appid": "wx337dab192177e665",
   "projectname": "不刷语料库",
   "simulatorType": "wechat",

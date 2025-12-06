@@ -2,9 +2,9 @@ var Promise = require('../plugins/es6-promise.min.js')
 var uploaduri = 'https://ielts-listen-training.oss-cn-qingdao.aliyuncs.com'
 let url = {
   // develop: 'https://local.lylo.top/api/listen',
-  develop: 'https://free.jingying.vip/api/listen',
-  trial: 'https://free.jingying.vip/api/listen',
-  release: 'https://free.jingying.vip/api/listen',
+  develop: 'https://listen.jingying.vip/api/listen',
+  trial: 'https://listen.jingying.vip/api/listen',
+  release: 'https://listen.jingying.vip/api/listen',
 }
 
 const version = wx.getAccountInfoSync().miniProgram.envVersion
@@ -100,21 +100,21 @@ function uploadFileToOSS(filePath) {
     let fileName = imageName.substring(imageName.lastIndexOf('/') + 1);
     var realpath = '/user/head/' + fileName
     const formData = {
-      key: realpath,  //上传文件名称
-      policy: res.data.policy,   //表单域
-      'x-oss-signature-version': res.data.x_oss_signature_version,    //指定签名的版本和算法
-      'x-oss-credential': res.data.x_oss_credential,   //指明派生密钥的参数集
-      'x-oss-date': res.data.x_oss_date,   //请求的时间
-      'x-oss-signature': res.data.signature,   //签名认证描述信息
-      'x-oss-security-token': res.data.security_token,  //安全令牌
-      success_action_status: "200"  //上传成功后响应状态码
+      key: realpath, //上传文件名称
+      policy: res.data.policy, //表单域
+      'x-oss-signature-version': res.data.x_oss_signature_version, //指定签名的版本和算法
+      'x-oss-credential': res.data.x_oss_credential, //指明派生密钥的参数集
+      'x-oss-date': res.data.x_oss_date, //请求的时间
+      'x-oss-signature': res.data.signature, //签名认证描述信息
+      'x-oss-security-token': res.data.security_token, //安全令牌
+      success_action_status: "200" //上传成功后响应状态码
     };
     return new Promise((resolve, reject) => {
       // 发送请求上传文件 
       wx.uploadFile({
-        url: uploaduri,  // 此域名仅作示例，实际Bucket域名，请替换为您的目标Bucket域名。
+        url: uploaduri, // 此域名仅作示例，实际Bucket域名，请替换为您的目标Bucket域名。
         filePath: filePath,
-        name: 'file',   //固定值为file
+        name: 'file', //固定值为file
         formData: formData,
         success: function (res) {
           wx.hideToast()
