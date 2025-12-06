@@ -393,7 +393,7 @@ page {
  * 注意：__header/__footer 已有 padding: 15px，此类仅需处理文字样式和居中
  */
 .btn-text-content {
-  width: 100%;
+  flex: 1;
   font-size: 15px;
   line-height: 1.4;
   text-align: center;
