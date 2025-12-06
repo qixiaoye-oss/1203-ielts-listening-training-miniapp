@@ -55,14 +55,13 @@
 }
 
 /* 重置按钮组内button的默认样式 */
-.btn-action {
-  background: none;
+.btn-group-layout-inline-center .btn-action {
   border: none;
   padding: 5px;
   margin: 0;
   line-height: inherit;
 }
 
-.btn-action::after {
+.btn-group-layout-inline-center .btn-action::after {
   border: none;
 }
