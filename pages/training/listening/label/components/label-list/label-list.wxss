@@ -1,5 +1,4 @@
-/* 组件需要直接引入全局样式，apply-shared 只继承页面样式不包括 app.wxss */
-@import "/style/button-group.wxss";
+/* 组件需要引入 tag 样式 */
 @import "/style/tag.wxss";
 
 .label-list-base-container {

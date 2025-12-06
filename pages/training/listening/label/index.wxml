@@ -1,6 +1,18 @@
 <view class="{{isPc ? 'windows' : '' }}" wx:if="{{isAllRady}}">
   <view class="body {{isPc ? 'left-body' : '' }}">
-    <label-list list="{{list}}" bind:edit="toEditPage" bind:return="returnPage"></label-list>
+    <label-list list="{{list}}" bind:edit="toEditPage"></label-list>
+    <view class="btn-page-bottom">
+      <view class="btn-group-layout-split">
+        <view class="btn-group-layout-split__header btn-text-content">保持精听，越来越好</view>
+        <view class="btn-group-layout-split__divider"></view>
+        <view class="btn-group-layout-split__footer">
+          <view class="btn-action btn--audio" bind:tap="returnPage" hover-class="tap-active" hover-stay-time="100">
+            <view>保存并返回</view>
+            <image src="/images/v2/save_but.png"></image>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
   <view class="intervals" wx:if="{{isPc}}"></view>
   <block wx:if="{{isPc}}">
