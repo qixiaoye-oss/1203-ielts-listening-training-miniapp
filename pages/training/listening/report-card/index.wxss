@@ -74,4 +74,4 @@
   margin-top: 10px;
 }
 
-/* .scoring_reviews 样式已移至 style/button-group.wxss */
+/* 纯文字层样式已统一使用 .btn-text-content（见 style/button-group.wxss） */

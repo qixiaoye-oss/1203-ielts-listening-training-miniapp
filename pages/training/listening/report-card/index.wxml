@@ -32,7 +32,7 @@
 </view>
 <view class="btn-page-bottom">
   <view class="btn-group-layout-split">
-    <view class="btn-group-layout-split__header scoring_reviews">
+    <view class="btn-group-layout-split__header btn-text-content">
       <text wx:if="{{correctness > 71}}">非常棒！有7+的潜质！只分析错题即可！</text>
       <text wx:if="{{correctness > 30 && correctness < 70}}">还不错！分数预估6.5分上下！如果有蒙对的题，建议整篇精听，并做好标注！</text>
       <text wx:if="{{correctness < 30}}">不太好！分数预估6分以下！必须整篇精听，并做好标注！</text>

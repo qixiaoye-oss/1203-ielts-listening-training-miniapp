@@ -28,7 +28,7 @@
   </scroll-view>
   <view class="btn-page-bottom">
     <view class="btn-group-layout-split">
-      <view class="btn-group-layout-split__header scoring_reviews">保持精听，越来越好</view>
+      <view class="btn-group-layout-split__header btn-text-content">保持精听，越来越好</view>
       <view class="btn-group-layout-split__divider"></view>
       <view class="btn-group-layout-split__footer">
         <view class="btn-action btn--audio" bind:tap="returnPage" hover-class="tap-active" hover-stay-time="100">
