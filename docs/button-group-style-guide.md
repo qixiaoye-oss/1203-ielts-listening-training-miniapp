@@ -1,7 +1,22 @@
 # 按钮组样式规范文档
 
-**版本：** v1.6
+微信小程序通用按钮组 **CSS 样式工具类库**，提供固定底部容器、多种布局模式和蒙版功能。
+
+> **注意**：这是一个纯 CSS 样式库，不是微信小程序自定义组件。
+> 通过 `@import` 引入样式后，直接在 wxml 中使用 CSS 类名即可。
+
+**版本：** v1.6.0
 **更新日期：** 2025-12-06
+**样式文件：** `style/button-group.wxss`
+
+---
+
+## 快速引入
+
+```css
+/* app.wxss */
+@import "style/button-group.wxss";
+```
 
 ---
 
@@ -69,9 +84,7 @@
 
 ---
 
-## 三、高度计算确认
-
-根据您提供的高度计算规范：
+## 三、高度计算
 
 ```
 页面列表内容（或其他内容）
@@ -111,7 +124,7 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 视窗底边缘
 ```
 
-### 计算验证
+### 计算结果
 
 **单层按钮组高度：**
 ```
@@ -134,9 +147,53 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 
 ---
 
-## 四、按钮规定
+## 四、Step 1 - 选择层数
 
-### 4.1 icon → 颜色自动关联
+### 一层结构
+
+使用 `.btn-group-layout-inline-center`
+
+```xml
+<view class="btn-page-bottom">
+  <view class="btn-group-layout-inline-center">
+    <!-- 按钮 -->
+  </view>
+</view>
+```
+
+### 两层结构
+
+使用 `.btn-group-layout-split`
+
+```xml
+<view class="btn-page-bottom">
+  <view class="btn-group-layout-split">
+    <!-- 上层 -->
+    <view class="btn-group-layout-split__header">
+      <!-- 按钮 -->
+    </view>
+    <!-- 分割线 -->
+    <view class="btn-group-layout-split__divider"></view>
+    <!-- 下层 -->
+    <view class="btn-group-layout-split__footer">
+      <!-- 按钮 -->
+    </view>
+  </view>
+</view>
+```
+
+---
+
+## 五、Step 2 - 定义按钮
+
+### 5.1 按钮类型
+
+| 类名 | 用途 | 包含内容 |
+|------|------|---------|
+| `.btn-action` | 带文字和图标的按钮 | 文字 + icon |
+| `.btn-action-icon` | 纯图标按钮 | 仅 icon |
+
+### 5.2 icon → 颜色自动关联
 
 **规定1：** icon 一旦确定，按钮的**文字颜色**和**背景色**均跟随该 icon 的主色。
 
@@ -171,7 +228,23 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 
 > **注意**：颜色映射表将在您提供完整 icon 列表后配置。在此之前，请手动使用颜色类（如 `.btn--audio`）。
 
-### 4.2 按钮位置
+**当前可用颜色类：**
+
+| 类名 | 主色 | 用途 |
+|------|------|------|
+| `.btn--audio` | #00A6ED 蓝色 | 音频播放 |
+| `.btn--correct` | #00D26A 绿色 | 正确确认 |
+| `.btn--wrong` | #F92F60 红色 | 错误删除 |
+| `.btn--list` | #FFB02D 黄色 | 列表导航 |
+| `.btn--setting` | #998EA4 紫灰 | 设置配置 |
+| `.btn--visible` | #7D4533 棕色 | 显示隐藏 |
+| `.btn--label` | #F8312F 红色 | 标记标签 |
+| `.btn--recording` | #212121 黑色 | 录音相关 |
+| `.btn--practice` | #433B6B 深紫 | 练习模式 |
+| `.btn--exercise` | #533566 紫色 | 习题练习 |
+| `.btn--dis` | - | 禁用状态(透明度0.3) |
+
+### 5.3 按钮位置
 
 **规定2：** 按钮的位置分为以下几种：
 
@@ -192,27 +265,39 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 
 ---
 
-## 五、蒙版规范
+## 六、Step 3 - 自动蒙版
 
-无论"一层"还是"两层"：
+使用 `.btn-page-bottom` 容器，自动获得蒙版A和蒙版B。
 
-### 5.1 蒙版A
+### 蒙版结构图
 
-- **起点**：按钮组灰框的上边缘
-- **终点**：视窗底边缘
-- **样式**：纯白色背景（`#FFFFFF`）
-- **作用**：防止滚动内容透出
+```
+┌─────────────────────────────────────┐
+│ 页面列表内容（或其他内容）             │
+├─────────────────────────────────────┤ ← 15px padding
+│░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│ ← 蒙版B（15px渐变至透明）
+├─────────────────────────────────────┤ ← 灰框上边缘
+│                                     │ ← 15px padding
+│  ┌─────────────────────────────┐   │
+│  │  按钮（icon+文字）            │   │ ← 按钮高度 35px
+│  └─────────────────────────────┘   │
+│                                     │ ← 15px padding
+├─────────────────────────────────────┤ ← 灰框下边缘
+│█████████████████████████████████████│
+│█████████████ 蒙版A ██████████████████│ ← 白色背景至视窗底
+│█████████████████████████████████████│
+└─────────────────────────────────────┘ ← 20px padding
+  视窗底边缘
+```
 
-### 5.2 蒙版B
+### 蒙版说明
 
-- **起点**：按钮组灰框的上边缘
-- **终点**：向上 15px
-- **样式**：白色渐变至 100% 透明
-- **作用**：平滑视觉过渡
+| 蒙版 | 起点 | 终点 | 样式 | 作用 |
+|------|------|------|------|------|
+| 蒙版A | 灰框上边缘 | 视窗底边缘 | 纯白色背景 | 防止滚动内容透出 |
+| 蒙版B | 灰框上边缘 | 向上15px | 白色渐变至透明 | 平滑视觉过渡 |
 
-### 5.3 蒙版实现
-
-使用 `.btn-page-bottom` 容器，蒙版自动生效：
+### 蒙版CSS实现
 
 ```css
 /* 蒙版A - ::before */
@@ -234,37 +319,79 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 
 ---
 
-## 六、位置示例
+## 七、完整示例
 
-### 6.1 单按钮居中
+### 示例1：单层单按钮
 
 ```xml
-<view class="btn-group-layout-inline-center">
-  <view class="btn-action btn--correct">
-    <view>提交</view>
-    <image src="/images/correct.png"></image>
+<view class="btn-page-bottom">
+  <view class="btn-group-layout-inline-center">
+    <view class="btn-action btn--correct" bindtap="submit">
+      <view>提交</view>
+      <image src="/images/submit.png"></image>
+    </view>
   </view>
 </view>
 ```
 
-### 6.2 双按钮居中
-
-两个按钮间距15px，间距的中央（7.5px位置）永远保持居中。
+### 示例2：单层双按钮居中
 
 ```xml
-<view class="btn-group-layout-inline-center btn-pos-dual-center">
-  <view class="btn-action btn--audio">
-    <view>播放</view>
-    <image src="/images/play.png"></image>
-  </view>
-  <view class="btn-action btn--correct">
-    <view>提交</view>
-    <image src="/images/correct.png"></image>
+<view class="btn-page-bottom">
+  <view class="btn-group-layout-inline-center btn-pos-dual-center">
+    <view class="btn-action btn--audio" bindtap="play">
+      <view>播放</view>
+      <image src="/images/play.png"></image>
+    </view>
+    <view class="btn-action btn--correct" bindtap="submit">
+      <view>提交</view>
+      <image src="/images/correct.png"></image>
+    </view>
   </view>
 </view>
 ```
 
-### 6.3 左右分布
+### 示例3：双层结构
+
+```xml
+<view class="btn-page-bottom">
+  <view class="btn-group-layout-split">
+    <!-- 上层 -->
+    <view class="btn-group-layout-split__header">
+      <view class="btn-pos-left-group">
+        <view class="btn-action btn--audio" bindtap="replay">
+          <view>重播</view>
+          <image src="/images/replay.png"></image>
+        </view>
+        <view class="btn-action btn--audio" bindtap="play">
+          <view>播放</view>
+          <image src="/images/play.png"></image>
+        </view>
+      </view>
+      <view class="btn-action btn--correct btn-pos-right-1" bindtap="confirm">
+        <view>听懂</view>
+        <image src="/images/correct.png"></image>
+      </view>
+    </view>
+
+    <!-- 分割线 -->
+    <view class="btn-group-layout-split__divider"></view>
+
+    <!-- 下层 -->
+    <view class="btn-group-layout-split__footer">
+      <view class="btn-action-icon btn--setting btn-pos-left-1" bindtap="setting">
+        <image src="/images/setting.png"></image>
+      </view>
+      <view class="btn-action btn--list btn-pos-right-1" bindtap="list">
+        <view>列表</view>
+        <image src="/images/list.png"></image>
+      </view>
+    </view>
+  </view>
+</view>
+```
+
+### 示例4：左右分布
 
 ```xml
 <view class="btn-group-layout-split__footer">
@@ -278,106 +405,26 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 </view>
 ```
 
-### 6.4 左侧多按钮 + 右侧单按钮
-
-```xml
-<view class="btn-group-layout-split__header">
-  <view class="btn-pos-left-group">
-    <view class="btn-action btn--audio">重播</view>
-    <view class="btn-action btn--audio">播放</view>
-  </view>
-  <view class="btn-action btn--correct btn-pos-right-1">听懂</view>
-</view>
-```
-
----
-
-## 七、完整构建示例
-
-### 示例：双层按钮组
-
-```xml
-<!-- Step 3: 使用 .btn-page-bottom 容器（自动蒙版） -->
-<view class="btn-page-bottom">
-
-  <!-- Step 1: 选择两层结构 -->
-  <view class="btn-group-layout-split">
-
-    <!-- 上层 -->
-    <view class="btn-group-layout-split__header">
-      <!-- Step 2: 定义按钮（icon + 位置） -->
-      <view class="btn-pos-left-group">
-        <view class="btn-action btn--audio" data-icon="replay">
-          <view>重播</view>
-          <image src="/images/replay.png"></image>
-        </view>
-        <view class="btn-action btn--audio" data-icon="play">
-          <view>播放</view>
-          <image src="/images/play.png"></image>
-        </view>
-      </view>
-      <view class="btn-action btn--correct btn-pos-right-1" data-icon="correct">
-        <view>听懂</view>
-        <image src="/images/correct.png"></image>
-      </view>
-    </view>
-
-    <!-- 分割线 -->
-    <view class="btn-group-layout-split__divider"></view>
-
-    <!-- 下层 -->
-    <view class="btn-group-layout-split__footer">
-      <view class="btn-action-icon btn--setting btn-pos-left-1" data-icon="setting">
-        <image src="/images/setting.png"></image>
-      </view>
-      <view class="btn-action btn--list btn-pos-right-1" data-icon="list">
-        <view>列表</view>
-        <image src="/images/list.png"></image>
-      </view>
-    </view>
-
-  </view>
-</view>
-```
-
 ---
 
 ## 八、更新记录
 
 ### v1.6 (2025-12-06)
-
-**更新内容：** 重构构建流程，添加按钮位置类
-
-**变更详情：**
-- 明确三步构建流程：选择层数 → 定义按钮 → 自动蒙版
+- 重构构建流程：选择层数 → 定义按钮 → 自动蒙版
 - 新增按钮位置类：双按钮居中、左1/2、右1/2、左右组
 - 预留 icon → 颜色自动映射机制（待颜色表配置）
-- 高度计算规范确认
-
----
+- 合并 readme 与 style-guide 文档
 
 ### v1.5 (2025-11-30)
-
 - 从 components/ 迁移至 style/
 - 明确定位为 CSS 样式工具类库
 
----
-
 ### v1.4 (2025-11-30)
-
 - 边框颜色修正为 rgba(0, 0, 0, 0.3)
 - 按钮改为 15% 透明度背景 + 主色文字
-- 删除 theme.wxss 中重复定义
 
 ---
 
-## 九、参考资源
-
-- **组件样式**：`style/button-group.wxss`
-- **使用文档**：`docs/button-group-readme.md`
-
----
-
-**文档版本：** v1.6
+**文档版本：** v1.6.0
 **最后更新：** 2025-12-06
 **维护者：** 开发团队
