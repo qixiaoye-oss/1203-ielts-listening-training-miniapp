@@ -349,21 +349,22 @@ page {
 /* ==================== 8. 辅助类 ==================== */
 
 /* 按钮角标（用于显示数字或状态） */
+/* 角标对角线中点与按钮右上角重合，背景色需自定义 */
 .btn-corner-mark {
   position: absolute;
-  top: -10px;
-  right: -14px;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%) scale(0.9);
   width: 22px;
   height: 22px;
   font-size: 10px;
   border-radius: var(--button-border-radius);
-  transform: scale(0.9);
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--button-color-wrong);
   color: white;
+  /* 背景色需通过额外类或内联样式指定，如 btn--wrong 的背景色 */
 }
 
 /* ==================== 9. 动画效果 ==================== */
