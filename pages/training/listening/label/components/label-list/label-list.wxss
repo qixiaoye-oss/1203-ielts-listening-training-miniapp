@@ -6,8 +6,10 @@
 
 /* 显示部分 */
 .label-list-container {
-  height: calc(100vh - 64px);
-  padding-block: 20px;
+  height: 100vh;
+  padding-top: 20px;
+  /* 底部 padding 为按钮组预留空间：按钮组高度约110px + 底部距离20px + 渐变15px */
+  padding-bottom: 150px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
