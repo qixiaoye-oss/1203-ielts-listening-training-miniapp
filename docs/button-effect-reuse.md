@@ -175,8 +175,8 @@
 <!-- 固定底部按钮组 -->
 <view class="btn-page-bottom">
   <view class="btn-group-layout-split">
-    <!-- 上层 -->
-    <view class="btn-group-layout-split__header">
+    <!-- 上层：使用 btn-pos-center 实现居中 -->
+    <view class="btn-group-layout-split__header btn-pos-center">
       <btn-action type="audio" bind:tap="onReplay">
         <text>重播</text>
         <image src="/images/replay.png"></image>

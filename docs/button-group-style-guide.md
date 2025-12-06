@@ -5,7 +5,7 @@
 > **注意**：这是一个纯 CSS 样式库，不是微信小程序自定义组件。
 > 通过 `@import` 引入样式后，直接在 wxml 中使用 CSS 类名即可。
 
-**版本：** v1.6.0
+**版本：** v1.6.1
 **更新日期：** 2025-12-06
 **样式文件：** `style/button-group.wxss`
 
@@ -250,8 +250,8 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 
 | 位置 | 类名 | 说明 |
 |------|------|------|
-| 居中（单按钮） | 默认 | 无需额外类，常规居中 |
-| 居中（双按钮） | `.btn-pos-dual-center` | 两按钮间距15px，间距中点（7.5px位置）居中 |
+| 居中 | `.btn-pos-center` | 任意数量按钮居中对齐 |
+| 居中（别名） | `.btn-pos-dual-center` | 向后兼容，功能同上 |
 | 左1 | `.btn-pos-left-1` | 第一个靠左按钮 |
 | 左2 | `.btn-pos-left-2` | 第二个靠左按钮（紧跟左1） |
 | 右1 | `.btn-pos-right-1` | 第一个靠右按钮 |
@@ -260,6 +260,8 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 | 右侧组 | `.btn-pos-right-group` | 多个右侧按钮的容器 |
 
 **位置规则：**
+- `__header` 和 `__footer` 仅提供基础布局，需配合位置类使用
+- 居中时，使用 `.btn-pos-center` 类
 - 靠左或靠右时，按钮距离边缘灰框的 padding 为 **15px**
 - 按钮与按钮之间的间距为 **15px**
 
@@ -338,7 +340,7 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 
 ```xml
 <view class="btn-page-bottom">
-  <view class="btn-group-layout-inline-center btn-pos-dual-center">
+  <view class="btn-group-layout-inline-center btn-pos-center">
     <view class="btn-action btn--audio" bindtap="play">
       <view>播放</view>
       <image src="/images/play.png"></image>
@@ -351,12 +353,12 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 </view>
 ```
 
-### 示例3：双层结构
+### 示例3：双层结构（左右分布）
 
 ```xml
 <view class="btn-page-bottom">
   <view class="btn-group-layout-split">
-    <!-- 上层 -->
+    <!-- 上层：左侧按钮组 + 右侧按钮 -->
     <view class="btn-group-layout-split__header">
       <view class="btn-pos-left-group">
         <view class="btn-action btn--audio" bindtap="replay">
@@ -391,7 +393,41 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 </view>
 ```
 
-### 示例4：左右分布
+### 示例4：双层结构（居中）
+
+```xml
+<view class="btn-page-bottom">
+  <view class="btn-group-layout-split">
+    <!-- 上层：按钮居中 -->
+    <view class="btn-group-layout-split__header btn-pos-center">
+      <view class="btn-action btn--audio" bindtap="play">
+        <view>播放</view>
+        <image src="/images/play.png"></image>
+      </view>
+      <view class="btn-action btn--audio" bindtap="goto">
+        <view>前往答题</view>
+        <image src="/images/goto.png"></image>
+      </view>
+    </view>
+
+    <!-- 分割线 -->
+    <view class="btn-group-layout-split__divider"></view>
+
+    <!-- 下层：左右分布 -->
+    <view class="btn-group-layout-split__footer">
+      <view class="btn-action-icon btn--setting btn-pos-left-1">
+        <image src="/images/setting.png"></image>
+      </view>
+      <view class="btn-action btn--list btn-pos-right-1">
+        <view>列表</view>
+        <image src="/images/list.png"></image>
+      </view>
+    </view>
+  </view>
+</view>
+```
+
+### 示例5：单独的左右分布
 
 ```xml
 <view class="btn-group-layout-split__footer">
@@ -409,7 +445,12 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 
 ## 八、更新记录
 
-### v1.6 (2025-12-06)
+### v1.6.1 (2025-12-06)
+- 新增 `.btn-pos-center` 通用居中类（任意数量按钮）
+- `__header` 和 `__footer` 仅提供基础布局，需配合位置类使用
+- `.btn-pos-dual-center` 保留为向后兼容别名
+
+### v1.6.0 (2025-12-06)
 - 重构构建流程：选择层数 → 定义按钮 → 自动蒙版
 - 新增按钮位置类：双按钮居中、左1/2、右1/2、左右组
 - 预留 icon → 颜色自动映射机制（待颜色表配置）
@@ -425,6 +466,6 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 
 ---
 
-**文档版本：** v1.6.0
+**文档版本：** v1.6.1
 **最后更新：** 2025-12-06
 **维护者：** 开发团队

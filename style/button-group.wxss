@@ -1,6 +1,6 @@
 /**
  * 按钮组样式库 (Button Group Styles)
- * @version 1.6.0
+ * @version 1.6.1
  * @date 2025-12-06
  * @description 微信小程序通用按钮组 CSS 样式工具类库，包含固定底部容器、多种布局模式和蒙版功能
  * @author 开发团队
@@ -12,6 +12,7 @@
  *   Step 3: 自动蒙版 - 使用.btn-page-bottom容器自动获得蒙版A和蒙版B
  *
  * @changelog
+ *   v1.6.1 (2025-12-06) - 新增btn-pos-center通用居中类，__header/__footer仅提供基础布局
  *   v1.6.0 (2025-12-06) - 添加按钮位置类，预留icon颜色映射机制，重构构建流程
  *   v1.5.0 (2025-11-30) - 从 components/ 迁移至 style/，明确定位为样式工具类库
  *   v1.4.0 (2025-11-30) - 修正边框颜色为0.3，按钮改为15%透明度背景+主色文字
@@ -121,11 +122,10 @@ page {
   box-sizing: border-box;
 }
 
-/* 上层（Header） */
+/* 上层（Header）- 仅提供基础布局，具体排列由 btn-pos-* 位置类控制 */
 .btn-group-layout-split__header {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   gap: var(--button-group-gap);
   padding: var(--button-group-padding);
 }
@@ -276,14 +276,20 @@ page {
 
 /**
  * 按钮位置规范：
- * - 居中（单按钮）：常规居中，无需额外类
- * - 居中（双按钮）：两按钮间距15px，间距中点居中
+ * - 居中（任意按钮）：使用 btn-pos-center 类包裹，按钮间距15px，整体居中
  * - 左1/左2：靠左排列，距边缘15px
  * - 右1/右2：靠右排列，距边缘15px
  * - 按钮与按钮之间间距：15px
  */
 
-/* 双按钮居中容器：两按钮关于中心对称 */
+/* 按钮居中容器：任意数量按钮居中对齐 */
+.btn-pos-center {
+  display: flex;
+  justify-content: center;
+  gap: var(--button-group-gap);
+}
+
+/* 双按钮居中（别名，向后兼容） */
 .btn-pos-dual-center {
   display: flex;
   justify-content: center;
@@ -343,21 +349,18 @@ page {
 /* ==================== 8. 辅助类 ==================== */
 
 /* 按钮角标（用于显示数字或状态） */
+/* 角标对角线中点与按钮右上角重合，背景色需自定义 */
 .btn-corner-mark {
   position: absolute;
-  top: -10px;
-  right: -14px;
-  width: 22px;
-  height: 22px;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%) scale(0.9);
+  padding: 2px;
   font-size: 10px;
   border-radius: var(--button-border-radius);
-  transform: scale(0.9);
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--button-color-wrong);
   color: white;
+  /* 背景色需通过额外类或内联样式指定 */
 }
 
 /* ==================== 9. 动画效果 ==================== */
