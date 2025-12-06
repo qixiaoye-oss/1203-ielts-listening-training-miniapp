@@ -9,5 +9,5 @@
     </view>
   </view>
   <view class="menu-item menu-item--access" bind:tap="toUpdateUserInfo" hover-class="tap-active" hover-stay-time="100">修改用户信息</view>
+  <view class="menu-item">版本号 {{version || '2.2.2'}}</view>
 </view>
-<view class="version">版本：{{version || '2.2.2'}}</view>

@@ -72,11 +72,3 @@
   top: 20px;
   right: 15px;
 }
-
-.version {
-  margin-top: 15px;
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  color: #cccccc;
-}
