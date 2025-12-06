@@ -1,7 +1,10 @@
+/* 组件需要直接引入全局样式，apply-shared 只继承页面样式不包括 app.wxss */
+@import "/style/button-group.wxss";
+@import "/style/tag.wxss";
+
 .label-list-base-container {
   width: 100%;
   height: 100%;
-  /* 移除 position: relative，避免影响 fixed 定位的按钮组蒙版 */
 }
 
 /* 显示部分 */
