@@ -1,11 +1,12 @@
 .base_view {
-  width: calc(100vw - 40px);
+  width: calc(100vw - 20px);
   height: calc(100vh - 40px);
 }
 
 .layout_grid {
   display: grid;
   gap: 15px;
+  padding-right: 20px;
 }
 
 .list_container {
