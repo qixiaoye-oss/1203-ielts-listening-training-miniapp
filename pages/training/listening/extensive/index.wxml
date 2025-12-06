@@ -37,17 +37,17 @@
       <view class="btn-action btn--audio" wx:if="{{audioStatus === 0}}" bindtap="playAudio" hover-class="tap-active" hover-stay-time="100">
         <view>播放</view>
         <image src="/images/v2/play.png"></image>
-        <view class="playback_rate">{{playbackRate}}x</view>
+        <view class="btn-corner-mark" style="background: rgba(0, 166, 237, 0.8);">{{playbackRate}}x</view>
       </view>
       <view class="btn-action btn--audio" wx:if="{{audioStatus === 1}}" bindtap="pauseAudio" hover-class="tap-active" hover-stay-time="100">
         <view>暂停</view>
         <image src="/images/v2/pause.png"></image>
-        <view class="playback_rate">{{playbackRate}}x</view>
+        <view class="btn-corner-mark" style="background: rgba(0, 166, 237, 0.8);">{{playbackRate}}x</view>
       </view>
       <view class="btn-action btn--audio" wx:if="{{audioStatus === 2}}" bindtap="refreshAudio" hover-class="tap-active" hover-stay-time="100">
         <view>重新播放</view>
         <image src="/images/v2/replay.png"></image>
-        <view class="playback_rate">{{playbackRate}}x</view>
+        <view class="btn-corner-mark" style="background: rgba(0, 166, 237, 0.8);">{{playbackRate}}x</view>
       </view>
       <view class="btn-action btn--audio" bindtap="toExam" hover-class="tap-active" hover-stay-time="100">
         <view>前往答题</view>
