@@ -364,7 +364,7 @@ Page({
     // 提交完成状态
     api.request(this, `/record/v1/complete/progress/${this.data.progressId}`, {}, false).then(() => {
       wx.redirectTo({
-        url: '../label/index' + api.parseParams({
+        url: '../intensive-notes/index' + api.parseParams({
           ...this.options,
           progressId: progressId,
         }),

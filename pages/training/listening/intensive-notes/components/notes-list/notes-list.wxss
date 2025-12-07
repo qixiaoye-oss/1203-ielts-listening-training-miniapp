@@ -1,5 +1,6 @@
-/* 组件需要引入 tag 样式 */
+/* 引入样式 */
 @import "/style/tag.wxss";
+@import "../../shared.wxss";
 
 .label-list-base-container {
   width: 100%;
@@ -180,4 +181,9 @@
   100% {
     transform: scale(1);
   }
+}
+
+/* 列表项间距 */
+.item-spacing {
+  height: 15px;
 }

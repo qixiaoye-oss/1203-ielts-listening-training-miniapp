@@ -1,4 +1,6 @@
+/* 引入样式 */
 @import "/style/iconfont.wxss";
+@import "../../shared.wxss";
 
 .edit-base-container {
   width: 100%;
