@@ -3,7 +3,7 @@
   <view class="loading-progress-bar" wx:if="{{loading}}">
     <view class="loading-progress-bar__inner" style="width: {{loadProgress}}%;"></view>
   </view>
-  <view class="home-main-item" wx:if="{{popularScience.list > 0}}" style="background:{{popularScience.colorRgba}}">
+  <view class="home-main-item" wx:if="{{popularScience.list.length > 0}}" style="background:{{popularScience.colorRgba}}">
     <view class="home-main-item__title" style="color:{{popularScience.colorRgb}}">{{popularScience.title}}</view>
     <view class="home-main-item__content--grid">
       <block wx:for="{{popularScience.list}}" wx:key="noticeIndex" wx:for-item="notice" wx:for-index="noticeIndex">
