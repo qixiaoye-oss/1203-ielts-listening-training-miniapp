@@ -110,6 +110,14 @@
 
 
 
+/* 辅助样式 */
+.flex_row_cen {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
 /* 复习按钮 */
 .again-buts-cell {
   margin-top: 10px;
