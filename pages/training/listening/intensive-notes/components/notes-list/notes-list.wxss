@@ -187,9 +187,15 @@
 
 /* ==================== 底部按钮组（本页面专用） ==================== */
 .footer-btn-group {
-  margin: 0 20px 40px;  /* 上0(依赖item-spacing 15px) 左右20 下40(20+安全区) */
+  margin: 0 20px;  /* 上0(依赖item-spacing 15px) 左右20 */
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 9px;
+}
+
+/* 底部间距占位（scroll-view 内 margin-bottom 不生效，需用占位元素） */
+.footer-bottom-spacer {
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .footer-btn-group__header {

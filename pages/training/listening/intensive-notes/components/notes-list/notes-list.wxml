@@ -62,5 +62,7 @@
         </view>
       </view>
     </view>
+    <!-- 底部间距占位（scroll-view 内 margin-bottom 不生效，需用占位元素） -->
+    <view class="footer-bottom-spacer"></view>
   </scroll-view>
 </view>
