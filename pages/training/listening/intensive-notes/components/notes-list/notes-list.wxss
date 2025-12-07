@@ -1,6 +1,5 @@
 /* 引入样式 */
 @import "/style/tag.wxss";
-@import "../../shared.wxss";
 
 .label-list-base-container {
   width: 100%;
