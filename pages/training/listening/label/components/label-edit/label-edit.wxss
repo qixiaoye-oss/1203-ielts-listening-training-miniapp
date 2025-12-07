@@ -11,7 +11,7 @@
 }
 
 .question-container {
-  border: 1px solid var(--border-color-4);
+  border: 1px solid var(--solid-border-color);
   border-radius: 9px;
   width: 100%;
   flex: 1;
@@ -86,7 +86,7 @@
   flex: 1;
   margin-inline: 15px;
   margin-bottom: 15px;
-  border: 1px dashed var(--border-color-4);
+  border: 1px dashed var(--solid-border-color);
   padding: 15px;
   position: relative;
   display: flex;
@@ -96,7 +96,7 @@
 .answer-title {
   font-size: 12px;
   line-height: 1;
-  color: var(--color-5);
+  color: var(--solid-border-color);
   margin-bottom: 10px;
 }
 
@@ -115,8 +115,8 @@
   margin-top: 10px;
   margin-bottom: 13px;
   padding-block: 12px;
-  border-top: 1px solid var(--border-color-6);
-  border-bottom: 1px solid var(--border-color-6);
+  border-top: 1px solid var(--solid-border-color);
+  border-bottom: 1px solid var(--solid-border-color);
   gap: 15px;
 }
 
@@ -186,7 +186,7 @@
 }
 
 .pl_ {
-  color: var(--color-gray-6);
+  color: var(--solid-border-color);
   font-size: 16px;
   position: absolute;
   top: -2px;
