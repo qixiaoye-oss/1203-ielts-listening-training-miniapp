@@ -91,4 +91,10 @@ Page({
   returnPage() {
     wx.navigateBack()
   },
+  // 打卡功能（占位）
+  review() {
+    // TODO: 实现打卡逻辑
+    api.toast("打卡功能待实现")
+    console.log('打卡功能')
+  }
 })
