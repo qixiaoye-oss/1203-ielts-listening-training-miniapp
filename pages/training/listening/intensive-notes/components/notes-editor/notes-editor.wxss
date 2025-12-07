@@ -6,6 +6,7 @@
   height: 100%;
   position: relative;
   padding: 20px;
+  padding-bottom: 82px; /* 单层按钮组67px + 15px间距 */
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -197,10 +198,6 @@
   position: absolute;
   top: -2px;
   z-index: -1;
-}
-
-.fun-cell {
-  margin-top: 15px;
 }
 
 .no-data {

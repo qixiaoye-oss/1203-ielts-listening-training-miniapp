@@ -10,10 +10,15 @@
 /* 显示部分 */
 .label-list-container {
   height: calc(100vh - 64px);
-  padding-block: 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+}
+
+/* 列表顶部间距（随滚动移动） */
+.list-top-spacer {
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .label-item-cell {
@@ -178,4 +183,9 @@
 /* 列表项间距 */
 .item-spacing {
   height: 15px;
+}
+
+/* 最后一个列表项的额外底部间距（为固定底部按钮组留出空间） */
+.item-spacing.last-item-spacing {
+  height: 145px; /* 双层按钮组110px + 底部距离20px + 间距15px */
 }
