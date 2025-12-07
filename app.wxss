@@ -21,7 +21,21 @@ page {
   --theme-bcakground-color: rgba(0, 166, 237, 0.15);
   /* 练习页主要颜色 */
   --question-color: rgba(0, 166, 237, 1);
-  --question-bcakground-color: rgba(0, 166, 237, 0.15)
+  --question-bcakground-color: rgba(0, 166, 237, 0.15);
+
+  /* 复刻参考项目变量 - 颜色 */
+  --color-5: #979797;
+  --color-gray-6: rgba(151, 151, 151, 1);
+
+  /* 复刻参考项目变量 - 边框 */
+  --border-color-1: #3478f6;
+  --border-color-4: #d7d7d7;
+  --border-color-6: #f2f2f2;
+
+  /* 复刻参考项目变量 - 背景 */
+  --background-color-3: #d6e4fd;
+  --background-color-4: #d7d7d7;
+  --background-color-6: #f2f2f2;
 }
 
 view {

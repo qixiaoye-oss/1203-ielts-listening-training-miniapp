@@ -11,7 +11,7 @@
 }
 
 .question-container {
-  border: 1px solid var(--solid-border-color);
+  border: 1px solid var(--border-color-4);
   border-radius: 9px;
   width: 100%;
   flex: 1;
@@ -20,10 +20,10 @@
   box-sizing: border-box;
 }
 
-/* 句子部分 */
+/* 句子部分 - 复刻参考项目字号 18px */
 .sentence-cell {
   margin: 15px;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.9;
 }
 
@@ -32,7 +32,7 @@
   flex: 1;
   margin-inline: 15px;
   margin-bottom: 15px;
-  border: 1px dashed var(--dashed-border-color);
+  border: 1px dashed var(--border-color-4);
   padding: 15px;
   position: relative;
   display: flex;
@@ -42,7 +42,7 @@
 .answer-title {
   font-size: 12px;
   line-height: 1;
-  color: rgba(0, 0, 0, 0.3);
+  color: var(--color-5);
   margin-bottom: 10px;
 }
 
@@ -61,8 +61,8 @@
   margin-top: 10px;
   margin-bottom: 13px;
   padding-block: 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid var(--border-color-6);
+  border-bottom: 1px solid var(--border-color-6);
   gap: 15px;
 }
 
@@ -132,7 +132,7 @@
 }
 
 .pl_ {
-  color: rgba(0, 0, 0, 0.3);
+  color: var(--color-gray-6);
   font-size: 16px;
   position: absolute;
   top: -2px;
