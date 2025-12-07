@@ -21,7 +21,7 @@ page {
  * - .btn-action, .btn-action-icon（按钮基础样式）
  * - .btn-group-layout-split, .btn-group-layout-inline-center（布局类）
  * - .btn-page-bottom（固定底部容器+蒙版）
- * - .btn--audio, .btn--correct 等（颜色类）
+ * - data-icon 颜色映射（通过属性自动应用颜色）
  * - .btn-corner-mark（角标）
  * - .btn-pos-*（位置类）
  *

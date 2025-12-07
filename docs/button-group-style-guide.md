@@ -5,7 +5,7 @@
 > **注意**：这是一个纯 CSS 样式库，不是微信小程序自定义组件。
 > 通过 `@import` 引入样式后，直接在 wxml 中使用 CSS 类名即可。
 
-**版本：** v1.7.0
+**版本：** v1.7.1
 **更新日期：** 2025-12-07
 **样式文件：** `style/button-group.wxss`
 
@@ -277,30 +277,16 @@
 
 ---
 
-## 八、废弃说明
+## 八、更新记录
 
-### 已废弃的功能色彩类
-
-自 v1.7.0 起，以下类已废弃，仅保留用于向后兼容：
-
-| 废弃类名 | 替代方式 |
-|----------|----------|
-| `.btn--audio` | `data-icon="save/play/pause..."` |
-| `.btn--correct` | `data-icon="correct"` |
-| `.btn--wrong` | `data-icon="flag"` |
-| `.btn--list` | `data-icon="list"` |
-| `.btn--setting` | `data-icon="setting"` |
-| `.btn--visible` | `data-icon="visible/hidden"` |
-
-**`.btn--dis`（禁用状态）仍然有效**，可继续使用。
-
----
-
-## 九、更新记录
+### v1.7.1 (2025-12-07)
+- **清理废弃代码**：移除 `.btn--audio`、`.btn--correct` 等10个废弃类
+- **组件简化**：移除 `btn-action` 和 `btn-action-icon` 组件的废弃 `type` 属性
+- **统一颜色方式**：所有按钮颜色均通过 `data-icon` 属性指定
 
 ### v1.7.0 (2025-12-07)
 - **实现 icon 颜色映射机制**：通过 `data-icon` 属性自动映射颜色
-- **废弃旧功能色彩类**：`.btn--audio` 等类标记为废弃
+- **全局迁移**：将所有页面的 `.btn--xxx` 迁移为 `data-icon` 方式
 - **简化按钮定义**：只需基础类 + data-icon，无需记忆颜色类名
 - 颜色映射基于 `images/v2/icon_color_mapping.json` 配置
 
@@ -318,6 +304,6 @@
 
 ---
 
-**文档版本：** v1.7.0
+**文档版本：** v1.7.1
 **最后更新：** 2025-12-07
 **维护者：** 开发团队
