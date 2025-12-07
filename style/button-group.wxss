@@ -1,17 +1,18 @@
 /**
  * 按钮组样式库 (Button Group Styles)
- * @version 1.6.1
- * @date 2025-12-06
+ * @version 1.7.0
+ * @date 2025-12-07
  * @description 微信小程序通用按钮组 CSS 样式工具类库，包含固定底部容器、多种布局模式和蒙版功能
  * @author 开发团队
  * @note 这是一个纯 CSS 样式库，不是微信小程序自定义组件。通过 @import 引入后直接使用类名即可。
  *
  * @构建流程
- *   Step 1: 选择层数 - 一层(inline-center) 或 两层(split)
- *   Step 2: 定义按钮 - 指定icon(自动应用主色) + 指定位置(居中/左1/左2/右1/右2)
- *   Step 3: 自动蒙版 - 使用.btn-page-bottom容器自动获得蒙版A和蒙版B
+ *   Step 1: 选择基础类 - .btn-action(文字+图标) 或 .btn-action-icon(纯图标)
+ *   Step 2: 指定颜色 - 添加 data-icon="xxx" 属性，自动映射颜色
+ *   Step 3: 可选布局 - 使用按钮组容器(.btn-page-bottom等)或单独使用
  *
  * @changelog
+ *   v1.7.0 (2025-12-07) - 实现icon颜色映射机制，废弃旧功能色彩类，简化按钮定义流程
  *   v1.6.1 (2025-12-06) - 新增btn-pos-center通用居中类，__header/__footer仅提供基础布局
  *   v1.6.0 (2025-12-06) - 添加按钮位置类，预留icon颜色映射机制，重构构建流程
  *   v1.5.0 (2025-11-30) - 从 components/ 迁移至 style/，明确定位为样式工具类库
@@ -22,11 +23,10 @@
  *
  * @features
  *   - 纯 CSS 实现，无需 js/json/wxml 文件
+ *   - data-icon 颜色自动映射（基于 images/v2/icon_color_mapping.json）
  *   - 固定底部按钮组容器（含蒙版A和蒙版B）
- *   - 双层结构布局（split）
- *   - 单行居中布局（inline-center）
- *   - 基础按钮样式（带图标、纯图标）
- *   - 10种功能色彩类
+ *   - 双层结构布局（split）/ 单行居中布局（inline-center）
+ *   - 基础按钮样式（文字+图标、纯图标）
  *   - 零外部依赖，开箱即用
  */
 
@@ -207,67 +207,31 @@ page {
   pointer-events: none;
 }
 
-/* ==================== 5. 功能色彩类 ==================== */
+/* ==================== 5. 功能色彩类【已废弃】 ==================== */
 
-/* 音频播放相关操作 */
-.btn--audio {
-  color: #00A6ED;
-  background-color: rgba(0, 166, 237, 0.15);
-}
+/**
+ * @deprecated 自 v1.7.0 起废弃
+ * 推荐使用 data-icon 属性自动映射颜色（见第 7 节）
+ *
+ * 新方式示例：
+ *   旧: <view class="btn-action btn--audio">
+ *   新: <view class="btn-action" data-icon="save">
+ *
+ * 以下类保留仅为向后兼容，新代码请勿使用
+ */
 
-/* 正确答案、提交确认 */
-.btn--correct {
-  color: #00D26A;
-  background-color: rgba(0, 210, 106, 0.15);
-}
+.btn--audio { color: #00A6ED; background-color: rgba(0, 166, 237, 0.15); }
+.btn--correct { color: #00D26A; background-color: rgba(0, 210, 106, 0.15); }
+.btn--wrong { color: #F92F60; background-color: rgba(249, 47, 96, 0.15); }
+.btn--list { color: #FFB02D; background-color: rgba(255, 176, 46, 0.15); }
+.btn--setting { color: #998EA4; background-color: rgba(153, 142, 164, 0.15); }
+.btn--visible { color: #7D4533; background-color: rgba(125, 69, 51, 0.15); }
+.btn--label { color: #F8312F; background-color: rgba(248, 49, 47, 0.15); }
+.btn--recording { color: #212121; background-color: rgba(33, 33, 33, 0.15); }
+.btn--practice { color: #433B6B; background-color: rgba(67, 59, 107, 0.15); }
+.btn--exercise { color: #533566; background-color: rgba(83, 53, 102, 0.15); }
 
-/* 错误答案、删除操作 */
-.btn--wrong {
-  color: #F92F60;
-  background-color: rgba(249, 47, 96, 0.15);
-}
-
-/* 列表、导航 */
-.btn--list {
-  color: #FFB02D;
-  background-color: rgba(255, 176, 46, 0.15);
-}
-
-/* 设置、配置 */
-.btn--setting {
-  background-color: rgba(153, 142, 164, 0.15);
-}
-
-/* 显示/隐藏切换 */
-.btn--visible {
-  background-color: rgba(125, 69, 51, 0.15);
-}
-
-/* 标记、标签 */
-.btn--label {
-  color: #F8312F;
-  background-color: rgba(248, 49, 47, 0.15);
-}
-
-/* 录音相关 */
-.btn--recording {
-  color: #212121;
-  background-color: rgba(33, 33, 33, 0.15);
-}
-
-/* 练习模式 */
-.btn--practice {
-  color: #433B6B;
-  background-color: rgba(67, 59, 107, 0.15);
-}
-
-/* 习题练习 */
-.btn--exercise {
-  color: #533566;
-  background-color: rgba(83, 53, 102, 0.15);
-}
-
-/* 禁用状态 */
+/* 禁用状态 - 仍然有效 */
 .btn--dis {
   opacity: 0.3;
 }
