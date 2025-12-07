@@ -51,15 +51,15 @@
       <view class="item-spacing"></view>
     </view>
   </scroll-view>
-  <view class="~btn-page-bottom">
-    <view class="~btn-group-layout-inline-center">
-      <view class="~btn-action ~btn--correct" bind:tap="review">
+  <view class="btn-page-bottom">
+    <view class="btn-group-layout-inline-center">
+      <view class="btn-action btn--correct" bind:tap="review">
         <view>打卡</view>
-        <image src="/image/v2/correct.png"></image>
+        <image src="/images/v2/correct_bt.png"></image>
       </view>
-      <view class="~btn-action-icon ~btn--visible" bind:tap="showHidden">
-        <image wx:if="{{!showHidden}}" src="/image/v2/hidden.png"></image>
-        <image wx:else src="/image/v2/visible.png"></image>
+      <view class="btn-action-icon btn--visible" bind:tap="showHidden">
+        <image wx:if="{{!showHidden}}" src="/images/v2/hidden_bt.png"></image>
+        <image wx:else src="/images/v2/visible_bt.png"></image>
       </view>
     </view>
   </view>
