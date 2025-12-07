@@ -1,6 +1,6 @@
 <view class="{{isPc ? 'windows' : '' }}" wx:if="{{isAllRady}}">
   <view class="body {{isPc ? 'left-body' : '' }}">
-    <label-list list="{{list}}" bind:edit="toEditPage"></label-list>
+    <label-list list="{{list}}" bind:edit="toEditPage" bind:review="review"></label-list>
   </view>
   <view class="intervals" wx:if="{{isPc}}"></view>
   <block wx:if="{{isPc}}">
