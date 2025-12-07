@@ -49,7 +49,20 @@
         <view class="again-but flex_row_cen but-warning {{item.status === '2'?'but-animation warning-bg':''}}" data-value="2">需要再次复习</view>
         <view class="again-but flex_row_cen but-success {{item.status === '1'?'but-animation success-bg':''}}" data-value="1">无需再次复习</view>
       </view>
-      <view class="item-spacing {{index === list.length - 1 ? 'last-item-spacing' : ''}}"></view>
+      <view class="item-spacing"></view>
     </view>
+    <!-- 底部按钮组（随列表滚动） -->
+    <view class="footer-btn-group">
+      <view class="footer-btn-group__header">保持精听，越来越好</view>
+      <view class="footer-btn-group__divider"></view>
+      <view class="footer-btn-group__footer">
+        <view class="footer-btn-action" bind:tap="onReturnTap" hover-class="tap-active" hover-stay-time="100">
+          <view>保存并返回</view>
+          <image src="/images/v2/save_bt.png"></image>
+        </view>
+      </view>
+    </view>
+    <!-- 底部间距占位（scroll-view 内 margin-bottom 不生效，需用占位元素） -->
+    <view class="list-bottom-spacer"></view>
   </scroll-view>
 </view>

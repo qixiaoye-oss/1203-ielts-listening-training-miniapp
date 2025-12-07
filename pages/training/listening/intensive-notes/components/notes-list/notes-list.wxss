@@ -9,7 +9,7 @@
 
 /* 显示部分 */
 .label-list-container {
-  height: calc(100vh - 64px);
+  height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -185,7 +185,58 @@
   height: 15px;
 }
 
-/* 最后一个列表项的额外底部间距（为固定底部按钮组留出空间） */
-.item-spacing.last-item-spacing {
-  height: 145px; /* 双层按钮组110px + 底部距离20px + 间距15px */
+/* ==================== 底部按钮组（本页面专用） ==================== */
+.footer-btn-group {
+  margin: 0 20px;  /* 上0(依赖item-spacing 15px) 左右20 */
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 9px;
+}
+
+/* 列表底部间距（scroll-view 内 margin-bottom 不生效，需用占位元素） */
+.list-bottom-spacer {
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.footer-btn-group__header {
+  padding: 15px;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.footer-btn-group__divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.footer-btn-group__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.footer-btn-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  line-height: 15px;
+  padding: 5px;
+  border-radius: 3px;
+  color: #00A6ED;
+  background-color: rgba(0, 166, 237, 0.15);
+}
+
+.footer-btn-action image {
+  width: 25px;
+  height: 25px;
+  margin-left: 5px;
+}
+
+.tap-active {
+  opacity: 0.7;
+  transform: scale(0.98);
 }
