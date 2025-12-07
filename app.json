@@ -16,7 +16,6 @@
     "pages/training/listening/sentence/index",
     "pages/training/listening/unclear/index",
     "pages/training/listening/label/index",
-    "pages/training/listening/label-edit/index",
     "pages/user/user/user",
     "pages/user/login/login",
     "pages/setting/module/index"
