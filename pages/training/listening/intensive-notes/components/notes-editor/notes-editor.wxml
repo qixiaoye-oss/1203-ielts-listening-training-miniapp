@@ -22,7 +22,7 @@
       </view>
       <view class="toolbar" catchtouchend="format">
         <image src="/image/editor/{{formats.color ? 'color_' : 'color'}}.png" data-name="color" data-value=""></image>
-        <image src="/image/editor/{{formats.backgroundColor ? 'bgcolor_' : 'bgcolor'}}.png" data-name="backgroundColor" data-value="">></image>
+        <image src="/image/editor/{{formats.backgroundColor ? 'bgcolor_' : 'bgcolor'}}.png" data-name="backgroundColor" data-value=""></image>
         <image src="/image/editor/{{formats.bold ? 'bold_' : 'bold'}}.png" data-name="bold"></image>
         <image src="/image/editor/{{formats.italic ? 'italic_' : 'italic'}}.png" data-name="italic"></image>
         <image src="/image/editor/{{formats.underline ? 'underline_' : 'underline'}}.png" data-name="underline"></image>
