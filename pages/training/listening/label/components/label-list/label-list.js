@@ -1,4 +1,21 @@
 const api = getApp().api
+const audioApi = getApp().audioApi
+
+// 获取时间（兼容 startTime/endTime 和 startTimeMillis/endTimeMillis）
+function getTimeInSeconds(item, type) {
+  if (type === 'start') {
+    if (item.startTimeMillis !== undefined) {
+      return audioApi.millis2Seconds(item.startTimeMillis)
+    }
+    return item.startTime || 0
+  } else {
+    if (item.endTimeMillis !== undefined) {
+      return audioApi.millis2Seconds(item.endTimeMillis)
+    }
+    return item.endTime || 0
+  }
+}
+
 Component({
   properties: {
     list: Array,
@@ -12,24 +29,16 @@ Component({
   },
   lifetimes: {
     attached() {
-      wx.showLoading({
-        title: '音频准备中...',
-        mask: true
-      })
       this.audioContext = wx.createInnerAudioContext()
-      // 优先使用传入的 audioSrc，否则从 Storage 读取
-      const src = this.properties.audioSrc || wx.getStorageSync('labelAudioSrc')
+      // 使用 audioApi.initAudio 下载后存储的临时音频路径
+      const src = wx.getStorageSync('tempAudioUrl')
       if (src) {
         this.audioContext.src = src
       }
-      this.audioContext.onCanplay(() => {
-        wx.hideLoading()
-      })
       this.audioContext.onError((err) => {
-        if (api && api.audioErr) {
-          api.audioErr(err, this.audioContext.src)
+        if (audioApi && audioApi.audioErr) {
+          audioApi.audioErr(err, this.audioContext.src)
         }
-        wx.hideLoading()
         wx.showModal({
           title: '',
           content: '音频加载失败，请稍后重试',
@@ -75,12 +84,14 @@ Component({
         this.audioContext.stop()
       }
       const sentenceData = list[pidx].list[cidx]
-      this.audioContext.seek(sentenceData.startTime || 0)
-      this.audioContext.startTime = sentenceData.startTime || 0
+      const startTime = getTimeInSeconds(sentenceData, 'start')
+      const endTime = getTimeInSeconds(sentenceData, 'end')
+      this.audioContext.seek(startTime)
+      this.audioContext.startTime = startTime
       this.setData({
         nowPlayAudio: pidx,
         nowPalySmallAudio: cidx,
-        audioEndTime: sentenceData.endTime || 0
+        audioEndTime: endTime
       })
       wx.nextTick(() => {
         this.audioContext.play()
@@ -100,13 +111,15 @@ Component({
       }
       if (value == 'play') {
         this.closeAllAgainFun()
-        this.audioContext.seek(list[index].startTime || 0)
-        this.audioContext.startTime = list[index].startTime || 0
+        const startTime = getTimeInSeconds(list[index], 'start')
+        const endTime = getTimeInSeconds(list[index], 'end')
+        this.audioContext.seek(startTime)
+        this.audioContext.startTime = startTime
         this.audioContext.play()
         this.setData({
           [`list[${index}].againFun`]: true,
           nowPlayAudio: index,
-          audioEndTime: list[index].endTime || 0
+          audioEndTime: endTime
         })
       }
     },
@@ -137,10 +150,12 @@ Component({
       let smallSentence = list[nowPlayAudio].list
       for (let i = 0; i < smallSentence.length; i++) {
         const ele = smallSentence[i]
-        if (this.audioContext.currentTime >= (ele.startTime - 0.1) && this.audioContext.currentTime <= ele.endTime) {
+        const startTime = getTimeInSeconds(ele, 'start')
+        const endTime = getTimeInSeconds(ele, 'end')
+        if (this.audioContext.currentTime >= (startTime - 0.1) && this.audioContext.currentTime <= endTime) {
           this.setData({ nowPalySmallAudio: i })
         }
-        if (this.audioContext.currentTime >= (ele.startTime - 0.1) && ele.endTime == 0) {
+        if (this.audioContext.currentTime >= (startTime - 0.1) && endTime == 0) {
           this.setData({ nowPalySmallAudio: i })
         }
       }

@@ -1,5 +1,6 @@
 const api = getApp().api
-let audioCn
+const audioApi = getApp().audioApi
+
 Page({
   data: {
     list: [],
@@ -37,24 +38,25 @@ Page({
   },
   // 获取数据
   listData() {
+    const _this = this
     wx.showLoading({
       title: '准备中...',
     })
     api.request(this, '/record/v1/list/label', {
       ...this.options
-    }, true).then(() => {
-      this.setData({ isAllRady: true })
-      // const { isPc, list } = this.data
-      // const newList = [...(list || [])].map((item, index) => ({
-      //   ...item,
-      //   active: index === 0 // 直接通过索引判断
-      // }));
-      // if (isPc) {
-      //   this.setData({
-      //     detail: newList[0] || null,
-      //     list: newList
-      //   })
-      // }
+    }, true).then((res) => {
+      // 初始化音频（使用与 intensive 页面相同的方式）
+      if (res && res.audioUrl) {
+        audioApi.initAudio(res.audioUrl).then(() => {
+          _this.setData({ isAllRady: true })
+        }).catch(() => {
+          _this.setData({ isAllRady: true })
+        })
+      } else {
+        _this.setData({ isAllRady: true })
+      }
+    }).catch(() => {
+      _this.setData({ isAllRady: true })
     })
   },
   toEditPage({ detail }) {
