@@ -1,5 +1,6 @@
 {
   "component": true,
+  "multipleSlots": true,
   "styleIsolation": "apply-shared",
   "usingComponents": {
     "sentence-text": "/components/sentence-text/sentence-text",

@@ -1,6 +1,20 @@
 <view class="{{isPc ? 'windows' : '' }}" wx:if="{{isAllRady}}">
   <view class="body {{isPc ? 'left-body' : '' }}">
-    <notes-list list="{{list}}" bind:edit="toEditPage" bind:review="review"></notes-list>
+    <notes-list list="{{list}}" bind:edit="toEditPage" bind:review="review">
+      <!-- 按钮组：随列表滚动，不固定底部 -->
+      <view slot="footer" class="btn-page-bottom btn-page-bottom--inline">
+        <view class="btn-group-layout-split">
+          <view class="btn-group-layout-split__header btn-text-content">保持精听，越来越好</view>
+          <view class="btn-group-layout-split__divider"></view>
+          <view class="btn-group-layout-split__footer">
+            <view class="btn-action btn--audio" bind:tap="returnPage" hover-class="tap-active" hover-stay-time="100">
+              <view>保存并返回</view>
+              <image src="/images/v2/save_bt.png"></image>
+            </view>
+          </view>
+        </view>
+      </view>
+    </notes-list>
   </view>
   <view class="intervals" wx:if="{{isPc}}"></view>
   <block wx:if="{{isPc}}">
@@ -13,16 +27,4 @@
       <notes-editor detail="{{detail}}" bind:ok="editOver" bind:autosave="autoSave"></notes-editor>
     </page-container>
   </block>
-</view>
-<view class="btn-page-bottom">
-  <view class="btn-group-layout-split">
-    <view class="btn-group-layout-split__header btn-text-content">保持精听，越来越好</view>
-    <view class="btn-group-layout-split__divider"></view>
-    <view class="btn-group-layout-split__footer">
-      <view class="btn-action btn--audio" bind:tap="returnPage" hover-class="tap-active" hover-stay-time="100">
-        <view>保存并返回</view>
-        <image src="/images/v2/save_bt.png"></image>
-      </view>
-    </view>
-  </view>
 </view>

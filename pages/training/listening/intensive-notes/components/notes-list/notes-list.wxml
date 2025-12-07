@@ -49,7 +49,9 @@
         <view class="again-but flex_row_cen but-warning {{item.status === '2'?'but-animation warning-bg':''}}" data-value="2">需要再次复习</view>
         <view class="again-but flex_row_cen but-success {{item.status === '1'?'but-animation success-bg':''}}" data-value="1">无需再次复习</view>
       </view>
-      <view class="item-spacing {{index === list.length - 1 ? 'last-item-spacing' : ''}}"></view>
+      <view class="item-spacing"></view>
     </view>
+    <!-- 底部按钮组插槽 -->
+    <slot name="footer"></slot>
   </scroll-view>
 </view>

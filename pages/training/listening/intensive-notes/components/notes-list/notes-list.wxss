@@ -184,8 +184,3 @@
 .item-spacing {
   height: 15px;
 }
-
-/* 最后一个列表项的额外底部间距（为固定底部按钮组留出空间） */
-.item-spacing.last-item-spacing {
-  height: 145px; /* 双层按钮组110px + 底部距离20px + 间距15px */
-}
