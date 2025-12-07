@@ -184,3 +184,8 @@
 .item-spacing {
   height: 15px;
 }
+
+/* 底部插槽容器 */
+.footer-slot-container {
+  padding-bottom: 20px;
+}

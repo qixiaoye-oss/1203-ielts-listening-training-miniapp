@@ -52,6 +52,8 @@
       <view class="item-spacing"></view>
     </view>
     <!-- 底部按钮组插槽 -->
-    <slot name="footer"></slot>
+    <view class="footer-slot-container">
+      <slot name="footer"></slot>
+    </view>
   </scroll-view>
 </view>
