@@ -128,7 +128,7 @@ Page({
   },
   handleIntensiveLabelMode(params) {
     wx.navigateTo({
-      url: '/pages/training/listening/label/index' + api.parseParams(params),
+      url: '/pages/training/listening/intensive-notes/index' + api.parseParams(params),
     })
   },
   // 跳转到设置页面
