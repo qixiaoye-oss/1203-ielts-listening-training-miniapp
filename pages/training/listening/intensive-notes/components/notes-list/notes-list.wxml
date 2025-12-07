@@ -32,15 +32,15 @@
           <view class="state but-warning warning-bg" wx:if="{{item.status === '2'}}">需要再次复习</view>
           <view class="state but-success success-bg" wx:if="{{item.status === '1'}}">有效复习</view>
           <view class="~btn-action-icon ~btn--audio" bind:tap="playAudio" data-index="{{index}}">
-            <image src="/image/v2/pause.png" data-value="pause" wx:if="{{nowPlayAudio == index}}"></image>
-            <image src="/image/v2/play.png" data-value="play" wx:else></image>
+            <image src="/images/v2/pause_bt.png" data-value="pause" wx:if="{{nowPlayAudio == index}}"></image>
+            <image src="/images/v2/play_bt.png" data-value="play" wx:else></image>
           </view>
           <view class="~btn-action-icon ~btn--setting" bindtap="operation" data-index="{{index}}" data-hidden="{{item.hidden}}">
-            <image src="/image/v2/setting.png"></image>
+            <image src="/images/v2/setting_bt.png"></image>
           </view>
           <view class="~btn-action-icon ~btn--visible" bindtap="showContent" data-index="{{index}}">
-            <image src="/image/v2/visible.png" wx:if="{{item.show}}"></image>
-            <image src="/image/v2/hidden.png" wx:else></image>
+            <image src="/images/v2/visible_bt.png" wx:if="{{item.show}}"></image>
+            <image src="/images/v2/hidden_bt.png" wx:else></image>
           </view>
         </view>
       </view>
