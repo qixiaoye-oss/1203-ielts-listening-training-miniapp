@@ -13,12 +13,17 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding-bottom: 125px; /* 双层按钮组110px + 15px间距 */
 }
 
 /* 列表顶部间距（随滚动移动） */
 .list-top-spacer {
   height: 20px;
+  flex-shrink: 0;
+}
+
+/* 列表底部间距（为固定底部按钮组留出空间） */
+.list-bottom-spacer {
+  height: 125px; /* 双层按钮组110px + 15px间距 */
   flex-shrink: 0;
 }
 

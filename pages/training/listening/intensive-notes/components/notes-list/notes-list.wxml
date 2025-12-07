@@ -51,5 +51,6 @@
       </view>
       <view class="item-spacing"></view>
     </view>
+    <view class="list-bottom-spacer"></view>
   </scroll-view>
 </view>
