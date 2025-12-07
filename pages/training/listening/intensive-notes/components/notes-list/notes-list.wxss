@@ -23,7 +23,7 @@
 
 /* 列表底部间距（为固定底部按钮组留出空间） */
 .list-bottom-spacer {
-  height: 125px; /* 双层按钮组110px + 15px间距 */
+  height: 145px; /* 双层按钮组110px + 底部距离20px + 间距15px */
   flex-shrink: 0;
 }
 
