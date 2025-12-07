@@ -14,8 +14,8 @@
     <view class="explain__question--option">
       <view><text user-select='true'>{{wxsUtil.formatNull(question.content,'')}}</text></view>
       <image wx:if="{{question.imageUrl}}" src="{{question.imageUrl}}" style="width: 560rpx;" mode='widthFix' bind:tap="checkImg"></image>
-      <view wx:for="{{question.options}}" wx:key="item">
-        <text style="margin-right :10px">{{item.choice}}</text>
+      <view wx:for="{{question.options}}" wx:key="item" class="explain__question--option-item">
+        <text class="explain__question--option-choice">{{item.choice}}</text>
         <text user-select='true'>{{wxsUtil.formatNull(item.content,'')}}</text>
       </view>
     </view>

@@ -57,6 +57,15 @@
   gap: 10px;
 }
 
+.explain__question--option-item {
+  display: flex;
+}
+
+.explain__question--option-choice {
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
 .explain__article {
   padding: 15px;
   display: flex;
