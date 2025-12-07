@@ -21,11 +21,9 @@
   flex-shrink: 0;
 }
 
-/* 列表底部间距（为固定底部按钮组留出空间） */
-.list-bottom-spacer {
+/* 最后一个列表项的额外底部间距（为固定底部按钮组留出空间） */
+.last-item-spacing {
   height: 145px; /* 双层按钮组110px + 底部距离20px + 间距15px */
-  flex-shrink: 0;
-  margin-top: auto; /* 始终推到 scroll-view 底部 */
 }
 
 .label-item-cell {
