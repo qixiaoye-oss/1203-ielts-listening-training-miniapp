@@ -37,40 +37,4 @@ page {
   height: 100vh;
 }
 
-/* 组件通过 ~ 前缀引用的页面级样式 */
-
-/* 小句子样式 */
-.sentence-text {
-  background-color: var(--background-color-6);
-  padding: 4px 0;
-  margin-right: 5px;
-  border-left: 3px solid var(--border-color-1);
-  position: relative;
-  z-index: 3;
-}
-
-.sentence-text-active {
-  background-color: var(--background-color-3);
-}
-
-/* 讲述人标签 */
-.narrator {
-  position: absolute;
-  top: -8px;
-  left: 5px;
-  transform: scale(0.4);
-  transform-origin: left top;
-  padding: 4px 8px;
-  border-radius: 4px;
-  z-index: 99;
-}
-
-.narrator-man {
-  background-color: #04A6F2;
-  color: #7FDEFC;
-}
-
-.narrator-woman {
-  background-color: #F6E5E3;
-  color: #FF6146;
-}
+/* 句子样式已提取到公共组件 /components/sentence-text */
