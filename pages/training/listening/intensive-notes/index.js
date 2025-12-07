@@ -54,17 +54,30 @@ Page({
     }
     this.setData({ showDetail: false })
   },
-  editRecord(answer) {
+  editRecord(answer, showToast = true) {
     api.request(this, '/record/v1/save/revise', answer, false, 'post').then(() => {
-      api.toast('保存成功')
+      if (showToast) {
+        api.toast('保存成功')
+      }
     })
+  },
+  // 实时自动保存
+  autoSave({ detail }) {
+    const { list } = this.data
+    if (detail.id) {
+      let index = list.findIndex((i) => i.id === detail.id)
+      if (index !== -1) {
+        this.setData({
+          [`list[${index}].reviseContent`]: detail.html
+        })
+        this.editRecord({
+          id: detail.id,
+          reviseContent: detail.html
+        }, false) // 静默保存，不显示提示
+      }
+    }
   },
   returnPage() {
     wx.navigateBack()
-  },
-  // 打卡功能
-  review() {
-    // TODO: 实现打卡逻辑
-    api.toast('打卡功能待实现')
   }
 })

@@ -92,10 +92,12 @@ Component({
     },
     textareaBlur() {
       const _this = this
-      const { editorCtx } = this.data
+      const { editorCtx, detail } = this.data
       editorCtx.getContents({
         success: (res) => {
           _this.setData({ showPl: api.isEmpty(res.text.trim()) })
+          // 实时自动保存
+          _this.triggerEvent('autosave', { ...res, id: detail.id })
         }
       })
     }
