@@ -74,41 +74,6 @@ view {
   line-height: 1.8;
 }
 
-.narrator {
-  position: absolute;
-  top: -8px;
-  left: 5px;
-  transform: scale(0.4);
-  transform-origin: left top;
-  padding: 4px 8px;
-  border-radius: 4px;
-  z-index: 99;
-}
-
-.narrator_man {
-  background-color: #04a6f2;
-  color: #7fdefc;
-}
-
-.narrator_woman {
-  background-color: #f6e5e3;
-  color: #ff6146;
-}
-
-.intensive_sentence_text {
-  background-color: #f2f2f2;
-  padding: 2px 0;
-  margin: 2px 0;
-  margin-right: 5px;
-  border-left: 3px solid var(--question-color);
-  position: relative;
-  z-index: 3;
-}
-
-.intensive_sentence_text_active {
-  background-color: #d6e4fd;
-}
-
 .hidden_text {
   color: rgba(0, 0, 0, 0) !important;
 }

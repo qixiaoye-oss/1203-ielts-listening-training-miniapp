@@ -50,13 +50,6 @@
   margin-right: 25px;
 }
 
-.chinese {
-  color: rgba(0, 0, 0, 0.3);
-  font-size: 14px;
-  line-height: 1.4;
-  margin-top: 10px;
-}
-
 .select {
   border: 1px solid var(--question-color);
 }

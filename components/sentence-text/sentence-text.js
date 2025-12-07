@@ -10,16 +10,6 @@ Component({
       type: Boolean,
       value: false
     },
-    // 讲述人名称（可选）
-    narrator: {
-      type: String,
-      value: ''
-    },
-    // 讲述人性别：'1' 男性，'2' 女性
-    narratorSex: {
-      type: String,
-      value: '1'
-    },
     // 元素 id（用于滚动定位）
     textId: {
       type: String,

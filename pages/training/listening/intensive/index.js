@@ -196,7 +196,8 @@ Page({
   listenSentenceAgain(e) {
     this.stopAudio()
     let { swiperCurrent, list } = this.data
-    let idx = e.currentTarget.dataset.idx
+    // 兼容组件事件（e.detail）和原生事件（e.currentTarget.dataset）
+    let idx = e.detail?.idx ?? e.currentTarget?.dataset?.idx
     let sentence = list[swiperCurrent].list[idx]
     this.setData({
       audioEndTime: audioApi.millis2Seconds(sentence.endTimeMillis),

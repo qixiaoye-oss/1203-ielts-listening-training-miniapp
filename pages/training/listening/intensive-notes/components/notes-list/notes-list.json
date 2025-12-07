@@ -2,6 +2,7 @@
   "component": true,
   "styleIsolation": "apply-shared",
   "usingComponents": {
-    "sentence-text": "/components/sentence-text/sentence-text"
+    "sentence-text": "/components/sentence-text/sentence-text",
+    "sentence-translate": "/components/sentence-translate/sentence-translate"
   }
 }

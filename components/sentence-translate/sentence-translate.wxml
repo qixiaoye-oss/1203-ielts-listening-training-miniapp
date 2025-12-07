@@ -1,0 +1,3 @@
+<view class="sentence-translate {{hidden ? 'sentence-translate-hidden' : ''}}">
+  <text user-select="{{true}}">{{content}}</text>
+</view>

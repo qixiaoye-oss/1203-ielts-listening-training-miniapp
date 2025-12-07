@@ -41,19 +41,12 @@
 }
 
 /* 句子部分 */
+.sentence-text-container {
+  display: inline;
+}
+
 .hidden-text {
   color: rgba(0, 0, 0, 0);
-}
-
-.analysis-cell {
-  margin-top: 5px;
-  font-size: 16px;
-  font-weight: normal;
-}
-
-.analysis-text-cell {
-  background-color: var(--background-color-6);
-  padding-block: 3px;
 }
 
 /* 我的听写 */
