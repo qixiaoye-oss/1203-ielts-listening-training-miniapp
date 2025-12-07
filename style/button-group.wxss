@@ -329,22 +329,74 @@ page {
   margin-left: auto;
 }
 
-/* ==================== 7. icon颜色映射（预留） ==================== */
+/* ==================== 7. icon颜色映射 ==================== */
 
 /**
  * icon → 颜色映射机制
+ * 基于 images/v2/icon_color_mapping.json 配置
  * 使用 data-icon 属性指定 icon 名称，自动应用对应主色
- * 颜色映射表待配置后启用
  *
  * 使用示例：
- * <view class="btn-action" data-icon="play">
- *   <view>播放</view>
- *   <image src="/images/play.png"></image>
+ * <view class="btn-action" data-icon="save">
+ *   <view>保存</view>
+ *   <image src="/images/v2/save_bt.png"></image>
  * </view>
  *
- * 映射规则将在颜色表确定后添加：
- * .btn-action[data-icon="play"] { color: #00A6ED; background: rgba(0,166,237,0.15); }
+ * <view class="btn-action-icon" data-icon="play">
+ *   <image src="/images/v2/play_bt.png"></image>
+ * </view>
  */
+
+/* 蓝色系 #00A6ED */
+[data-icon="save"],
+[data-icon="play"],
+[data-icon="pause"],
+[data-icon="replay"],
+[data-icon="restart"],
+[data-icon="submit"],
+[data-icon="next"],
+[data-icon="goto"],
+[data-icon="updown"] {
+  color: #00A6ED;
+  background-color: rgba(0, 166, 237, 0.15);
+}
+
+/* 绿色 #00D26A */
+[data-icon="correct"] {
+  color: #00D26A;
+  background-color: rgba(0, 210, 106, 0.15);
+}
+
+/* 红色 #F8312F */
+[data-icon="flag"] {
+  color: #F8312F;
+  background-color: rgba(248, 49, 47, 0.15);
+}
+
+/* 棕色 #7D4533 */
+[data-icon="visible"],
+[data-icon="hidden"] {
+  color: #7D4533;
+  background-color: rgba(125, 69, 51, 0.15);
+}
+
+/* 黄色 #FFB02E */
+[data-icon="list"] {
+  color: #FFB02E;
+  background-color: rgba(255, 176, 46, 0.15);
+}
+
+/* 灰紫色 #998EA4 */
+[data-icon="setting"] {
+  color: #998EA4;
+  background-color: rgba(153, 142, 164, 0.15);
+}
+
+/* 紫色 #533566 */
+[data-icon="me"] {
+  color: #533566;
+  background-color: rgba(83, 53, 102, 0.15);
+}
 
 /* ==================== 8. 辅助类 ==================== */
 
