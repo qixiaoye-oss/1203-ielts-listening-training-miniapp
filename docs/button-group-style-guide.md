@@ -192,6 +192,25 @@ icon+文字（icon高度必为25px；文字必为15px；整体高度按25px计�
 |------|------|---------|
 | `.btn-action` | 带文字和图标的按钮 | 文字 + icon |
 | `.btn-action-icon` | 纯图标按钮 | 仅 icon |
+| `.btn-text-content` | 纯文字内容（无按钮） | 仅文字 |
+
+### 5.1.1 纯文字层规范
+
+当按钮组的一层中只有纯文字（无按钮）时，使用 `.btn-text-content` 类：
+
+| 属性 | 数值 | 说明 |
+|------|------|------|
+| 文字大小 | **15px** | 与按钮文字一致 |
+| 行距 | **1.4** | 适合多行文字阅读 |
+| 对齐方式 | **居中** | text-align: center |
+| 上下间距 | **15px** | 由 __header/__footer 的 padding 提供 |
+
+```xml
+<!-- 纯文字层示例 -->
+<view class="btn-group-layout-split__header btn-text-content">
+  保持精听，越来越好
+</view>
+```
 
 ### 5.2 icon → 颜色自动关联
 

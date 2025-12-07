@@ -74,8 +74,4 @@
   margin-top: 10px;
 }
 
-.scoring_reviews {
-  padding-inline: 60px;
-  padding-block: 15px;
-  text-align: center;
-}
+/* 纯文字层样式已统一使用 .btn-text-content（见 style/button-group.wxss） */

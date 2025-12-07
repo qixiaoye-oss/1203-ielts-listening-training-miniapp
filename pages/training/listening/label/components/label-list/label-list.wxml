@@ -4,10 +4,10 @@
     <view class="label-item-cell" wx:for="{{list}}" wx:key="item">
       <view class="big-sentence-cell {{item.active ? 'active' : ''}}">
         <view class="sentence__content">
-          <view class="~tag tag--transparent">原文</view>
+          <view class="tag tag--transparent">原文</view>
           <view class="{{item.show?'':'hidden-text'}}">
             <text user-select="{{true}}">
-              <text wx:for="{{item.list}}" wx:for-item="smll" wx:key="smll" wx:for-index='smlli' data-pidx="{{index}}" data-cidx="{{smlli}}" class="~sentence-text {{(nowPalySmallAudio == smlli && nowPlayAudio == index)? '~sentence-text-active':''}}">{{smll.content}}<text class="~narrator {{smll.narratorSex == '1'?'~narrator-man':'~narrator-woman'}}" wx:if="{{smll.narrator}}">{{smll.narrator}}</text></text>
+              <text wx:for="{{item.list}}" wx:for-item="smll" wx:key="smll" wx:for-index='smlli' data-pidx="{{index}}" data-cidx="{{smlli}}" class="sentence-text {{(nowPalySmallAudio == smlli && nowPlayAudio == index)? 'sentence-text-active':''}}">{{smll.content}}<text class="narrator {{smll.narratorSex == '1'?'narrator-man':'narrator-woman'}}" wx:if="{{smll.narrator}}">{{smll.narrator}}</text></text>
             </text>
           </view>
         </view>
@@ -26,16 +26,4 @@
       <view style="height: 15px;"></view>
     </view>
   </scroll-view>
-  <view class="~btn-page-bottom">
-    <view class="~btn-group-layout-split">
-      <view class="~btn-group-layout-split__header ~scoring_reviews">保持精听，越来越好</view>
-      <view class="~btn-group-layout-split__divider"></view>
-      <view class="~btn-group-layout-split__footer">
-        <view class="~btn-action ~btn--audio" bind:tap="returnPage" hover-class="tap-active" hover-stay-time="100">
-          <view>保存并返回</view>
-          <image src="/images/v2/save_but.png"></image>
-        </view>
-      </view>
-    </view>
-  </view>
 </view>
