@@ -10,10 +10,21 @@
 /* 显示部分 */
 .label-list-container {
   height: calc(100vh - 64px);
-  padding-block: 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+}
+
+/* 列表顶部间距（随滚动移动） */
+.list-top-spacer {
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* 列表底部间距（为固定底部按钮组留出空间） */
+.list-bottom-spacer {
+  height: 82px; /* 67px(按钮组高度) + 15px(间距) */
+  flex-shrink: 0;
 }
 
 .label-item-cell {

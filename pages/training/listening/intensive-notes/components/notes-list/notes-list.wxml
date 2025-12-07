@@ -1,6 +1,7 @@
 <wxs src="/utils/util.wxs" module="wxsUtil" />
 <view class="label-list-base-container">
   <scroll-view scroll-y class="label-list-container" enhanced enable-flex show-scrollbar="{{false}}">
+    <view class="list-top-spacer"></view>
     <view class="label-item-cell" wx:for="{{list}}" wx:key="item">
       <view class="big-sentence-cell {{item.active ? 'active' : ''}}">
         <view class="sentence-label-cell">
@@ -50,6 +51,7 @@
       </view>
       <view class="item-spacing"></view>
     </view>
+    <view class="list-bottom-spacer"></view>
   </scroll-view>
   <view class="btn-page-bottom">
     <view class="btn-group-layout-inline-center">
