@@ -1,0 +1,21 @@
+{
+  "correct_bt.png": "#00D26A",
+  "flag_bt.png": "#F8312F",
+  "hidden_bt.png": "#7D4533",
+  "visible_bt.png": "#7D4533",
+  "list_bt.png": "#FFB02E",
+  "listening_active_bt.png": "#007BFF",
+  "listening_bt.png": "#FFFFFF",
+  "me_active.png": "#533566",
+  "me.png": "#FFFFFF",
+  "updown_bt.png": "#00A6ED",
+  "goto_bt.png": "#00A6ED",
+  "next_bt.png": "#00A6ED",
+  "play_bt.png": "#00A6ED",
+  "pause_bt.png": "#00A6ED",
+  "replay_bt.png": "#00A6ED",
+  "restart_bt.png": "#00A6ED",
+  "save_bt.png": "#00A6ED",
+  "submit_bt.png": "#00A6ED",
+  "setting_bt.png": "#998EA4"
+}

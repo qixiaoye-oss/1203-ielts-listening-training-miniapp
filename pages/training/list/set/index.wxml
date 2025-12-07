@@ -3,7 +3,7 @@
 <view class="main-page" wx:if="{{list.length > 0}}">
   <!-- <view class="set-settings-entry" bind:tap="toPage" hover-class="tap-active" hover-stay-time="100">
     <view class="set-settings-entry__button" style="background: rgba(248, 49, 47, 0.15);">
-      <image src="/images/v2/flag.png"></image>
+      <image src="/images/v2/flag_bt.png"></image>
       <text>标签显示</text>
     </view>
   </view> -->

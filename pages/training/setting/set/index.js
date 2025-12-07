@@ -22,7 +22,7 @@ Page({
       },
       {
         title: '没听懂句子标签',
-        icon: '/images/v2/flag.png',
+        icon: '/images/v2/flag_bt.png',
         bgColor: 'rgba(248, 49, 47, 0.15)',
         items: [
           { key: 'review', label: '复习', value: 'close' }

@@ -20,7 +20,7 @@
   <view class="btn-group-layout-inline-center">
     <view class="btn-action btn--correct" bindtap="saveQue" hover-class="tap-active" hover-stay-time="100">
       <view>提交</view>
-      <image src="/images/v2/correct.png"></image>
+      <image src="/images/v2/correct_bt.png"></image>
     </view>
   </view>
 </view>

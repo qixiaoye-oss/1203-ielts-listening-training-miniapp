@@ -57,7 +57,7 @@ Page({
       },
       {
         title: '其他设置',
-        icon: '/images/v2/flag.png',
+        icon: '/images/v2/flag_bt.png',
         bgColor: 'rgba(248, 49, 47, 0.15)',
         items: [
           { key: 'review', label: '复习', value: 'open' }
