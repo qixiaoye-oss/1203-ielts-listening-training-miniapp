@@ -6,8 +6,6 @@
         wx:key="idx"
         content="{{item.content}}"
         active="{{selected == index}}"
-        narrator="{{item.narrator}}"
-        narratorSex="{{item.narratorSex}}"
         textId="T{{index}}"
         index="{{index}}"
         bind:tap="listenSentenceAgain"

@@ -14,15 +14,11 @@
                   wx:for-index="smlli"
                   content="{{smll.content}}"
                   active="{{nowPalySmallAudio == smlli && nowPlayAudio == index}}"
-                  narrator="{{smll.narrator}}"
-                  narratorSex="{{smll.narratorSex}}"
                   index="{{smlli}}"
                 />
               </text>
             </view>
-            <view class="analysis-cell">
-              <text class="analysis-text-cell {{item.show?'':'hidden-text'}}">{{wxsUtil.formatNull(item.translate,'暂无解析')}}</text>
-            </view>
+            <sentence-translate content="{{wxsUtil.formatNull(item.translate,'暂无解析')}}" hidden="{{!item.show}}" />
           </view>
           <view class="answer-cell" bind:tap="toEditPage" data-item="{{item}}">
             <view class="answer-title">我的听写</view>

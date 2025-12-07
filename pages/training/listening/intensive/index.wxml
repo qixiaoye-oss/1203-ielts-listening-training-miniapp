@@ -17,7 +17,15 @@
     <view class="label-container">
       <view class="paragraph-cell">
         <view class="paragraph-content-cell {{baseShowArticle?'':showArticle?'':'hidden_text'}}">
-          <text bindtap="listenSentenceAgain" class="intensive_sentence_text {{playingSmallIndex == index? 'intensive_sentence_text_active':''}}" id='T{{index}}' wx:for="{{list[swiperCurrent].list}}" wx:key="idx" data-idx="{{index}}">{{item.content}}<text class="narrator {{item.narratorSex == '1'?'narrator_man':'narrator_woman'}}" wx:if="{{item.narrator}}">{{item.narrator}}</text></text>
+          <sentence-text
+            wx:for="{{list[swiperCurrent].list}}"
+            wx:key="idx"
+            content="{{item.content}}"
+            active="{{playingSmallIndex == index}}"
+            textId="T{{index}}"
+            index="{{index}}"
+            bind:tap="listenSentenceAgain"
+          />
         </view>
         <view class="writing-cell">
           <view class="writing-label">我的听写</view>

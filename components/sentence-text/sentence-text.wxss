@@ -1,35 +1,14 @@
-/* 句子文本样式 */
+/* 句子文本样式 - 与 intensive_sentence_text 保持一致 */
 .sentence-text {
-  background-color: var(--background-color-6);
-  padding: 4px 0;
+  background-color: #f2f2f2;
+  padding: 2px 0;
+  margin: 2px 0;
   margin-right: 5px;
-  border-left: 3px solid var(--border-color-1);
+  border-left: 3px solid var(--question-color);
   position: relative;
   z-index: 3;
 }
 
 .sentence-text-active {
-  background-color: var(--background-color-3);
-}
-
-/* 讲述人标签 */
-.narrator {
-  position: absolute;
-  top: -8px;
-  left: 5px;
-  transform: scale(0.4);
-  transform-origin: left top;
-  padding: 4px 8px;
-  border-radius: 4px;
-  z-index: 99;
-}
-
-.narrator-man {
-  background-color: #04A6F2;
-  color: #7FDEFC;
-}
-
-.narrator-woman {
-  background-color: #F6E5E3;
-  color: #FF6146;
+  background-color: #d6e4fd;
 }

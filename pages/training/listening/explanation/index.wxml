@@ -27,14 +27,15 @@
     <view class="explain__article--content">
       <view wx:for="{{question.sentenceList}}" wx:key="item" wx:for-item="sentence">
         <view class="{{showHidden?'':'hidden_text'}} lh18">
-          <text user-select="true">
-            <text wx:key="item" wx:for="{{sentence.list}}" wx:for-item="val" class="intensive_sentence_text">{{val.content}}<text class="narrator {{val.narratorSex == '1'?'narrator_man':'narrator_woman'}}" wx:if="{{val.narrator}}">{{val.narrator}}</text></text>
-          </text>
+          <sentence-text
+            wx:key="item"
+            wx:for="{{sentence.list}}"
+            wx:for-item="val"
+            content="{{val.content}}"
+          />
         </view>
-        <view class="mt20 translate {{showHidden?'':'hidden_text'}}">
-          <text user-select='true'>{{sentence.translate}}</text>
-        </view>
-        <view class="font_color_base mt20" wx:if="{{sentence.keyPoints}}">{{wxsUtil.formatNull(sentence.keyPoints,'')}}</view>
+        <sentence-translate content="{{sentence.translate}}" hidden="{{!showHidden}}" />
+        <view class="font_color_base" style="margin-bottom: 15px;" wx:if="{{sentence.keyPoints}}">{{wxsUtil.formatNull(sentence.keyPoints,'')}}</view>
         <view class="sentence_analysis_cell" wx:if="{{sentence.analysisList.length > 0}}">
           <view wx:for="{{sentence.analysisList}}" wx:for-item="analysis" wx:key="item" class="layout_flex ">
             <view class="left_cell model_name">

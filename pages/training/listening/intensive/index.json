@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "mp-actionSheet": "weui-miniprogram/actionsheet/actionsheet"
+    "mp-actionSheet": "weui-miniprogram/actionsheet/actionsheet",
+    "sentence-text": "/components/sentence-text/sentence-text"
   }
 }

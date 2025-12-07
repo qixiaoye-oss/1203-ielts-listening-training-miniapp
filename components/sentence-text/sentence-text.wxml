@@ -3,7 +3,4 @@
   bindtap="handleTap"
   id="{{textId}}"
   data-idx="{{index}}"
->{{content}}<text
-    class="narrator {{narratorSex == '1' ? 'narrator-man' : 'narrator-woman'}}"
-    wx:if="{{narrator}}"
-  >{{narrator}}</text></text>
+>{{content}}</text>
