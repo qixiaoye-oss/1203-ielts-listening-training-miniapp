@@ -21,7 +21,7 @@
 }
 
 .big-sentence-cell {
-  border: 1px solid var(--border-color-4);
+  border: 1px solid var(--solid-border-color);
   border-radius: 9px;
   padding: 15px 15px;
 }
@@ -58,7 +58,7 @@
 
 /* 我的听写 */
 .answer-cell {
-  border: 1px dashed var(--border-color-4);
+  border: 1px dashed var(--solid-border-color);
   margin-top: 10px;
   margin-bottom: 15px;
   position: relative;
@@ -68,7 +68,7 @@
 .answer-title {
   font-size: 12px;
   line-height: 1;
-  color: var(--color-5);
+  color: var(--solid-border-color);
   margin-bottom: 10px;
 }
 
@@ -95,7 +95,7 @@
   box-sizing: border-box;
   overflow: hidden;
   font-size: 14px;
-  color: var(--color-5);
+  color: var(--solid-border-color);
 }
 
 /* 功能按钮 */
