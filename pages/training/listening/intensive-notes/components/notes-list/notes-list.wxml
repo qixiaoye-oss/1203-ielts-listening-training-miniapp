@@ -36,9 +36,6 @@
             <image src="/images/v2/pause_bt.png" data-value="pause" wx:if="{{nowPlayAudio == index}}"></image>
             <image src="/images/v2/play_bt.png" data-value="play" wx:else></image>
           </view>
-          <view class="~btn-action-icon ~btn--setting" bindtap="operation" data-index="{{index}}" data-hidden="{{item.hidden}}">
-            <image src="/images/v2/setting_bt.png"></image>
-          </view>
           <view class="~btn-action-icon ~btn--visible" bindtap="showContent" data-index="{{index}}">
             <image src="/images/v2/visible_bt.png" wx:if="{{item.show}}"></image>
             <image src="/images/v2/hidden_bt.png" wx:else></image>
