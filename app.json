@@ -37,14 +37,14 @@
       {
         "pagePath": "pages/home/index",
         "text": "听力",
-        "iconPath": "images/v2/listening.png",
-        "selectedIconPath": "images/v2/listening_.png"
+        "iconPath": "images/v2/listening_bt.png",
+        "selectedIconPath": "images/v2/listening_active_bt.png"
       },
       {
         "pagePath": "pages/user/user/user",
         "text": "我",
         "iconPath": "images/v2/me.png",
-        "selectedIconPath": "images/v2/me_.png"
+        "selectedIconPath": "images/v2/me_active.png"
       }
     ]
   },

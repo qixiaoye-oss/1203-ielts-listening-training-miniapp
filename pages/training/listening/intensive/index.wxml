@@ -41,44 +41,44 @@
     <view class="btn-group-layout-split__header btn-pos-center">
       <view class="btn-action btn--audio" bindtap="listenAgain" hover-class="tap-active" hover-stay-time="100">
         <view>重播</view>
-        <image src="/images/v2/replay.png"></image>
+        <image src="/images/v2/replay_bt.png"></image>
       </view>
       <view class="btn-action btn--audio" wx:if="{{audioState === 'none'}}" bindtap="playAudio" hover-class="tap-active" hover-stay-time="100">
         <view>播放</view>
-        <image src="/images/v2/play.png"></image>
+        <image src="/images/v2/play_bt.png"></image>
       </view>
       <view class="btn-action btn--audio" wx:if="{{audioState === 'playing'}}" bindtap="stopAudio" hover-class="tap-active" hover-stay-time="100">
         <view>暂停</view>
-        <image src="/images/v2/pause.png"></image>
+        <image src="/images/v2/pause_bt.png"></image>
       </view>
       <view class="btn-action btn--audio" wx:if="{{!completelyOver && audioState === 'stop'}}" bindtap="nextSentence" hover-class="tap-active" hover-stay-time="100">
         <view>下句</view>
-        <image src="/images/v2/next.png"></image>
+        <image src="/images/v2/next_bt.png"></image>
       </view>
       <view class="btn-action btn--audio" wx:if="{{completelyOver && audioState === 'stop'}}" bindtap="toExam" hover-class="tap-active" hover-stay-time="100">
         <view>保存</view>
-        <image src="/images/v2/submit.png"></image>
+        <image src="/images/v2/submit_bt.png"></image>
       </view>
       <view class="btn-action btn--correct {{list[swiperCurrent].label || list[swiperCurrent].status == 0 ?'dis' :''}}" bind:tap="nextSentence2" hover-class="tap-active" hover-stay-time="100">
         <view>听懂</view>
-        <image src="/images/v2/correct.png"></image>
+        <image src="/images/v2/correct_bt.png"></image>
       </view>
     </view>
     <view class="btn-group-layout-split__divider"></view>
     <view class="btn-group-layout-split__footer">
       <view class="btn-action-icon btn--setting" bindtap="playSet" hover-class="tap-active" hover-stay-time="100">
-        <image src="/images/v2/setting.png"></image>
+        <image src="/images/v2/setting_bt.png"></image>
       </view>
       <view class="btn-action-icon btn--visible" wx:if="{{baseShowArticle}}">
-        <image src="/images/v2/visible.png"></image>
+        <image src="/images/v2/visible_bt.png"></image>
       </view>
       <view class="btn-action-icon btn--visible" wx:if="{{!baseShowArticle}}">
-        <image wx:if="{{!showArticle}}" src="/images/v2/hidden.png" bindtap="showArticle"></image>
-        <image wx:if="{{showArticle}}" src="/images/v2/visible.png" bindtap="showArticle"></image>
+        <image wx:if="{{!showArticle}}" src="/images/v2/hidden_bt.png" bindtap="showArticle"></image>
+        <image wx:if="{{showArticle}}" src="/images/v2/visible_bt.png" bindtap="showArticle"></image>
       </view>
       <view class="btn-action btn--list" bindtap="toList" hover-class="tap-active" hover-stay-time="100">
         <view>句子列表</view>
-        <image src="/images/v2/list.png" class="but-img-2"></image>
+        <image src="/images/v2/list_bt.png" class="but-img-2"></image>
       </view>
     </view>
   </view>

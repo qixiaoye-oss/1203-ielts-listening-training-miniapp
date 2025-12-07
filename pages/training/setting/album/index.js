@@ -8,7 +8,7 @@ Page({
     groups: [
       {
         title: '完成率统计',
-        icon: '/images/v2/correct.png',
+        icon: '/images/v2/correct_bt.png',
         bgColor: 'rgba(0, 210, 106, 0.15)',
         items: [
           {
