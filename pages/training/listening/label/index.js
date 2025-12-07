@@ -13,7 +13,6 @@ Page({
     audioDownProgress: 100 // 音频下载进度（100表示无需显示加载）
   },
   onLoad(options) {
-    this.setData({ audioDownProgress: 0 }) // 立即显示加载动画
     this.listData()
   },
   onShow() {

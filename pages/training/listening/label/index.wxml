@@ -1,11 +1,16 @@
-<!-- 圆饼进度 -->
-<view class="audio-loading-mask" wx:if="{{audioDownProgress < 100}}">
+<!-- 加载状态 -->
+<view class="audio-loading-mask" wx:if="{{!isAllRady}}">
   <view class="pie-progress" style="background: conic-gradient(#3478F6 {{audioDownProgress * 3.6}}deg, #f5f5f5 {{audioDownProgress * 3.6}}deg);"></view>
-  <view class="audio-loading-text">音频加载中...</view>
+  <view class="audio-loading-text">{{audioDownProgress < 100 ? '音频加载中...' : '数据加载中...'}}</view>
 </view>
 <view class="{{isPc ? 'windows' : '' }}" wx:if="{{isAllRady}}">
   <view class="body {{isPc ? 'left-body' : '' }}">
-    <label-list list="{{list}}" bind:edit="toEditPage"></label-list>
+    <block wx:if="{{list && list.length > 0}}">
+      <label-list list="{{list}}" bind:edit="toEditPage"></label-list>
+    </block>
+    <view class="empty-state" wx:else>
+      <view class="empty-text">暂无标注记录</view>
+    </view>
   </view>
   <view class="intervals" wx:if="{{isPc}}"></view>
   <block wx:if="{{isPc}}">
