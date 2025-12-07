@@ -9,7 +9,7 @@
 
 /* 显示部分 */
 .label-list-container {
-  height: calc(100vh - 64px);
+  height: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
