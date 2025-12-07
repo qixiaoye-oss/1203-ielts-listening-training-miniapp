@@ -47,11 +47,11 @@
         </view>
       </view>
       <view class="btn-group-embedded">
-        <view class="btn-action-icon btn--audio" hover-class="tap-active" hover-stay-time="100">
+        <view class="btn-action-icon" data-icon="play" hover-class="tap-active" hover-stay-time="100">
           <image src="/images/v2/play_bt.png" wx:if="{{!audioPlay}}" bindtap="play"></image>
           <image src="/images/v2/pause_bt.png" wx:if="{{audioPlay}}" bindtap="stopAudio"></image>
         </view>
-        <view class="btn-action-icon btn--visible" bind:tap="showHidden" hover-class="tap-active" hover-stay-time="100">
+        <view class="btn-action-icon" data-icon="visible" bind:tap="showHidden" hover-class="tap-active" hover-stay-time="100">
           <image wx:if="{{!showHidden}}" src="/images/v2/hidden_bt.png"></image>
           <image wx:else src="/images/v2/visible_bt.png"></image>
         </view>

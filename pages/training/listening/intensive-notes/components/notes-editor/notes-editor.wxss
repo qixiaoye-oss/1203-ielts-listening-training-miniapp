@@ -1,5 +1,6 @@
 /* 引入样式 */
 @import "/style/iconfont.wxss";
+@import "/style/button-group.wxss";
 
 .edit-base-container {
   width: 100%;
@@ -197,6 +198,13 @@
   position: absolute;
   top: -2px;
   z-index: -1;
+}
+
+/* 保存按钮 - 右下角定位（仅覆盖位置，按钮样式使用公共 btn-action） */
+.save-btn {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
 }
 
 .no-data {

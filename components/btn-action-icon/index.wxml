@@ -1,5 +1,6 @@
 <view
-  class="btn-action-icon {{type ? 'btn--' + type : ''}} {{disabled ? 'btn--dis' : ''}}"
+  class="btn-action-icon {{disabled ? 'btn--dis' : ''}}"
+  data-icon="{{icon}}"
   hover-class="{{disabled ? '' : 'tap-active'}}"
   hover-stay-time="100"
   bindtap="onTap"

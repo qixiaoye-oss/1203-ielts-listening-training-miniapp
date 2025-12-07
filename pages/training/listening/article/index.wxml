@@ -15,7 +15,7 @@
   <view class="btn-page-bottom">
     <view class="btn-group-layout-split">
       <view class="btn-group-layout-split__footer">
-        <view class="btn-action btn--audio" bind:tap="returnPage" hover-class="tap-active" hover-stay-time="100">
+        <view class="btn-action" data-icon="save" bind:tap="returnPage" hover-class="tap-active" hover-stay-time="100">
           <view>返回</view>
           <image src="/images/v2/save_bt.png"></image>
         </view>

@@ -18,7 +18,7 @@
 <view class="occupied"></view>
 <view class="btn-page-bottom">
   <view class="btn-group-layout-inline-center">
-    <view class="btn-action btn--correct" bindtap="saveQue" hover-class="tap-active" hover-stay-time="100">
+    <view class="btn-action" data-icon="correct" bindtap="saveQue" hover-class="tap-active" hover-stay-time="100">
       <view>提交</view>
       <image src="/images/v2/correct_bt.png"></image>
     </view>
