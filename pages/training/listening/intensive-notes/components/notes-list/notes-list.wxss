@@ -185,7 +185,53 @@
   height: 15px;
 }
 
-/* 底部插槽容器 */
-.footer-slot-container {
-  padding-bottom: 20px;
+/* ==================== 底部按钮组（本页面专用） ==================== */
+.footer-btn-group {
+  margin: 20px;
+  margin-bottom: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 9px;
+}
+
+.footer-btn-group__header {
+  padding: 15px;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.footer-btn-group__divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.footer-btn-group__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.footer-btn-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  line-height: 15px;
+  padding: 5px;
+  border-radius: 3px;
+  color: #00A6ED;
+  background-color: rgba(0, 166, 237, 0.15);
+}
+
+.footer-btn-action image {
+  width: 25px;
+  height: 25px;
+  margin-left: 5px;
+}
+
+.tap-active {
+  opacity: 0.7;
+  transform: scale(0.98);
 }

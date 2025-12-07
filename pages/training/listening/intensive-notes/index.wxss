@@ -38,19 +38,3 @@ page {
 }
 
 /* 句子样式已提取到公共组件 /components/sentence-text */
-
-/* ==================== 按钮组特殊处理 ==================== */
-/**
- * 本页面按钮组随列表滚动，不固定底部
- * 通过 .btn-page-bottom--inline 修饰类覆盖公共样式
- */
-.btn-page-bottom--inline {
-  position: static;
-  margin: 20px;
-}
-
-/* 内联模式不需要蒙版 */
-.btn-page-bottom--inline::before,
-.btn-page-bottom--inline::after {
-  display: none;
-}

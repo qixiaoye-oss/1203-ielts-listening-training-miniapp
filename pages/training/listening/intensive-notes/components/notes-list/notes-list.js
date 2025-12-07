@@ -53,6 +53,10 @@ Component({
     // 打卡
     review() {
       this.triggerEvent('review')
+    },
+    // 保存并返回
+    onReturnTap() {
+      this.triggerEvent('return')
     }
   }
 })
