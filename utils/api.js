@@ -2,9 +2,9 @@ var Promise = require('../plugins/es6-promise.min.js')
 var uploaduri = 'https://ielts-listen-training.oss-cn-qingdao.aliyuncs.com'
 let url = {
   // develop: 'https://local.lylo.top/api/listen',
-  develop: 'https://listen.jingying.vip/api/listen',
-  trial: 'https://listen.jingying.vip/api/listen',
-  release: 'https://listen.jingying.vip/api/listen',
+  develop: 'https://ielts.jingying.vip/api/mal',
+  trial: 'https://ielts.jingying.vip/api/mal',
+  release: 'https://ielts.jingying.vip/api/mal',
 }
 
 const version = wx.getAccountInfoSync().miniProgram.envVersion
