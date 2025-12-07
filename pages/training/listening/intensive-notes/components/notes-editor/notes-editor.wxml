@@ -1,7 +1,17 @@
 <view class="edit-base-container" wx:if="{{detail.list}}">
   <view class="question-container">
     <view id="question_cell" class="sentence-cell">
-      <text bindtap="listenSentenceAgain" class="~sentence-text {{selected == index ? '~sentence-text-active':''}}" id='T{{index}}' wx:for="{{detail.list}}" wx:key="idx" data-idx="{{index}}">{{item.content}}<text class="~narrator {{item.narratorSex == '1'?'~narrator-man':'~narrator-woman'}}" wx:if="{{item.narrator}}">{{item.narrator}}</text></text>
+      <sentence-text
+        wx:for="{{detail.list}}"
+        wx:key="idx"
+        content="{{item.content}}"
+        active="{{selected == index}}"
+        narrator="{{item.narrator}}"
+        narratorSex="{{item.narratorSex}}"
+        textId="T{{index}}"
+        index="{{index}}"
+        bind:tap="listenSentenceAgain"
+      />
     </view>
     <view class="review-result" wx:if="{{enableScore == 1}}">
       <view class="review-result__result">{{detail.aiReviewResult}}</view>
@@ -22,7 +32,7 @@
       </view>
       <view class="toolbar" catchtouchend="format">
         <image src="/image/editor/{{formats.color ? 'color_' : 'color'}}.png" data-name="color" data-value=""></image>
-        <image src="/image/editor/{{formats.backgroundColor ? 'bgcolor_' : 'bgcolor'}}.png" data-name="backgroundColor" data-value="">></image>
+        <image src="/image/editor/{{formats.backgroundColor ? 'bgcolor_' : 'bgcolor'}}.png" data-name="backgroundColor" data-value=""></image>
         <image src="/image/editor/{{formats.bold ? 'bold_' : 'bold'}}.png" data-name="bold"></image>
         <image src="/image/editor/{{formats.italic ? 'italic_' : 'italic'}}.png" data-name="italic"></image>
         <image src="/image/editor/{{formats.underline ? 'underline_' : 'underline'}}.png" data-name="underline"></image>

@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "label-list": "./components/label-list/label-list",
-    "label-edit": "./components/label-edit/label-edit"
-  }
-}

@@ -1,18 +1,14 @@
 const api = getApp().api
+
 Component({
   properties: {
-    detail: Object,
-    audioSrc: String,
+    detail: Object
   },
   data: {
     formats: {},
     editorCtx: null,
     editorKey: true,
     showPl: true
-  },
-  lifetimes: {
-    attached() {
-    }
   },
   observers: {
     // 正确监听写法（注意这里是对象属性路径）
@@ -85,33 +81,16 @@ Component({
       this.setData({ formats })
     },
     textareaFocus() {
-      const { formats, editorCtx } = this.data
-      // 设置行距
-      // if (!formats.hasOwnProperty("lineHeight")) {
-      // console.log('设置行距')
-      // editorCtx.format('lineHeight', '1.4em')
-      // this.editorCtx.blur()
-      // }
-      this.setData({
-        showPl: false
-      })
+      this.setData({ showPl: false })
     },
     textareaBlur() {
       const _this = this
-      const { editorCtx, formats } = this.data
+      const { editorCtx } = this.data
       editorCtx.getContents({
         success: (res) => {
           _this.setData({ showPl: api.isEmpty(res.text.trim()) })
         }
       })
-    },
-    setEditorContent() {
-      const { editorCtx, detail, formats } = this.data
-      editorCtx.setContents({
-        // delta: JSON.parse(detail.reviseContent)
-        html: detail.reviseContent
-      })
-      this.textareaBlur()
-    },
+    }
   }
 })
