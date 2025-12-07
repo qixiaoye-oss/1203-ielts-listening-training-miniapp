@@ -41,19 +41,19 @@
 }
 
 .my__label {
-  border-top: 1px solid var(--border-color-4);
-  padding: 15px 15px;
+  /* 复刻参考项目：去掉分割线，仅作为结构容器 */
+  /* 参考项目无此分割区域，answer-cell 直接在 sentence-label-cell 内 */
 }
 
 .active {
   border-color: var(--border-color-1);
 }
 
-/* 我的听写 */
+/* 我的听写 - 复刻参考项目间距 */
 .answer-cell {
   border: 1px dashed var(--border-color-4);
   margin-top: 10px;
-  margin-bottom: 15px;
+  /* 去掉 margin-bottom，由 big-sentence-cell 的 padding 控制底部间距 */
   position: relative;
   padding: 15px;
 }
