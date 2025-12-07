@@ -121,8 +121,8 @@
   margin-top: 10px;
   margin-bottom: 13px;
   padding-block: 12px;
-  border-top: 1px solid var(--solid-border-color);
-  border-bottom: 1px solid var(--solid-border-color);
+  border-top: 1px solid var(--border-color-4);
+  border-bottom: 1px solid var(--border-color-4);
   gap: 15px;
 }
 
