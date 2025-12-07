@@ -13,6 +13,7 @@ Page({
     audioDownProgress: 100 // 音频下载进度（100表示无需显示加载）
   },
   onLoad(options) {
+    this.setData({ audioDownProgress: 0 }) // 立即显示加载动画
     this.listData()
   },
   onShow() {
@@ -40,13 +41,21 @@ Page({
   // 获取数据
   listData() {
     const _this = this
+    // 设置超时保护，防止请求无响应导致页面一直空白
+    const timeoutId = setTimeout(() => {
+      if (!_this.data.isAllRady) {
+        _this.setData({ isAllRady: true, audioDownProgress: 100 })
+      }
+    }, 10000) // 10秒超时
+
     api.request(this, '/record/v1/list/label', {
       ...this.options
-    }, true).then((res) => {
-      // 初始化音频（使用与 intensive 页面相同的方式）
-      if (res && res.audioUrl) {
-        _this.setData({ audioDownProgress: 0 }) // 开始下载音频
-        audioApi.initAudio(res.audioUrl, (progress) => {
+    }, false).then((res) => {
+      clearTimeout(timeoutId)
+      // API 会自动将数据绑定到 this.data，所以检查 this.data.audioUrl 或 res.audioUrl
+      const audioUrl = (res && res.audioUrl) || _this.data.audioUrl
+      if (audioUrl) {
+        audioApi.initAudio(audioUrl, (progress) => {
           _this.setData({ audioDownProgress: progress })
         }).then(() => {
           _this.setData({ isAllRady: true, audioDownProgress: 100 })
@@ -54,9 +63,11 @@ Page({
           _this.setData({ isAllRady: true, audioDownProgress: 100 })
         })
       } else {
-        _this.setData({ isAllRady: true })
+        // 没有音频URL，直接显示内容
+        _this.setData({ isAllRady: true, audioDownProgress: 100 })
       }
     }).catch(() => {
+      clearTimeout(timeoutId)
       _this.setData({ isAllRady: true, audioDownProgress: 100 })
     })
   },
