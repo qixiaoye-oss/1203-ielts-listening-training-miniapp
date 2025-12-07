@@ -9,7 +9,8 @@ Page({
     },
     isPc: false,
     showDetail: false,
-    isAllRady: false
+    isAllRady: false,
+    audioDownProgress: 100 // 音频下载进度（100表示无需显示加载）
   },
   onLoad(options) {
     this.listData()
@@ -39,24 +40,24 @@ Page({
   // 获取数据
   listData() {
     const _this = this
-    wx.showLoading({
-      title: '准备中...',
-    })
     api.request(this, '/record/v1/list/label', {
       ...this.options
     }, true).then((res) => {
       // 初始化音频（使用与 intensive 页面相同的方式）
       if (res && res.audioUrl) {
-        audioApi.initAudio(res.audioUrl).then(() => {
-          _this.setData({ isAllRady: true })
+        _this.setData({ audioDownProgress: 0 }) // 开始下载音频
+        audioApi.initAudio(res.audioUrl, (progress) => {
+          _this.setData({ audioDownProgress: progress })
+        }).then(() => {
+          _this.setData({ isAllRady: true, audioDownProgress: 100 })
         }).catch(() => {
-          _this.setData({ isAllRady: true })
+          _this.setData({ isAllRady: true, audioDownProgress: 100 })
         })
       } else {
         _this.setData({ isAllRady: true })
       }
     }).catch(() => {
-      _this.setData({ isAllRady: true })
+      _this.setData({ isAllRady: true, audioDownProgress: 100 })
     })
   },
   toEditPage({ detail }) {

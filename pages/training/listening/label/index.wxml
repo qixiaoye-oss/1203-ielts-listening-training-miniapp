@@ -1,3 +1,8 @@
+<!-- 圆饼进度 -->
+<view class="audio-loading-mask" wx:if="{{audioDownProgress < 100}}">
+  <view class="pie-progress" style="background: conic-gradient(#3478F6 {{audioDownProgress * 3.6}}deg, #f5f5f5 {{audioDownProgress * 3.6}}deg);"></view>
+  <view class="audio-loading-text">音频加载中...</view>
+</view>
 <view class="{{isPc ? 'windows' : '' }}" wx:if="{{isAllRady}}">
   <view class="body {{isPc ? 'left-body' : '' }}">
     <label-list list="{{list}}" bind:edit="toEditPage"></label-list>
