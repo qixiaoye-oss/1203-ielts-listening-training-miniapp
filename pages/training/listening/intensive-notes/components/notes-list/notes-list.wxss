@@ -187,8 +187,7 @@
 
 /* ==================== 底部按钮组（本页面专用） ==================== */
 .footer-btn-group {
-  margin: 20px;
-  margin-bottom: 40px;
+  margin: 0 20px 20px;  /* 上0(依赖item-spacing 15px) 左右20 下20 */
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 9px;
 }
