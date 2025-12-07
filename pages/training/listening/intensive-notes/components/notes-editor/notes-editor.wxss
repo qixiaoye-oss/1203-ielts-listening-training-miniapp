@@ -1,5 +1,6 @@
 /* 引入样式 */
 @import "/style/iconfont.wxss";
+@import "/style/button-group.wxss";
 
 .edit-base-container {
   width: 100%;
@@ -199,31 +200,11 @@
   z-index: -1;
 }
 
-/* 保存按钮 - 右下角定位 */
+/* 保存按钮 - 右下角定位（仅覆盖位置，按钮样式使用公共 btn-action） */
 .save-btn {
   position: absolute;
   right: 15px;
   bottom: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  line-height: 15px;
-  padding: 5px;
-  border-radius: 3px;
-  color: #00A6ED;
-  background-color: rgba(0, 166, 237, 0.15);
-}
-
-.save-btn image {
-  width: 25px;
-  height: 25px;
-  margin-left: 5px;
-}
-
-.tap-active {
-  opacity: 0.7;
-  transform: scale(0.98);
 }
 
 .no-data {

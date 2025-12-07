@@ -11,7 +11,7 @@
   </view>
   <view class="btn-page-bottom">
     <view class="btn-group-layout-inline-center">
-      <button formType="submit" class="btn-action btn--audio" hover-class="tap-active">
+      <button formType="submit" class="btn-action" data-icon="save" hover-class="tap-active">
         <view>保存</view>
         <image src="/images/v2/save_bt.png"></image>
       </button>

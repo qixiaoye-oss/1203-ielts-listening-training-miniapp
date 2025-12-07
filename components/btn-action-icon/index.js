@@ -9,7 +9,12 @@ Component({
     multipleSlots: true
   },
   properties: {
-    // 功能色彩类型：audio, correct, wrong, list, setting, visible, label, recording, practice, exercise
+    // [推荐] icon 名称，自动映射颜色（如 save, play, correct 等）
+    icon: {
+      type: String,
+      value: ''
+    },
+    // [废弃] 功能色彩类型，推荐使用 icon 属性
     type: {
       type: String,
       value: ''

@@ -19,11 +19,11 @@
           <view class="btn-action-icon " wx:if="{{item.label}}">
             <image class="label_flag" src="/images/v2/flag_bt.png"></image>
           </view>
-          <view class="btn-action-icon btn--audio" hover-class="tap-active" hover-stay-time="100">
+          <view class="btn-action-icon" data-icon="play" hover-class="tap-active" hover-stay-time="100">
             <image src="/images/v2/pause_bt.png" wx:if="{{item.audioPlay =='play'}}"></image>
             <image src="/images/v2/play_bt.png" wx:else bindtap="playAudio" data-idx="{{idx}}"></image>
           </view>
-          <view class="btn-action-icon btn--audio" bindtap="toDetail" data-idx="{{idx}}" hover-class="tap-active" hover-stay-time="100">
+          <view class="btn-action-icon" data-icon="goto" bindtap="toDetail" data-idx="{{idx}}" hover-class="tap-active" hover-stay-time="100">
             <image src="/images/v2/goto_bt.png"></image>
           </view>
         </view>
