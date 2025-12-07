@@ -21,11 +21,16 @@
   box-sizing: border-box;
 }
 
-/* 句子部分 */
+/* 句子部分 - 与 notes-list 的 content-cell 保持一致 */
 .sentence-cell {
   margin: 15px;
   font-size: 18px;
+  font-weight: bold;
   line-height: 1.9;
+}
+
+.sentence-text-container {
+  display: inline;
 }
 
 /* ai 评分部分 */
