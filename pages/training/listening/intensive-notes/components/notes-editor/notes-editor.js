@@ -8,7 +8,8 @@ Component({
     formats: {},
     editorCtx: null,
     editorKey: true,
-    showPl: true
+    showPl: true,
+    selected: -1
   },
   observers: {
     // 正确监听写法（注意这里是对象属性路径）
@@ -22,6 +23,12 @@ Component({
     },
   },
   methods: {
+    // 点击句子高亮
+    listenSentenceAgain(e) {
+      // 兼容组件事件（e.detail）和原生事件（e.currentTarget.dataset）
+      const idx = e.detail?.idx ?? e.currentTarget?.dataset?.idx
+      this.setData({ selected: idx })
+    },
     // 保存并返回
     saveUserAnswer() {
       const { editorCtx, detail } = this.data
