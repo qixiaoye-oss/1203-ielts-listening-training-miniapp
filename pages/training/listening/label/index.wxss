@@ -1,5 +1,10 @@
-/* 不覆盖 page padding，使用全局默认的 padding: 20px */
-/* 移除 overflow: hidden，否则会裁剪按钮组蒙版 */
+/* 页面基础样式 - 参考项目复刻 */
+page {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
 
 .windows {
   display: flex;
