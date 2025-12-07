@@ -25,6 +25,7 @@
 .list-bottom-spacer {
   height: 145px; /* 双层按钮组110px + 底部距离20px + 间距15px */
   flex-shrink: 0;
+  margin-top: auto; /* 始终推到 scroll-view 底部 */
 }
 
 .label-item-cell {
