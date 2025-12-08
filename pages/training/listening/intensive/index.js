@@ -1,11 +1,12 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
-const loadingProgress = require('../../../../behaviors/loadingProgress')
+const pageLoading = require('../../../../behaviors/pageLoading')
+const audioLoading = require('../../../../behaviors/audioLoading')
 
 let audioContext
 let inputTimer
 Page({
-  behaviors: [loadingProgress],
+  behaviors: [pageLoading, audioLoading],
   data: {
     areaTop: -2,
     areaLeft: 0,
@@ -21,7 +22,6 @@ Page({
     showActionsheet: false, // 倍速选择
     playbackRate: 1, // 倍速
     playbackRateStr: 1.0,
-    audioDownProgress: 100, // 音频下载进度
     groups: [
       {
         text: '文章显示',

@@ -1,5 +1,5 @@
-<import src="/templates/loading-progress.wxml" />
-<template is="loadingProgress" data="{{loading, loadProgress}}" />
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
 <view class="article-page">
   <view class="article-page__content">
     <view class="sub-item">

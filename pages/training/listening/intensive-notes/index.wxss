@@ -1,7 +1,7 @@
 /**
  * 精听笔记页面布局样式
+ * 注：page-loading.wxss 已在 app.wxss 全局引入
  */
-@import '/style/loading-progress.wxss';
 
 page {
   height: 100%;

@@ -1,8 +1,8 @@
 const api = getApp().api
-const loadingProgress = require('../../behaviors/loadingProgress')
+const pageLoading = require('../../behaviors/pageLoading')
 
 Page({
-  behaviors: [loadingProgress],
+  behaviors: [pageLoading],
   data: {
     url: {
       "TRAINING": "/pages/training/list/album/index"

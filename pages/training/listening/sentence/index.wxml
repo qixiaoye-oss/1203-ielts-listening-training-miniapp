@@ -1,5 +1,5 @@
-<import src="/templates/loading-progress.wxml" />
-<template is="loadingProgress" data="{{loading, loadProgress}}" />
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
 <wxs src="/utils/util.wxs" module="wxsUtil" />
 <scroll-view class="base_view" scroll-y scroll-into-view="{{scrollIntoId}}" scroll-with-animation>
   <view class="layout_grid">

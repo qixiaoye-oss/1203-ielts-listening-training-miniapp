@@ -1,18 +1,18 @@
 const api = getApp().api
-const loadingProgress = require('../../../../behaviors/loadingProgress')
+const pageLoading = require('../../../../behaviors/pageLoading')
+const audioLoading = require('../../../../behaviors/audioLoading')
 const audioApi = require('../../../../utils/audioApi')
 
 let audio
 Page({
-  behaviors: [loadingProgress],
+  behaviors: [pageLoading, audioLoading],
   data: {
     audioPlay: false,
     noReady: true,
     htmlStyle: {
       p: 'margin-bottom:14px'
     },
-    showHidden: false,
-    audioDownProgress: 100 // 音频下载进度
+    showHidden: false
   },
   onLoad: function (options) {
     this.startLoading()

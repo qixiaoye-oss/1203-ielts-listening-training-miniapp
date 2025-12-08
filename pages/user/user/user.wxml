@@ -1,10 +1,7 @@
-<import src="/templates/loading-progress.wxml" />
-<template is="loadingProgress" data="{{loading, loadProgress}}" />
-<!-- 加载失败重试 -->
-<view class="load-error" wx:if="{{loadError}}">
-  <view class="load-error__text">加载失败</view>
-  <view class="load-error__btn" bindtap="retryLoad">点击重试</view>
-</view>
+<import src="/templates/page-loading.wxml" />
+<import src="/templates/load-error.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+<template is="loadError" data="{{loadError}}" />
 <view class="user-page" wx:if="{{!loadError}}">
   <view class="user-info">
     <image class="user__avatar" src="{{user.headUrl}}" mode="cover" />

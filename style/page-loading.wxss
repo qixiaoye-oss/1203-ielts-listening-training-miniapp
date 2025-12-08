@@ -1,5 +1,5 @@
 /* 页面加载进度条样式 */
-.loading-progress-bar {
+.page-loading-bar {
   position: fixed;
   top: 0;
   left: 0;
@@ -10,7 +10,7 @@
   overflow: hidden;
 }
 
-.loading-progress-bar__inner {
+.page-loading-bar__inner {
   height: 100%;
   background: linear-gradient(90deg, var(--theme-color, #007bff), #00c6ff);
   transition: width 0.1s ease-out;
@@ -18,7 +18,7 @@
   position: relative;
 }
 
-.loading-progress-bar__inner::after {
+.page-loading-bar__inner::after {
   content: '';
   position: absolute;
   top: 0;

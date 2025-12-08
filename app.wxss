@@ -1,6 +1,7 @@
 @import "style/default-styles.wxss";
 @import "style/theme.wxss";
-@import "style/loading-progress.wxss";
+@import "style/page-loading.wxss";
+@import "style/audio-loading.wxss";
 @import "style/load-error.wxss";
 @import "style/button-group.wxss";
 @import "style/tag.wxss";
