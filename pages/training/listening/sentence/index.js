@@ -1,5 +1,5 @@
 const audioApi = getApp().audioApi
-const pageLoading = require('../../../../behaviors/pageLoading')
+const pageLoading = require('../../../../behaviors/pageLoading.js')
 
 let audio
 Page({

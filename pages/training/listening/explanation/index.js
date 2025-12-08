@@ -1,6 +1,6 @@
 const api = getApp().api
-const pageLoading = require('../../../../behaviors/pageLoading')
-const audioLoading = require('../../../../behaviors/audioLoading')
+const pageLoading = require('../../../../behaviors/pageLoading.js')
+const audioLoading = require('../../../../behaviors/audioLoading.js')
 const audioApi = require('../../../../utils/audioApi')
 
 let audio

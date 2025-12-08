@@ -1,5 +1,5 @@
 const api = getApp().api
-const pageLoading = require('../../../../behaviors/pageLoading')
+const pageLoading = require('../../../../behaviors/pageLoading.js')
 
 Page({
   behaviors: [pageLoading],

@@ -1,7 +1,7 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
-const pageLoading = require('../../../../behaviors/pageLoading')
-const audioLoading = require('../../../../behaviors/audioLoading')
+const pageLoading = require('../../../../behaviors/pageLoading.js')
+const audioLoading = require('../../../../behaviors/audioLoading.js')
 
 let audioContext
 let inputTimer

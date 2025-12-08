@@ -225,6 +225,18 @@ function parseParams(json) {
   }
 }
 
+/**
+ * 分享配置
+ * @param {分享标题} title
+ * @param {页面实例} that
+ */
+function share(title, that) {
+  return {
+    title: title || '不刷语料库',
+    path: '/' + (that && that.route ? that.route : 'pages/home/index')
+  }
+}
+
 module.exports = {
   wxPromisify: wxPromisify,
   request: request,
@@ -233,5 +245,6 @@ module.exports = {
   isNotEmpty: isNotEmpty,
   toast: toast,
   modal: modal,
-  parseParams: parseParams
+  parseParams: parseParams,
+  share: share
 }
