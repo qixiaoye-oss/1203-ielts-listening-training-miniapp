@@ -39,7 +39,7 @@ text {
 }
 
 .progress-sel-bg {
-  width: 100%;
+  width: 0;
   position: relative;
   top: -4px;
   height: 4px;

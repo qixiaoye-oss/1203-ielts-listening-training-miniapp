@@ -49,7 +49,7 @@ Page({
       let i = Number(this.data.index)
       this.setData({
         swiperCurrent: i,
-        schedule: ((index / list.length) * 100),
+        schedule: ((i / list.length) * 100),
         showArticle: false,
         index: ''
       })
@@ -87,7 +87,7 @@ Page({
       swiperCurrent: detail.current,
       audioState: 'none',
       showArticle: false,
-      schedule: (((detail.current + 1) / list.length) * 100)
+      schedule: ((detail.current / list.length) * 100)
     })
     wx.nextTick(() => {
       this.playAudio()
@@ -187,7 +187,7 @@ Page({
     }
     this.setData({
       swiperCurrent: swiperCurrent + 1,
-      schedule: (((swiperCurrent + 2) / list.length) * 100),
+      schedule: (((swiperCurrent + 1) / list.length) * 100),
       showArticle: false
     })
     this.playAudio()
@@ -298,8 +298,9 @@ Page({
     let _this = this
     api.request(this, `/part/v1/sentence`, { ...this.options }, isPull, true).then(res => {
       wx.setStorageSync('listenings', res.list)
+      const currentIndex = res.swiperCurrent || 0
       this.setData({
-        schedule: (((res.swiperCurrent + 1) / res.list.length) * 100),
+        schedule: ((currentIndex / res.list.length) * 100),
         audioUrl: res.audioUrl,
         audioDownProgress: 0 // 开始下载音频
       })
