@@ -20,7 +20,3 @@
   margin-left: 0;
   margin-right: var(--button-icon-margin);
 }
-
-.img_rotate {
-  transform: rotate(180deg);
-}

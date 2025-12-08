@@ -4,8 +4,8 @@ const pageLoading = require('../../../behaviors/pageLoading')
 Page({
   behaviors: [pageLoading],
   data: {
-    uselessCount: 0,
-    usefulCount: 0
+    usefulCount: 0,
+    shaking: false
   },
   // ===========生命周期 Start===========
   onShow() {
@@ -21,20 +21,13 @@ Page({
     }
     this.setData({
       usefulCount: 1,
-      uselessCount: 0
+      shaking: true
     })
+    // 动画结束后移除 shake 类
+    setTimeout(() => {
+      this.setData({ shaking: false })
+    }, 600)
     this.lable('useful')
-  },
-  // 无用
-  useless() {
-    if (this.data.uselessCount >= 1) {
-      return
-    }
-    this.setData({
-      usefulCount: 0,
-      uselessCount: 1
-    })
-    this.lable('useless')
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========

@@ -8,18 +8,11 @@
 </view>
 <view class="btn-page-bottom">
   <view class="btn-group-layout-inline-center">
-    <view class="btn-action {{usefulCount == 0?'btn--dis':''}}" data-icon="flag" bindtap="useful" hover-class="tap-active" hover-stay-time="100">
+    <view class="btn-action {{usefulCount == 0?'btn--dis':''}} {{shaking?'btn--shake':''}}" data-icon="flag" bindtap="useful" hover-class="tap-active" hover-stay-time="100">
       <image src="/images/helpful.png" class="img_flag"></image>
       <view>
         <text>有用</text>
         <text wx:if="{{usefulCount > 0}}">+{{usefulCount}}</text>
-      </view>
-    </view>
-    <view class="btn-action {{uselessCount == 0?'btn--dis':''}}" data-icon="list" bindtap="useless" hover-class="tap-active" hover-stay-time="100">
-      <image src="/images/like.png" class="img_flag img_rotate"></image>
-      <view>
-        <text>无用</text>
-        <text wx:if="{{uselessCount > 0}}">+{{uselessCount}}</text>
       </view>
     </view>
   </view>
