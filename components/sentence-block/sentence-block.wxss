@@ -45,9 +45,8 @@
 }
 
 /* ==================== 简洁模式（plain）==================== */
-/* 用于列表场景，无背景色和边框 */
+/* 用于列表场景，保留灰色背景，无边框 */
 .sentence-block--plain .sentence-block__text {
-  background-color: transparent;
   border-left: none;
   margin: 0;
 }
