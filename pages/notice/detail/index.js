@@ -4,8 +4,8 @@ const pageLoading = require('../../../behaviors/pageLoading')
 Page({
   behaviors: [pageLoading],
   data: {
-    uselessCount: 0,
-    usefulCount: 0
+    usefulCount: 0,
+    shaking: false
   },
   // ===========生命周期 Start===========
   onShow() {
@@ -19,22 +19,16 @@ Page({
     if (this.data.usefulCount >= 1) {
       return
     }
-    this.setData({
-      usefulCount: 1,
-      uselessCount: 0
-    })
+    this.setData({ usefulCount: 1 })
+    // 等 hover 效果结束后再触发 shake 动画
+    setTimeout(() => {
+      this.setData({ shaking: true })
+      // 动画结束后移除 shake 类
+      setTimeout(() => {
+        this.setData({ shaking: false })
+      }, 600)
+    }, 150)
     this.lable('useful')
-  },
-  // 无用
-  useless() {
-    if (this.data.uselessCount >= 1) {
-      return
-    }
-    this.setData({
-      usefulCount: 0,
-      uselessCount: 1
-    })
-    this.lable('useless')
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
@@ -48,9 +42,7 @@ Page({
     })
   },
   lable(type) {
-    api.request(this, `/popular/science/v1/label/${type}/${this.options.id}`, {}, true).then(() => {
-      api.toast('感谢反馈')
-    }).catch(() => {
+    api.request(this, `/popular/science/v1/label/${type}/${this.options.id}`, {}, true).catch(() => {
       // 点赞失败仅提示，已在 api.js 中 toast
     })
   },
