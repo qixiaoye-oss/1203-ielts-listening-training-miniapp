@@ -51,6 +51,7 @@ Page({
       this.finishLoading()
     }).catch(() => {
       this.finishLoading()
+      setTimeout(() => wx.navigateBack(), 1500)
     })
   },
   updateGroupsFromResponse(res) {

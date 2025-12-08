@@ -147,6 +147,7 @@ Page({
       this.finishLoading()
     }).catch(() => {
       this.finishLoading()
+      setTimeout(() => wx.navigateBack(), 1500)
     })
   },
   // 删除记录
@@ -154,6 +155,8 @@ Page({
     api.request(this, `/record/v1/del/progress/${params.progressId}`, {}, true).then(() => {
       delete params['progressId']
       this.toIntensivePage(params)
+    }).catch(() => {
+      // 删除失败仅提示
     })
   }
   // ===========数据获取 End===========

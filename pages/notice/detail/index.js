@@ -44,11 +44,14 @@ Page({
       this.finishLoading()
     }).catch(() => {
       this.finishLoading()
+      setTimeout(() => wx.navigateBack(), 1500)
     })
   },
   lable(type) {
     api.request(this, `/popular/science/v1/label/${type}/${this.options.id}`, {}, true).then(() => {
-      api.toast(res)
+      api.toast('感谢反馈')
+    }).catch(() => {
+      // 点赞失败仅提示，已在 api.js 中 toast
     })
   },
   // ===========数据获取 End===========

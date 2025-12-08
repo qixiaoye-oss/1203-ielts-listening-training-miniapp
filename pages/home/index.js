@@ -9,7 +9,8 @@ Page({
     },
     popularScience: {
       url: []
-    }
+    },
+    loadError: false
   },
   // ===========生命周期 Start===========
   onShow() { },
@@ -58,14 +59,24 @@ Page({
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
   listData() {
+    this.setData({ loadError: false })
     api.request(this, '/home/v1/list', {}, true).then(() => {
       this.finishLoading()
     }).catch(() => {
       this.finishLoading()
+      this.setData({ loadError: true })
     })
   },
   listPopularScienceData() {
-    api.request(this, '/popular/science/v1/miniapp/home', {}, true)
+    api.request(this, '/popular/science/v1/miniapp/home', {}, true).catch(() => {
+      // 科普数据非必需，静默失败
+    })
+  },
+  // 重试加载
+  retryLoad() {
+    this.startLoading()
+    this.listData()
+    this.listPopularScienceData()
   },
   // ===========数据获取 End===========
 })

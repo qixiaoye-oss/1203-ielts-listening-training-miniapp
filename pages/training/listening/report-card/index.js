@@ -38,6 +38,7 @@ Page({
       _this.finishLoading()
     }).catch(() => {
       _this.finishLoading()
+      setTimeout(() => wx.navigateBack(), 1500)
     })
   },
 })

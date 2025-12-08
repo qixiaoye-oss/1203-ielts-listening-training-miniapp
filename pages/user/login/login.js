@@ -4,7 +4,9 @@ Page({
     checked: false
   },
   onReady() {
-    api.request(this, '/user/v1/user/info', {}, true)
+    api.request(this, '/user/v1/user/info', {}, true).catch(() => {
+      // 新用户可能无数据，静默失败
+    })
   },
   onChooseAvatar(e) {
     const {
@@ -45,6 +47,8 @@ Page({
       wx.navigateBack({
         delta: 1,
       })
+    }).catch(() => {
+      // 保存失败仅提示，保留表单数据
     })
   }
 })

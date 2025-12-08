@@ -73,11 +73,13 @@ function request(that, url, data, hasToast, method) {
           resolve(res.data.data)
         } else {
           toast(res.data.msg || res.data.message)
+          reject(res.data)
         }
       },
       fail: function (res) {
         wx.hideLoading()
         toast('请求失败，请稍候再试')
+        reject(res)
       },
       complete: function (res) {
         clearTimeout(timer)

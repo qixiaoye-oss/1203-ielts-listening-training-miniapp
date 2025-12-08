@@ -314,6 +314,7 @@ Page({
     }).catch(() => {
       _this.finishLoading()
       _this.setData({ audioDownProgress: 100 })
+      setTimeout(() => wx.navigateBack(), 1500)
     })
   },
   // 标注先期验证
@@ -330,6 +331,8 @@ Page({
   createProgress() {
     api.request(this, '/record/v1/create/progress', { ...this.options }, false, 'POST').then(() => {
       this.saveSentenceLabel()
+    }).catch(() => {
+      // 创建进度静默失败
     })
   },
   // 保存句子标注
@@ -341,7 +344,9 @@ Page({
       status: list[swiperCurrent].status,
       content: list[swiperCurrent].label,
       currentIndex: swiperCurrent
-    }, false, 'POST')
+    }, false, 'POST').catch(() => {
+      // 保存标注静默失败
+    })
   },
   // 保存句子播放状态
   saveSentencePlayingRecord() {
@@ -355,7 +360,9 @@ Page({
     api.request(this, '/record/v1/sentence/playing', {
       ...this.options,
       sentenceId: list[swiperCurrent].id
-    }, false, 'POST')
+    }, false, 'POST').catch(() => {
+      // 播放记录静默失败
+    })
   },
   // 完成精听
   overIntensice() {
@@ -370,6 +377,8 @@ Page({
           progressId: progressId,
         }),
       })
+    }).catch(() => {
+      // 完成失败提示重试
     })
   }
 })

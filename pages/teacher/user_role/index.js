@@ -1,9 +1,7 @@
 const api = getApp().api
-const loadingProgress = require('../../../behaviors/loadingProgress')
 
 var timer
 Page({
-  behaviors: [loadingProgress],
   data: {
     inputVal: "",
     hideScroll: true,
@@ -51,12 +49,16 @@ Page({
   listUser() {
     api.request(this, '/user/listUserByName', {
       nameOrId: this.data.inputVal
-    }, true)
+    }, true).catch(() => {
+      // 搜索失败仅提示
+    })
   },
   listUserRole(userId) {
     api.request(this, '/user/listUserRole', {
       userId: userId
-    }, true)
+    }, true).catch(() => {
+      // 查询失败仅提示
+    })
   },
   submit: function (e) {
     let param = {
@@ -65,6 +67,8 @@ Page({
     }
     api.request(this, '/user/saveUserRole', param, true, "POST").then(res => {
       api.toast("保存成功")
+    }).catch(() => {
+      // 保存失败仅提示
     })
   },
 })
