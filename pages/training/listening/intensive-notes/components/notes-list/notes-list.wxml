@@ -8,7 +8,7 @@
           <view class="content-cell">
             <sentence-block
               list="{{item.list}}"
-              translate="{{wxsUtil.formatNull(item.translate,'暂无翻译')}}"
+              translate="{{item.translate}}"
               activeIndex="{{nowPlayAudio == index ? nowPalySmallAudio : -1}}"
               hidden="{{!item.show}}"
             />
