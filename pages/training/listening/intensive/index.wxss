@@ -137,7 +137,7 @@ text {
 }
 
 .paragraph-content-cell {
-  line-height: 1.9;
+  line-height: 1.4;
   font-weight: bold;
   font-size: 18px;
   flex: 1;
