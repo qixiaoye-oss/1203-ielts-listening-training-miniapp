@@ -1,11 +1,8 @@
 <import src="/templates/loading-progress.wxml" />
+<import src="/templates/load-error.wxml" />
 <template is="loadingProgress" data="{{loading, loadProgress}}" />
+<template is="loadError" data="{{loadError}}" />
 <wxs src="/utils/util.wxs" module="wxsUtil" />
-<!-- 加载失败重试 -->
-<view class="load-error" wx:if="{{loadError}}">
-  <view class="load-error__text">加载失败</view>
-  <view class="load-error__btn" bindtap="retryLoad">点击重试</view>
-</view>
 <view class="album-list" wx:if="{{!loadError}}">
   <!-- <view class="album-settings-entry" bind:tap="toPage" hover-class="tap-active" hover-stay-time="100">
     <view class="album-settings-entry__button" style="background: rgba(49, 159, 231, 0.15);">

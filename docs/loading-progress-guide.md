@@ -4,7 +4,7 @@
 
 > **注意**：这是一个基于 Behavior 的可复用方案，包含 JS 逻辑、WXML 模板和 WXSS 样式三部分。
 
-**版本：** v1.1.0
+**版本：** v1.2.0
 **更新日期：** 2025-12-08
 
 **相关文件：**
@@ -13,6 +13,7 @@
 |------|----------|-----------|----------|
 | 页面进度条 | `behaviors/loadingProgress.js` | `templates/loading-progress.wxml` | `style/loading-progress.wxss` |
 | 音频加载 | `behaviors/audioLoading.js` | `templates/audio-loading.wxml` | `style/audio-loading.wxss` |
+| 加载失败 | - | `templates/load-error.wxml` | `style/load-error.wxss` |
 
 ---
 
@@ -328,6 +329,6 @@ Page({
 
 ---
 
-**文档版本：** v1.1.0
+**文档版本：** v1.2.0
 **最后更新：** 2025-12-08
 **维护者：** 开发团队
