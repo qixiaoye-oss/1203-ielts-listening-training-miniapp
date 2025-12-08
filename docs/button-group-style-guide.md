@@ -52,7 +52,7 @@
 │                                                                 │
 │  Step 2: 指定颜色                                                │
 │     └─ 添加 data-icon="xxx" 属性，自动映射颜色                    │
-│        （基于 images/v2/icon_color_mapping.json）                │
+│        （基于 images/icon_color_mapping.json）                │
 │                                                                 │
 │  Step 3: 可选布局                                                │
 │     ├─ 单独使用：无需额外容器                                     │
@@ -76,7 +76,7 @@
 
 通过 `data-icon` 属性指定 icon 名称，自动应用对应的文字颜色和背景色。
 
-**颜色映射表**（基于 `images/v2/icon_color_mapping.json`）：
+**颜色映射表**（基于 `images/icon_color_mapping.json`）：
 
 | data-icon | 主色 | 背景色 | 对应 icon |
 |-----------|------|--------|-----------|
@@ -121,7 +121,7 @@
 ### 2.3 维护流程
 
 新增 icon 时需同步更新两处：
-1. `images/v2/icon_color_mapping.json` - 添加 icon → 颜色映射
+1. `images/icon_color_mapping.json` - 添加 icon → 颜色映射
 2. `style/button-group.wxss` - 添加对应的 `[data-icon="xxx"]` 选择器
 
 ---
@@ -288,7 +288,7 @@
 - **实现 icon 颜色映射机制**：通过 `data-icon` 属性自动映射颜色
 - **全局迁移**：将所有页面的 `.btn--xxx` 迁移为 `data-icon` 方式
 - **简化按钮定义**：只需基础类 + data-icon，无需记忆颜色类名
-- 颜色映射基于 `images/v2/icon_color_mapping.json` 配置
+- 颜色映射基于 `images/icon_color_mapping.json` 配置
 
 ### v1.6.1 (2025-12-06)
 - 新增 `.btn-pos-center` 通用居中类
