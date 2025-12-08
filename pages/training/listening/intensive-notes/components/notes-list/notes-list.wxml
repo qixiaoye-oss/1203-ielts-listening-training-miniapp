@@ -26,6 +26,7 @@
         <view class="buts-cell">
           <view class="state but-warning warning-bg" wx:if="{{item.status === '2'}}">需要再次复习</view>
           <view class="state but-success success-bg" wx:if="{{item.status === '1'}}">有效复习</view>
+          <view class="tag tag__multi--green" wx:if="{{item.reviseContent}}">有订正</view>
           <view class="btn-action-icon" data-icon="play" bind:tap="playAudio" data-index="{{index}}">
             <image src="/images/v2/pause_bt.png" data-value="pause" wx:if="{{nowPlayAudio == index}}"></image>
             <image src="/images/v2/play_bt.png" data-value="play" wx:else></image>
