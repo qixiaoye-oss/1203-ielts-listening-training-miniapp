@@ -1,3 +1,5 @@
+<import src="/templates/loading-progress.wxml" />
+<template is="loadingProgress" data="{{loading, loadProgress}}" />
 <view class="{{isPc ? 'windows' : '' }}" wx:if="{{isAllRady}}">
   <view class="body {{isPc ? 'left-body' : '' }}">
     <notes-list list="{{list}}" bind:edit="toEditPage" bind:review="review" bind:return="returnPage"></notes-list>

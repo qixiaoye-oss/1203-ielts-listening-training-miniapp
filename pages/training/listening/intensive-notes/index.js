@@ -1,6 +1,8 @@
 const api = getApp().api
+const loadingProgress = require('../../../../behaviors/loadingProgress')
 
 Page({
+  behaviors: [loadingProgress],
   data: {
     list: [],
     detail: null,
@@ -9,6 +11,7 @@ Page({
     isAllRady: false
   },
   onLoad(options) {
+    this.startLoading()
     this.listData()
   },
   onShow() {
@@ -26,11 +29,13 @@ Page({
   },
   // 获取数据
   listData() {
-    wx.showLoading({ title: '准备中...' })
     api.request(this, '/record/v1/list/label', {
       ...this.options
     }, true).then(() => {
       this.setData({ isAllRady: true })
+      this.finishLoading()
+    }).catch(() => {
+      this.finishLoading()
     })
   },
   toEditPage({ detail }) {
