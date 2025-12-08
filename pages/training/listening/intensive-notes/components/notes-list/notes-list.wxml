@@ -6,18 +6,12 @@
       <view class="big-sentence-cell {{item.active ? 'active' : ''}}">
         <view class="sentence-label-cell">
           <view class="content-cell">
-            <view class="sentence-text-container {{item.show?'':'hidden-text'}}">
-              <sentence-text
-                wx:for="{{item.list}}"
-                wx:for-item="smll"
-                wx:key="smll"
-                wx:for-index="smlli"
-                content="{{smll.content}}"
-                active="{{nowPalySmallAudio == smlli && nowPlayAudio == index}}"
-                index="{{smlli}}"
-              />
-            </view>
-            <sentence-translate content="{{wxsUtil.formatNull(item.translate,'暂无解析')}}" hidden="{{!item.show}}" />
+            <sentence-block
+              list="{{item.list}}"
+              translate="{{wxsUtil.getTranslate(item)}}"
+              activeIndex="{{nowPlayAudio == index ? nowPalySmallAudio : -1}}"
+              hidden="{{!item.show}}"
+            />
           </view>
           <view class="answer-cell" bind:tap="toEditPage" data-item="{{item}}">
             <view class="answer-title">我的听写</view>

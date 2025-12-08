@@ -37,4 +37,4 @@ page {
   height: 100vh;
 }
 
-/* 句子样式已提取到公共组件 /components/sentence-text */
+/* 句子样式已提取到公共组件 /components/sentence-block */
