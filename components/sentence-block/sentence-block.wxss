@@ -36,9 +36,13 @@
   font-weight: normal !important;
 }
 
+/* 翻译内部文字：始终保持相同的 padding，避免切换遮罩时高度变化 */
+.sentence-block__translate text {
+  padding: 2px 0;
+}
+
 .sentence-block__translate--hidden text {
   background-color: #f2f2f2;
-  padding: 2px 0;
   color: rgba(0, 0, 0, 0) !important;
 }
 
