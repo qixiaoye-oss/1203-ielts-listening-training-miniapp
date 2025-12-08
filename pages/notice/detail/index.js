@@ -5,7 +5,9 @@ Page({
   behaviors: [pageLoading],
   data: {
     uselessCount: 0,
-    usefulCount: 0
+    usefulCount: 0,
+    usefulShaking: false,
+    uselessShaking: false
   },
   // ===========生命周期 Start===========
   onShow() {
@@ -21,8 +23,13 @@ Page({
     }
     this.setData({
       usefulCount: 1,
-      uselessCount: 0
+      uselessCount: 0,
+      usefulShaking: true
     })
+    // 动画结束后移除 shake 类
+    setTimeout(() => {
+      this.setData({ usefulShaking: false })
+    }, 600)
     this.lable('useful')
   },
   // 无用
@@ -32,8 +39,13 @@ Page({
     }
     this.setData({
       usefulCount: 0,
-      uselessCount: 1
+      uselessCount: 1,
+      uselessShaking: true
     })
+    // 动画结束后移除 shake 类
+    setTimeout(() => {
+      this.setData({ uselessShaking: false })
+    }, 600)
     this.lable('useless')
   },
   // ===========业务操作 End===========
