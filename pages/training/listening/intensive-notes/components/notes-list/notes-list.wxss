@@ -49,7 +49,7 @@
 /* 我的听写 */
 .answer-cell {
   border: 1px dashed var(--solid-border-color);
-  margin-top: 10px;
+  margin-top: 15px;
   margin-bottom: 15px;
   position: relative;
   padding: 15px;
