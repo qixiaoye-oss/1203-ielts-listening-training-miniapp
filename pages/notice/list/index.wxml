@@ -1,6 +1,6 @@
-<import src="/templates/loading-progress.wxml"/>
+<import src="/templates/page-loading.wxml"/>
 <import src="/templates/load-error.wxml"/>
-<template is="loadingProgress" data="{{loading, loadProgress}}"/>
+<template is="pageLoading" data="{{loading, loadProgress}}"/>
 <template is="loadError" data="{{loadError}}" />
 <view class="main-page" wx:if="{{list.length > 0}}">
   <view class="main-item" wx:for="{{list}}" wx:key="index">

@@ -1,11 +1,11 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
-const loadingProgress = require('../../../../behaviors/loadingProgress')
+const pageLoading = require('../../../../behaviors/pageLoading')
 const audioLoading = require('../../../../behaviors/audioLoading')
 
 let innerAudioContext = null
 Page({
-  behaviors: [loadingProgress, audioLoading],
+  behaviors: [pageLoading, audioLoading],
   data: {
     underwayIndex: 0,
     underway: {

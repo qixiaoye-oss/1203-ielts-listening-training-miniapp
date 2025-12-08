@@ -1,9 +1,9 @@
 const audioApi = getApp().audioApi
-const loadingProgress = require('../../../../behaviors/loadingProgress')
+const pageLoading = require('../../../../behaviors/pageLoading')
 
 let audio
 Page({
-  behaviors: [loadingProgress],
+  behaviors: [pageLoading],
   data: {
     endTime: 0,
     stauts: 0,

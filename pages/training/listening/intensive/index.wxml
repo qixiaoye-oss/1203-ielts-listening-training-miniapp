@@ -1,6 +1,6 @@
-<import src="/templates/loading-progress.wxml" />
+<import src="/templates/page-loading.wxml" />
 <import src="/templates/audio-loading.wxml" />
-<template is="loadingProgress" data="{{loading, loadProgress}}" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
 <template is="audioLoading" data="{{audioDownProgress}}" />
 <wxs src="/utils/util.wxs" module="wxsUtil" />
 <view class="page-wrapper">

@@ -4,14 +4,14 @@
 
 > **注意**：这是一个基于 Behavior 的可复用方案，包含 JS 逻辑、WXML 模板和 WXSS 样式三部分。
 
-**版本：** v1.2.0
+**版本：** v1.3.0
 **更新日期：** 2025-12-08
 
 **相关文件：**
 
 | 类型 | Behavior | WXML 模板 | 样式文件 |
 |------|----------|-----------|----------|
-| 页面进度条 | `behaviors/loadingProgress.js` | `templates/loading-progress.wxml` | `style/loading-progress.wxss` |
+| 页面进度条 | `behaviors/pageLoading.js` | `templates/page-loading.wxml` | `style/page-loading.wxss` |
 | 音频加载 | `behaviors/audioLoading.js` | `templates/audio-loading.wxml` | `style/audio-loading.wxss` |
 | 加载失败 | - | `templates/load-error.wxml` | `style/load-error.wxss` |
 
@@ -22,10 +22,10 @@
 ### 1. 在页面 JS 中引入 Behavior
 
 ```js
-const loadingProgress = require('../../behaviors/loadingProgress')
+const pageLoading = require('../../behaviors/pageLoading')
 
 Page({
-  behaviors: [loadingProgress],
+  behaviors: [pageLoading],
   // ...
 })
 ```
@@ -33,8 +33,8 @@ Page({
 ### 2. 在页面 WXML 中引入模板
 
 ```xml
-<import src="/templates/loading-progress.wxml" />
-<template is="loadingProgress" data="{{loading, loadProgress}}" />
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
 
 <!-- 页面其他内容 -->
 ```
@@ -42,7 +42,7 @@ Page({
 ### 3. 在页面 WXSS 中引入样式
 
 ```css
-@import '/style/loading-progress.wxss';
+@import '/style/page-loading.wxss';
 ```
 
 ---
@@ -69,10 +69,10 @@ Page({
 
 ```js
 const api = getApp().api
-const loadingProgress = require('../../behaviors/loadingProgress')
+const pageLoading = require('../../behaviors/pageLoading')
 
 Page({
-  behaviors: [loadingProgress],
+  behaviors: [pageLoading],
 
   onLoad() {
     this.startLoading()
@@ -95,7 +95,7 @@ Page({
 
 ```js
 Page({
-  behaviors: [loadingProgress],
+  behaviors: [pageLoading],
   data: {
     isReady: false
   },
@@ -119,8 +119,8 @@ Page({
 ```
 
 ```xml
-<import src="/templates/loading-progress.wxml" />
-<template is="loadingProgress" data="{{loading, loadProgress}}" />
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
 
 <view wx:if="{{isReady}}">
   <!-- 页面内容 -->
@@ -157,7 +157,7 @@ Page({
 进度条固定在页面顶部，高度 3px，带有渐变色和光泽动画效果。
 
 ```css
-.loading-progress-bar {
+.page-loading-bar {
   position: fixed;
   top: 0;
   left: 0;
@@ -166,7 +166,7 @@ Page({
   z-index: 9999;
 }
 
-.loading-progress-bar__inner {
+.page-loading-bar__inner {
   background: linear-gradient(90deg, var(--theme-color, #007bff), #00c6ff);
   /* 带有闪光动画效果 */
 }
@@ -329,6 +329,6 @@ Page({
 
 ---
 
-**文档版本：** v1.2.0
+**文档版本：** v1.3.0
 **最后更新：** 2025-12-08
 **维护者：** 开发团队

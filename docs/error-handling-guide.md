@@ -292,7 +292,7 @@ retryLoad() {
 }
 ```
 
-### 6.4 与 loadingProgress behavior 配合
+### 6.4 与 pageLoading behavior 配合
 
 确保在 `.catch()` 中调用 `this.finishLoading()`，否则进度条会卡在 90%：
 
@@ -311,15 +311,15 @@ retryLoad() {
 
 1. `utils/api.js` - 核心请求方法（确保包含 reject 逻辑）
 2. `style/load-error.wxss` - 加载失败样式
-3. `behaviors/loadingProgress.js` - 进度条 behavior（可选）
-4. `templates/loading-progress.wxml` - 进度条模板（可选）
-5. `style/loading-progress.wxss` - 进度条样式（可选）
+3. `behaviors/pageLoading.js` - 进度条 behavior（可选）
+4. `templates/page-loading.wxml` - 进度条模板（可选）
+5. `style/page-loading.wxss` - 进度条样式（可选）
 
 ### 7.2 在 app.wxss 中引入
 
 ```css
 @import "style/load-error.wxss";
-@import "style/loading-progress.wxss";  /* 可选 */
+@import "style/page-loading.wxss";  /* 可选 */
 ```
 
 ### 7.3 逐页面添加错误处理
@@ -333,10 +333,10 @@ retryLoad() {
 ```js
 // pages/example/index.js
 const api = getApp().api
-const loadingProgress = require('../../behaviors/loadingProgress')
+const pageLoading = require('../../behaviors/pageLoading')
 
 Page({
-  behaviors: [loadingProgress],
+  behaviors: [pageLoading],
   data: {
     loadError: false,
     list: []
@@ -386,8 +386,8 @@ Page({
 
 ```xml
 <!-- pages/example/index.wxml -->
-<import src="/templates/loading-progress.wxml" />
-<template is="loadingProgress" data="{{loading, loadProgress}}" />
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
 
 <!-- 加载失败重试 -->
 <view class="load-error" wx:if="{{loadError}}">

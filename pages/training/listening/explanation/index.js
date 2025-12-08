@@ -1,11 +1,11 @@
 const api = getApp().api
-const loadingProgress = require('../../../../behaviors/loadingProgress')
+const pageLoading = require('../../../../behaviors/pageLoading')
 const audioLoading = require('../../../../behaviors/audioLoading')
 const audioApi = require('../../../../utils/audioApi')
 
 let audio
 Page({
-  behaviors: [loadingProgress, audioLoading],
+  behaviors: [pageLoading, audioLoading],
   data: {
     audioPlay: false,
     noReady: true,

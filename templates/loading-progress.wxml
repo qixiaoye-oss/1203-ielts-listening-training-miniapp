@@ -1,5 +1,0 @@
-<template name="loadingProgress">
-  <view class="loading-progress-bar" wx:if="{{loading}}">
-    <view class="loading-progress-bar__inner" style="width: {{loadProgress}}%;"></view>
-  </view>
-</template>

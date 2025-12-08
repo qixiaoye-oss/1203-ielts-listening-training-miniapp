@@ -1,9 +1,9 @@
 const api = getApp().api
-const loadingProgress = require('../../../behaviors/loadingProgress')
+const pageLoading = require('../../../behaviors/pageLoading')
 
 var timer
 Page({
-  behaviors: [loadingProgress],
+  behaviors: [pageLoading],
   data: {
     inputVal: "",
     hideScroll: true,
