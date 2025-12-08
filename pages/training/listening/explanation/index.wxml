@@ -26,15 +26,11 @@
     </view>
     <view class="explain__article--content">
       <view wx:for="{{question.sentenceList}}" wx:key="item" wx:for-item="sentence">
-        <view class="{{showHidden?'':'hidden_text'}} lh18">
-          <sentence-text
-            wx:key="item"
-            wx:for="{{sentence.list}}"
-            wx:for-item="val"
-            content="{{val.content}}"
-          />
-        </view>
-        <sentence-translate content="{{sentence.translate}}" hidden="{{!showHidden}}" />
+        <sentence-block
+          list="{{sentence.list}}"
+          translate="{{sentence.translate}}"
+          hidden="{{!showHidden}}"
+        />
         <view class="font_color_base" style="margin-bottom: 15px;" wx:if="{{sentence.keyPoints}}">{{wxsUtil.formatNull(sentence.keyPoints,'')}}</view>
         <view class="sentence_analysis_cell" wx:if="{{sentence.analysisList.length > 0}}">
           <view wx:for="{{sentence.analysisList}}" wx:for-item="analysis" wx:key="item" class="layout_flex ">

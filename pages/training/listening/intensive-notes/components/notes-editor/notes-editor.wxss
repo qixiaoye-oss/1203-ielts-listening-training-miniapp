@@ -30,10 +30,6 @@
   line-height: 1.9;
 }
 
-.sentence-text-container {
-  display: inline;
-}
-
 /* ai 评分部分 */
 .review-result {
   margin-inline: 15px;

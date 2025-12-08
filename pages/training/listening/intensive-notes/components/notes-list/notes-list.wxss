@@ -46,15 +46,6 @@
   line-height: 1.9;
 }
 
-/* 句子部分 */
-.sentence-text-container {
-  display: inline;
-}
-
-.hidden-text {
-  color: rgba(0, 0, 0, 0);
-}
-
 /* 我的听写 */
 .answer-cell {
   border: 1px dashed var(--solid-border-color);

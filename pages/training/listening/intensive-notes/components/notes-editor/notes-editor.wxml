@@ -1,18 +1,13 @@
 <view class="edit-base-container" wx:if="{{detail.list}}">
   <view class="question-container">
     <view id="question_cell" class="sentence-cell">
-      <view class="sentence-text-container">
-        <sentence-text
-          wx:for="{{detail.list}}"
-          wx:key="idx"
-          content="{{item.content}}"
-          active="{{selected == index}}"
-          textId="T{{index}}"
-          index="{{index}}"
-          bind:tap="listenSentenceAgain"
-        />
-      </view>
-      <sentence-translate content="{{detail.translate}}" wx:if="{{detail.translate}}" />
+      <sentence-block
+        list="{{detail.list}}"
+        translate="{{detail.translate}}"
+        activeIndex="{{selected}}"
+        idPrefix="T"
+        bind:tap="listenSentenceAgain"
+      />
     </view>
     <view class="review-result" wx:if="{{enableScore == 1}}">
       <view class="review-result__result">{{detail.aiReviewResult}}</view>

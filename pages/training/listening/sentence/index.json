@@ -1,5 +1,5 @@
 {
   "usingComponents": {
-    "sentence-translate": "/components/sentence-translate/sentence-translate"
+    "sentence-block": "/components/sentence-block/sentence-block"
   }
 }

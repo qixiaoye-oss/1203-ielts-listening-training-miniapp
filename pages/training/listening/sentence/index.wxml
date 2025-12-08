@@ -10,10 +10,10 @@
           <view wx:if="{{item.status == 0}}">未收听</view>
         </view>
         <view class="listening_content">
-          <view class="listening_content_text">
-            <text wx:for="{{item.list}}" wx:key="index" wx:for-item="citem">{{citem.content}}</text>
-          </view>
-          <sentence-translate content="{{item.chinese}}" />
+          <sentence-block
+            list="{{item.list}}"
+            translate="{{item.chinese}}"
+          />
         </view>
         <view style="display: flex;align-items: center;justify-content: flex-end;">
           <view class="btn-action-icon " wx:if="{{item.label}}">
