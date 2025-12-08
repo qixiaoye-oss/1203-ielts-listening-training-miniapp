@@ -19,14 +19,15 @@ Page({
     if (this.data.usefulCount >= 1) {
       return
     }
-    this.setData({
-      usefulCount: 1,
-      shaking: true
-    })
-    // 动画结束后移除 shake 类
+    this.setData({ usefulCount: 1 })
+    // 等 hover 效果结束后再触发 shake 动画
     setTimeout(() => {
-      this.setData({ shaking: false })
-    }, 600)
+      this.setData({ shaking: true })
+      // 动画结束后移除 shake 类
+      setTimeout(() => {
+        this.setData({ shaking: false })
+      }, 600)
+    }, 150)
     this.lable('useful')
   },
   // ===========业务操作 End===========
