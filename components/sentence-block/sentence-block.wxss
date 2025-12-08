@@ -15,8 +15,6 @@
 /* 原文片段样式 */
 .sentence-block__text {
   background-color: #f2f2f2;
-  margin: 2px 0;
-  margin-right: 5px;
   border-left: 3px solid var(--question-color);
   position: relative;
   z-index: 3;
@@ -44,9 +42,3 @@
   color: rgba(0, 0, 0, 0) !important;
 }
 
-/* ==================== 简洁模式（plain）==================== */
-/* 用于列表场景，保留灰色背景，无边框 */
-.sentence-block--plain .sentence-block__text {
-  border-left: none;
-  margin: 0;
-}

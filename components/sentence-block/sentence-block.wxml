@@ -1,4 +1,4 @@
-<view class="sentence-block {{plain ? 'sentence-block--plain' : ''}}">
+<view class="sentence-block">
   <!-- 原文部分：多个片段，可点击播放 -->
   <view class="sentence-block__text-container {{hidden ? 'sentence-block__text-container--hidden' : ''}}">
     <text
