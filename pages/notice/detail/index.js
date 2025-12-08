@@ -16,10 +16,15 @@ Page({
   // ===========业务操作 Start===========
   // 有用
   useful() {
-    if (this.data.usefulCount >= 1) {
-      return
+    const isFirstClick = this.data.usefulCount === 0
+
+    // 第一次点击时设置为1，之后保持不变
+    if (isFirstClick) {
+      this.setData({ usefulCount: 1 })
+      this.lable('useful')
     }
-    this.setData({ usefulCount: 1 })
+
+    // 每次点击都触发 shake 动画
     // 等 hover 效果结束后再触发 shake 动画
     setTimeout(() => {
       this.setData({ shaking: true })
@@ -28,7 +33,6 @@ Page({
         this.setData({ shaking: false })
       }, 600)
     }, 150)
-    this.lable('useful')
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
