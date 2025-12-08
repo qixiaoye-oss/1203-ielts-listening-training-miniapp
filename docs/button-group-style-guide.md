@@ -86,7 +86,7 @@
 | `replay` | #00A6ED | rgba(0,166,237,0.15) | replay_bt.png |
 | `restart` | #00A6ED | rgba(0,166,237,0.15) | restart_bt.png |
 | `submit` | #00A6ED | rgba(0,166,237,0.15) | submit_bt.png |
-| `next` | #00A6ED | rgba(0,166,237,0.15) | next_bt.png |
+| `next` | #00A6ED | rgba(0,166,237,0.15) | end_bt.png |
 | `goto` | #00A6ED | rgba(0,166,237,0.15) | goto_bt.png |
 | `updown` | #00A6ED | rgba(0,166,237,0.15) | updown_bt.png |
 | `correct` | #00D26A | rgba(0,210,106,0.15) | correct_bt.png |

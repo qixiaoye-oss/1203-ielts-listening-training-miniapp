@@ -53,7 +53,7 @@
       </view>
       <view class="btn-action" data-icon="next" wx:if="{{!completelyOver && audioState === 'stop'}}" bindtap="nextSentence" hover-class="tap-active" hover-stay-time="100">
         <view>下句</view>
-        <image src="/images/v2/next_bt.png"></image>
+        <image src="/images/v2/end_bt.png"></image>
       </view>
       <view class="btn-action" data-icon="submit" wx:if="{{completelyOver && audioState === 'stop'}}" bindtap="toExam" hover-class="tap-active" hover-stay-time="100">
         <view>保存</view>

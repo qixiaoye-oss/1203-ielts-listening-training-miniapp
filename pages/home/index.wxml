@@ -31,7 +31,7 @@
     <view class="home-view-all">
       <view class="home-view-all__button" style="background: {{popularScience.colorRgba}};" bind:tap="toNoticeListPage" hover-class="tap-active" hover-stay-time="100">
         <view style="color: {{popularScience.colorRgb}};">查看所有</view>
-        <image src="/images/v2/next_bt.png"></image>
+        <image src="/images/v2/end_bt.png"></image>
       </view>
     </view>
   </view>
