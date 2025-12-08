@@ -36,12 +36,9 @@
   margin-right: 5px;
 }
 
-/* 句子内容区域 - 原文样式 */
+/* 句子内容区域 - 样式由 sentence-block 组件自包含 */
 .listening_content {
   margin: 10px 0;
-  font-size: 16px;
-  line-height: 1.4;
-  font-weight: bold;
 }
 
 .play {

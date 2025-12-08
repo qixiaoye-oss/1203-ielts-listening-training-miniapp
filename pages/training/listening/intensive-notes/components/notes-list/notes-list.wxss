@@ -41,9 +41,7 @@
 }
 
 .content-cell {
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 1.9;
+  /* 样式由 sentence-block 组件自包含 */
 }
 
 /* 我的听写 */

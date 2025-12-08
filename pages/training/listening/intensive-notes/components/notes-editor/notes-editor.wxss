@@ -22,12 +22,9 @@
   box-sizing: border-box;
 }
 
-/* 句子部分 - 与 notes-list 的 content-cell 保持一致 */
+/* 句子部分 - 样式由 sentence-block 组件自包含 */
 .sentence-cell {
   margin: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 1.9;
 }
 
 /* ai 评分部分 */
