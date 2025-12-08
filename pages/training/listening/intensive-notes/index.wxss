@@ -1,6 +1,7 @@
 /**
  * 精听笔记页面布局样式
  */
+@import '/style/loading-progress.wxss';
 
 page {
   height: 100%;
