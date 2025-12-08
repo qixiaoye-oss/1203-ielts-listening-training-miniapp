@@ -1,15 +1,18 @@
-# 页面加载进度条使用指南
+# 加载动效使用指南
 
-微信小程序页面加载进度条 **Behavior + 模板** 方案，提供统一的页面加载视觉反馈。
+微信小程序加载动效 **Behavior + 模板** 方案，提供统一的页面加载视觉反馈。
 
 > **注意**：这是一个基于 Behavior 的可复用方案，包含 JS 逻辑、WXML 模板和 WXSS 样式三部分。
 
-**版本：** v1.0.0
+**版本：** v1.1.0
 **更新日期：** 2025-12-08
+
 **相关文件：**
-- `behaviors/loadingProgress.js` - Behavior 逻辑
-- `templates/loading-progress.wxml` - WXML 模板
-- `style/loading-progress.wxss` - 样式文件
+
+| 类型 | Behavior | WXML 模板 | 样式文件 |
+|------|----------|-----------|----------|
+| 页面进度条 | `behaviors/loadingProgress.js` | `templates/loading-progress.wxml` | `style/loading-progress.wxss` |
+| 音频加载 | `behaviors/audioLoading.js` | `templates/audio-loading.wxml` | `style/audio-loading.wxss` |
 
 ---
 
@@ -200,7 +203,91 @@ if (!hasToast) {
 
 ---
 
+## 音频加载进度（圆饼进度）
+
+用于音频下载时显示全屏圆饼进度动画。
+
+### 快速引入
+
+#### 1. 在页面 JS 中引入 Behavior
+
+```js
+const audioLoading = require('../../behaviors/audioLoading')
+
+Page({
+  behaviors: [audioLoading],
+  // ...
+})
+```
+
+#### 2. 在页面 WXML 中引入模板
+
+```xml
+<import src="/templates/audio-loading.wxml" />
+<template is="audioLoading" data="{{audioDownProgress}}" />
+```
+
+### API 方法
+
+| 方法 | 说明 |
+|------|------|
+| `this.startAudioLoading()` | 开始加载，重置进度为 0 |
+| `this.updateAudioProgress(progress)` | 更新进度值 (0-100) |
+| `this.finishAudioLoading()` | 完成加载，进度设为 100 |
+
+### Data 属性
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `audioDownProgress` | Number | 100 | 音频下载进度 (0-100)，100 时隐藏遮罩 |
+
+### 使用示例
+
+```js
+const audioLoading = require('../../behaviors/audioLoading')
+const audioApi = require('../../utils/audioApi')
+
+Page({
+  behaviors: [audioLoading],
+
+  loadAudio(url) {
+    this.startAudioLoading()
+    audioApi.initAudio(url, (progress) => {
+      this.updateAudioProgress(progress)
+    }).then(() => {
+      this.finishAudioLoading()
+    }).catch(() => {
+      this.finishAudioLoading()
+    })
+  }
+})
+```
+
+### 样式说明
+
+全屏白色遮罩 + 圆饼进度动画，使用 CSS `conic-gradient` 实现。
+
+```css
+.audio-loading-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #fff;
+  z-index: 9999;
+}
+
+.audio-loading-pie {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  /* 使用 conic-gradient 实现圆饼进度 */
+}
+```
+
+---
+
 ## 已使用的页面
+
+### 页面进度条
 
 | 页面 | 路径 |
 |------|------|
@@ -210,6 +297,14 @@ if (!hasToast) {
 | 精听笔记 | `pages/training/listening/intensive-notes/index` |
 | 通知详情 | `pages/notice/detail/index` |
 | 首页 | `pages/home/index` |
+
+### 音频加载进度
+
+| 页面 | 路径 |
+|------|------|
+| 精听训练 | `pages/training/listening/intensive/index` |
+| 泛听训练 | `pages/training/listening/extensive/index` |
+| 听力讲解 | `pages/training/listening/explanation/index` |
 
 ---
 
@@ -233,6 +328,6 @@ if (!hasToast) {
 
 ---
 
-**文档版本：** v1.0.0
+**文档版本：** v1.1.0
 **最后更新：** 2025-12-08
 **维护者：** 开发团队

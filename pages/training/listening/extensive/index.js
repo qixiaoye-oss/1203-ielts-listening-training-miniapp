@@ -1,10 +1,11 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
 const loadingProgress = require('../../../../behaviors/loadingProgress')
+const audioLoading = require('../../../../behaviors/audioLoading')
 
 let innerAudioContext = null
 Page({
-  behaviors: [loadingProgress],
+  behaviors: [loadingProgress, audioLoading],
   data: {
     underwayIndex: 0,
     underway: {
@@ -15,7 +16,6 @@ Page({
     lastRecordingTime: 0,
     playTime: 0,
     saveFlag: true,
-    audioDownProgress: 100,
     showActionsheet: false,
     playbackRate: '1.0',
     groups: [{

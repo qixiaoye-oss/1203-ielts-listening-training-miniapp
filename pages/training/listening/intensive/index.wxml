@@ -1,11 +1,8 @@
 <import src="/templates/loading-progress.wxml" />
+<import src="/templates/audio-loading.wxml" />
 <template is="loadingProgress" data="{{loading, loadProgress}}" />
+<template is="audioLoading" data="{{audioDownProgress}}" />
 <wxs src="/utils/util.wxs" module="wxsUtil" />
-<!-- 圆饼进度 -->
-<view class="audio-loading-mask" wx:if="{{audioDownProgress < 100}}">
-  <view class="pie-progress" style="background: conic-gradient(#3478F6 {{audioDownProgress * 3.6}}deg, #f5f5f5 {{audioDownProgress * 3.6}}deg);"></view>
-  <view class="audio-loading-text">音频加载中...</view>
-</view>
 <view class="page-wrapper">
   <view class="base-container">
     <view class="progress-cell">

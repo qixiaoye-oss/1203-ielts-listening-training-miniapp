@@ -13,37 +13,6 @@ page {
   display: none;
 }
 
-/* 圆饼进度容器 */
-.audio-loading-mask {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-/* 圆饼进度 */
-.pie-progress {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-/* 加载提示文字 */
-.audio-loading-text {
-  margin-top: 16px;
-  color: #333;
-  font-size: 14px;
-}
-
 image {
   width: 17px;
   height: 17px;
