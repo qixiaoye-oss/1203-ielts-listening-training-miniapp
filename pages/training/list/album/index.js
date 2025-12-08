@@ -3,7 +3,9 @@ const loadingProgress = require('../../../../behaviors/loadingProgress')
 
 Page({
   behaviors: [loadingProgress],
-  data: {},
+  data: {
+    loadError: false
+  },
   // ===========生命周期 Start===========
   onShow() {
     this.startLoading()
@@ -39,13 +41,20 @@ Page({
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
   listData() {
+    this.setData({ loadError: false })
     api.request(this, '/module/v1/list', {
       ...this.options
     }, true).then(() => {
       this.finishLoading()
     }).catch(() => {
       this.finishLoading()
+      this.setData({ loadError: true })
     })
+  },
+  // 重试加载
+  retryLoad() {
+    this.startLoading()
+    this.listData()
   },
   // ===========数据获取 End===========
 })

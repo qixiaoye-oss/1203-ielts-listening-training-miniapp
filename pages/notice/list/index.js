@@ -3,7 +3,9 @@ const loadingProgress = require('../../../behaviors/loadingProgress')
 
 Page({
   behaviors: [loadingProgress],
-  data: {},
+  data: {
+    loadError: false
+  },
   // ===========生命周期 Start===========
   onShow() {
     this.startLoading()
@@ -22,11 +24,18 @@ Page({
   // ===========数据获取 Start===========
   // 访问接口获取数据
   listData() {
+    this.setData({ loadError: false })
     api.request(this, '/popular/science/v1/miniapp/list', {}, true).then(() => {
       this.finishLoading()
     }).catch(() => {
       this.finishLoading()
+      this.setData({ loadError: true })
     })
+  },
+  // 重试加载
+  retryLoad() {
+    this.startLoading()
+    this.listData()
   },
   // ===========数据获取 End===========
 })

@@ -25,6 +25,7 @@ Page({
       this.finishLoading()
     }).catch(() => {
       this.finishLoading()
+      setTimeout(() => wx.navigateBack(), 1500)
     })
   },
   saveQue() {
@@ -44,6 +45,9 @@ Page({
           ...this.options
         })
       })
+    }).catch(() => {
+      this.setData({ saveLoading: false })
+      // 提交失败仅提示，保留答案
     })
   }
   // ===========数据获取 End===========

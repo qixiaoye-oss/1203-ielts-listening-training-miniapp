@@ -36,6 +36,7 @@ Page({
       this.finishLoading()
     }).catch(() => {
       this.finishLoading()
+      setTimeout(() => wx.navigateBack(), 1500)
     })
   },
   toEditPage({ detail }) {
@@ -64,6 +65,8 @@ Page({
       if (showToast) {
         api.toast('保存成功')
       }
+    }).catch(() => {
+      // 保存失败仅提示
     })
   },
   // 实时自动保存

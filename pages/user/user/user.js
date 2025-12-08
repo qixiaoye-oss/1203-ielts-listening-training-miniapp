@@ -5,6 +5,7 @@ Page({
   behaviors: [loadingProgress],
   data: {
     version: '1.4.37',
+    loadError: false
   },
   onShow: function () {
     this.getUser(this)
@@ -26,10 +27,17 @@ Page({
     })
   },
   getUser() {
+    this.setData({ loadError: false })
     api.request(this, '/user/v1/user/info', {}, true).then(() => {
       this.finishLoading()
     }).catch(() => {
       this.finishLoading()
+      this.setData({ loadError: true })
     })
+  },
+  // 重试加载
+  retryLoad() {
+    this.startLoading()
+    this.getUser()
   }
 })

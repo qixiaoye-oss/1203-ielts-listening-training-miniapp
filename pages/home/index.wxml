@@ -3,6 +3,11 @@
   <view class="loading-progress-bar" wx:if="{{loading}}">
     <view class="loading-progress-bar__inner" style="width: {{loadProgress}}%;"></view>
   </view>
+  <!-- 加载失败重试 -->
+  <view class="load-error" wx:if="{{loadError}}">
+    <view class="load-error__text">加载失败</view>
+    <view class="load-error__btn" bindtap="retryLoad">点击重试</view>
+  </view>
   <view class="home-main-item" wx:if="{{popularScience.list.length > 0}}" style="background:{{popularScience.colorRgba}}">
     <view class="home-main-item__title" style="color:{{popularScience.colorRgb}}">{{popularScience.title}}</view>
     <view class="home-main-item__content--grid">

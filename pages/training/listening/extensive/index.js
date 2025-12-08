@@ -152,6 +152,7 @@ Page({
       _this.setData({
         audioDownProgress: 100
       })
+      setTimeout(() => wx.navigateBack(), 1500)
     })
   },
   addEventListener() {
@@ -205,7 +206,9 @@ Page({
   saveRecord(isPull) {
     api.request(this, '/v2/training/save/extensive', {
       ...this.options
-    }, isPull, true, 'POST')
+    }, isPull, true, 'POST').catch(() => {
+      // 自动保存静默失败
+    })
   },
   toExam() {
     // innerAudioContext.stop()

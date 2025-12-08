@@ -59,20 +59,26 @@ Page({
   listUser() {
     api.request(this, '/user/listUserByName', {
       nameOrId: this.data.inputVal
-    }, true, false)
+    }, true, false).catch(() => {
+      // 搜索失败仅提示
+    })
   },
   listDict() {
     api.request(this, '/sys/albumLabel', {}, true, false).then(() => {
       this.finishLoading()
     }).catch(() => {
       this.finishLoading()
+      setTimeout(() => wx.navigateBack(), 1500)
     })
   },
   listUserRole(userId) {
-    let that = this
+    const that = this
     api.request(this, '/user/listUserPermissions', {
       userId: userId
-    }, true, false).then(res => {
+    }, true, false).catch(() => {
+      // 查询失败仅提示
+    }).then(res => {
+      if (!res) return
       let list = res.permissionsList
       if (list.length == 0) {
         list.push({
@@ -142,6 +148,8 @@ Page({
     })
     api.request(this, '/user/saveUserPermissions', list, true, false, "POST").then(res => {
       api.toast("保存成功")
+    }).catch(() => {
+      // 保存失败仅提示
     })
   },
 })
