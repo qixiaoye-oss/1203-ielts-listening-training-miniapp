@@ -36,7 +36,8 @@
   font-weight: normal !important;
 }
 
-.sentence-block__translate--hidden {
+.sentence-block__translate--hidden,
+.sentence-block__translate--hidden text {
   color: rgba(0, 0, 0, 0) !important;
 }
 
