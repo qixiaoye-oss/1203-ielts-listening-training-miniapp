@@ -24,6 +24,11 @@ Component({
     idPrefix: {
       type: String,
       value: 'T'
+    },
+    // 是否使用简洁样式（无背景色和边框，用于列表场景）
+    plain: {
+      type: Boolean,
+      value: false
     }
   },
   methods: {

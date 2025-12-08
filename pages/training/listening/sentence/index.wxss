@@ -36,11 +36,9 @@
   margin-right: 5px;
 }
 
+/* 句子内容区域 - 原文样式 */
 .listening_content {
   margin: 10px 0;
-}
-
-.listening_content_text {
   font-size: 16px;
   line-height: 1.4;
   font-weight: bold;

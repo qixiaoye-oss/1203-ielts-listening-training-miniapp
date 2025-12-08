@@ -13,6 +13,7 @@
           <sentence-block
             list="{{item.list}}"
             translate="{{item.chinese}}"
+            plain="{{true}}"
           />
         </view>
         <view style="display: flex;align-items: center;justify-content: flex-end;">
