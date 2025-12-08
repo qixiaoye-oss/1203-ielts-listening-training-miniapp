@@ -10,7 +10,7 @@
 
 ```
 home (首页容器)
-├── loading-progress-bar (页面加载进度条)
+├── page-loading-bar (页面加载进度条)
 │
 └── home-main-item (分组区块 - "大卡片")
     ├── home-main-item__title (分组标题)
