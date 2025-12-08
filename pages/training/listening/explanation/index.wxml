@@ -28,7 +28,7 @@
       <view wx:for="{{question.sentenceList}}" wx:key="item" wx:for-item="sentence">
         <sentence-block
           list="{{sentence.list}}"
-          translate="{{sentence.translate}}"
+          translate="{{wxsUtil.getTranslate(sentence)}}"
           hidden="{{!showHidden}}"
         />
         <view class="font_color_base" style="margin-bottom: 15px;" wx:if="{{sentence.keyPoints}}">{{wxsUtil.formatNull(sentence.keyPoints,'')}}</view>

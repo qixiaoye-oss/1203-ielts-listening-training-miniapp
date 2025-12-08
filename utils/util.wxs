@@ -116,6 +116,16 @@ function calcProgressWidth(progress) {
   return width > 100 ? 100 : width
 }
 
+/**
+ * 获取翻译字段（兼容 chinese 和 translate）
+ * @param item 数据对象
+ * @returns 翻译文本
+ */
+function getTranslate(item) {
+  if (!item) return ''
+  return item.translate || item.chinese || ''
+}
+
 module.exports = {
   formatDate: formatDate,
   isCheck: isCheck,
@@ -124,5 +134,6 @@ module.exports = {
   isEmpty: isEmpty,
   accuracyStyle: accuracyStyle,
   calcGradientStop: calcGradientStop,
-  calcProgressWidth: calcProgressWidth
+  calcProgressWidth: calcProgressWidth,
+  getTranslate: getTranslate
 }

@@ -1,5 +1,6 @@
 <import src="/templates/loading-progress.wxml" />
 <template is="loadingProgress" data="{{loading, loadProgress}}" />
+<wxs src="/utils/util.wxs" module="wxsUtil" />
 <!-- 圆饼进度 -->
 <view class="audio-loading-mask" wx:if="{{audioDownProgress < 100}}">
   <view class="pie-progress" style="background: conic-gradient(#3478F6 {{audioDownProgress * 3.6}}deg, #f5f5f5 {{audioDownProgress * 3.6}}deg);"></view>
@@ -19,7 +20,7 @@
         <view class="paragraph-content-cell">
           <sentence-block
             list="{{list[swiperCurrent].list}}"
-            translate="{{list[swiperCurrent].chinese}}"
+            translate="{{wxsUtil.getTranslate(list[swiperCurrent])}}"
             activeIndex="{{playingSmallIndex}}"
             hidden="{{!baseShowArticle && !showArticle}}"
             idPrefix="T"

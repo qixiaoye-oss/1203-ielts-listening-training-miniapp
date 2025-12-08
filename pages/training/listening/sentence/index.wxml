@@ -1,5 +1,6 @@
 <import src="/templates/loading-progress.wxml" />
 <template is="loadingProgress" data="{{loading, loadProgress}}" />
+<wxs src="/utils/util.wxs" module="wxsUtil" />
 <scroll-view class="base_view" scroll-y scroll-into-view="{{scrollIntoId}}" scroll-with-animation>
   <view class="layout_grid">
     <block wx:for="{{list}}" wx:key="id" wx:for-item="item" wx:for-index="idx">
@@ -12,7 +13,7 @@
         <view class="listening_content">
           <sentence-block
             list="{{item.list}}"
-            translate="{{item.chinese}}"
+            translate="{{wxsUtil.getTranslate(item)}}"
           />
         </view>
         <view style="display: flex;align-items: center;justify-content: flex-end;">

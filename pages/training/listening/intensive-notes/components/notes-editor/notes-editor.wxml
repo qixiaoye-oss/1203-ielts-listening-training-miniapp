@@ -1,9 +1,10 @@
+<wxs src="/utils/util.wxs" module="wxsUtil" />
 <view class="edit-base-container" wx:if="{{detail.list}}">
   <view class="question-container">
     <view id="question_cell" class="sentence-cell">
       <sentence-block
         list="{{detail.list}}"
-        translate="{{detail.translate}}"
+        translate="{{wxsUtil.getTranslate(detail)}}"
         activeIndex="{{selected}}"
         idPrefix="T"
         bind:tap="listenSentenceAgain"
