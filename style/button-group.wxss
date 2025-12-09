@@ -96,6 +96,7 @@ page {
   position: relative;
   box-sizing: border-box;
   width: fit-content;
+  white-space: nowrap;
 }
 
 .btn-action image {
