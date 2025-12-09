@@ -52,9 +52,9 @@ text {
 
 /* 进度文字 */
 .progress-text {
-  margin-top: 10px;
+  margin-top: 5px;
   font-size: 12px;
-  color: var(--solid-border-color);
+  color: var(--question-color);
 }
 
 /* 提醒样式 */
