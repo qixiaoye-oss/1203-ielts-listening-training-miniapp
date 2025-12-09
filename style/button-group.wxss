@@ -242,6 +242,7 @@ page {
 .btn-pos-right {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--button-group-gap);
   margin-left: auto;
 }
@@ -256,7 +257,7 @@ page {
 
 /* 向后兼容别名 */
 .btn-pos-left-group { display: flex; align-items: center; gap: var(--button-group-gap); margin-right: auto; }
-.btn-pos-right-group { display: flex; align-items: center; gap: var(--button-group-gap); margin-left: auto; }
+.btn-pos-right-group { display: flex; align-items: center; justify-content: flex-end; gap: var(--button-group-gap); margin-left: auto; }
 .btn-pos-dual-center { display: flex; align-items: center; justify-content: center; gap: var(--button-group-gap); }
 
 /* ==================== 7. icon颜色映射 ==================== */
