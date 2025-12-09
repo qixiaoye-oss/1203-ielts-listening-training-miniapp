@@ -214,58 +214,50 @@ page {
 
 /**
  * 按钮位置规范：
- * - 居中（任意按钮）：使用 btn-pos-center 类包裹，按钮间距15px，整体居中
- * - 左1/左2：靠左排列，距边缘15px
- * - 右1/右2：靠右排列，距边缘15px
- * - 按钮与按钮之间间距：15px
+ * - 使用 .btn-pos-left / .btn-pos-right / .btn-pos-center 包裹按钮
+ * - 支持单个或多个按钮，内部按钮间距 15px
+ * - 左右可同时存在，自动分布到两侧
+ *
+ * 示例：
+ * <view class="btn-group-layout-split__header">
+ *   <view class="btn-pos-left">
+ *     <tap-action icon="play">左1</tap-action>
+ *     <tap-action icon="pause">左2</tap-action>
+ *   </view>
+ *   <view class="btn-pos-right">
+ *     <tap-action icon="list">右1</tap-action>
+ *   </view>
+ * </view>
  */
 
-/* 按钮居中容器：任意数量按钮居中对齐 */
+/* 左侧按钮组：支持1个或多个按钮 */
+.btn-pos-left {
+  display: flex;
+  align-items: center;
+  gap: var(--button-group-gap);
+  margin-right: auto;
+}
+
+/* 右侧按钮组：支持1个或多个按钮 */
+.btn-pos-right {
+  display: flex;
+  align-items: center;
+  gap: var(--button-group-gap);
+  margin-left: auto;
+}
+
+/* 居中按钮组：支持1个或多个按钮 */
 .btn-pos-center {
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: var(--button-group-gap);
 }
 
-/* 双按钮居中（别名，向后兼容） */
-.btn-pos-dual-center {
-  display: flex;
-  justify-content: center;
-  gap: var(--button-group-gap);
-}
-
-/* 靠左第1个按钮 */
-.btn-pos-left-1 {
-  margin-right: auto;
-}
-
-/* 靠左第2个按钮（紧跟左1，间距15px由gap控制） */
-.btn-pos-left-2 {
-  /* 配合 left-1 使用，自动跟随 */
-}
-
-/* 靠右第1个按钮 */
-.btn-pos-right-1 {
-  margin-left: auto;
-}
-
-/* 靠右第2个按钮（紧跟右1，间距15px由gap控制） */
-.btn-pos-right-2 {
-  /* 配合 right-1 使用，自动跟随 */
-}
-
-/* 组合：左侧按钮组 + 右侧按钮组 */
-.btn-pos-left-group {
-  display: flex;
-  gap: var(--button-group-gap);
-  margin-right: auto;
-}
-
-.btn-pos-right-group {
-  display: flex;
-  gap: var(--button-group-gap);
-  margin-left: auto;
-}
+/* 向后兼容别名 */
+.btn-pos-left-group { display: flex; align-items: center; gap: var(--button-group-gap); margin-right: auto; }
+.btn-pos-right-group { display: flex; align-items: center; gap: var(--button-group-gap); margin-left: auto; }
+.btn-pos-dual-center { display: flex; align-items: center; justify-content: center; gap: var(--button-group-gap); }
 
 /* ==================== 7. icon颜色映射 ==================== */
 
