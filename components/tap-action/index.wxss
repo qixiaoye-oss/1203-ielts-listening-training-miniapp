@@ -6,3 +6,8 @@
   transform: scale(0.98);
   transition: all 0.1s ease-out;
 }
+
+/* 卡片模式 - 继承父容器宽度 */
+.tap-card {
+  width: 100%;
+}
