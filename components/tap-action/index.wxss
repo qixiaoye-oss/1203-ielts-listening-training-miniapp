@@ -1,6 +1,12 @@
 /* tap-action 组件样式 */
-/* 点击动效 - 组件核心功能 */
 
+/* 组件宿主元素 - 确保在 flex 容器中正确显示 */
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* 点击动效 - 组件核心功能 */
 .tap-active {
   opacity: 0.7;
   transform: scale(0.98);
