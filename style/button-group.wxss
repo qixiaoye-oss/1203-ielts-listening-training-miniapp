@@ -1,6 +1,6 @@
 /**
  * 按钮组样式库 (Button Group Styles)
- * @version 1.9.0
+ * @version 2.0.0
  * @date 2025-12-09
  * @description 微信小程序通用按钮组 CSS 样式工具类库，包含固定底部容器、多种布局模式和蒙版功能
  * @author 开发团队
@@ -12,6 +12,7 @@
  *   Step 3: 可选布局 - 使用按钮组容器(.btn-page-bottom等)或单独使用
  *
  * @changelog
+ *   v2.0.0 (2025-12-09) - 重构位置类为.btn-pos-left/.btn-pos-right/.btn-pos-center包裹类
  *   v1.9.0 (2025-12-09) - 全局迁移到<tap-action>组件，移除.btn-action-icon类
  *   v1.8.0 (2025-12-09) - 合并.btn-action-icon到.btn-action，点击效果由tap-action组件管理
  *   v1.7.1 (2025-12-07) - 清理废弃代码，移除.btn--xxx类和组件type属性
