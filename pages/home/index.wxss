@@ -177,18 +177,3 @@
 .home-view-all > tap-action {
   margin-left: auto;
 }
-
-/* 内部样式层 - 填充 .btn-action 的 padding 区域 */
-.home-view-all__inner {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin: -5px;
-  padding: 5px;
-  border-radius: 3px;
-}
-
-.home-view-all__inner image {
-  width: 25px;
-  height: 25px;
-}
