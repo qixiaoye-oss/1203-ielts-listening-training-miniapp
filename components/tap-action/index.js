@@ -1,6 +1,7 @@
 /**
- * btn-action-icon 组件
- * 纯图标按钮，自动封装点击动效
+ * tap-action 组件
+ * 通用点击动效组件，封装点击反馈效果
+ * 支持按钮模式和卡片模式
  */
 const app = getApp()
 
@@ -9,7 +10,12 @@ Component({
     multipleSlots: true
   },
   properties: {
-    // icon 名称，自动映射颜色（如 save, play, correct 等）
+    // 类型：button（默认，应用按钮样式）/ card（仅点击动效）
+    type: {
+      type: String,
+      value: 'button'
+    },
+    // icon 名称，自动映射颜色（仅 button 模式有效）
     icon: {
       type: String,
       value: ''

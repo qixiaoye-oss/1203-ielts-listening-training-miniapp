@@ -16,17 +16,17 @@
             translate="{{wxsUtil.getTranslate(item)}}"
           />
         </view>
-        <view style="display: flex;align-items: center;justify-content: flex-end;">
-          <view class="btn-action-icon " wx:if="{{item.label}}">
+        <view class="btn-pos-right">
+          <tap-action icon="flag" wx:if="{{item.label}}">
             <image class="label_flag" src="/images/v2/flag_bt.png"></image>
-          </view>
-          <view class="btn-action-icon" data-icon="play" hover-class="tap-active" hover-stay-time="100">
+          </tap-action>
+          <tap-action icon="play" bind:tap="playAudio" data-idx="{{idx}}">
             <image src="/images/v2/pause_bt.png" wx:if="{{item.audioPlay =='play'}}"></image>
-            <image src="/images/v2/play_bt.png" wx:else bindtap="playAudio" data-idx="{{idx}}"></image>
-          </view>
-          <view class="btn-action-icon" data-icon="goto" bindtap="toDetail" data-idx="{{idx}}" hover-class="tap-active" hover-stay-time="100">
+            <image src="/images/v2/play_bt.png" wx:else></image>
+          </tap-action>
+          <tap-action icon="goto" bind:tap="toDetail" data-idx="{{idx}}">
             <image src="/images/v2/goto_bt.png"></image>
-          </view>
+          </tap-action>
         </view>
       </view>
     </block>

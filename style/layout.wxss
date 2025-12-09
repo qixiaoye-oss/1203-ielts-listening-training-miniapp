@@ -18,6 +18,11 @@
   padding: 15px;
 }
 
+/* tap-action 在列表容器中需要撑满宽度 */
+.main-item > tap-action {
+  align-self: stretch;
+}
+
 .main-item__title {
   display: flex;
   align-items: center;

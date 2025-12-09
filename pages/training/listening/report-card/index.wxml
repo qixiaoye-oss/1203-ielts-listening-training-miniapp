@@ -13,15 +13,15 @@
             <view class="question">
               <view class="question__no">{{item.qNumber}}</view>
               <view class="question__user-answer {{item.state != 1?'answer_wrong':''}}">{{wxsUtil.formatNull(item.userAnswer,'未填写')}}</view>
-              <view class="btn-action-icon" data-icon="correct" wx:if="{{item.state == 1}}">
+              <tap-action icon="correct" wx:if="{{item.state == 1}}">
                 <image src="/images/v2/correct_bt.png"></image>
-              </view>
-              <view class="btn-action-icon" data-icon="flag" wx:else>
+              </tap-action>
+              <tap-action icon="flag" wx:else>
                 <image src="/images/v2/wrong.png"></image>
-              </view>
-              <view class="btn-action-icon" data-icon="next" bind:tap="change" data-part-index="{{partIndex}}" data-group-index="{{groupIndex}}" data-question-index="{{index}}" hover-class="tap-active" hover-stay-time="100">
+              </tap-action>
+              <tap-action icon="next" bind:tap="change" data-part-index="{{partIndex}}" data-group-index="{{groupIndex}}" data-question-index="{{index}}">
                 <image src="/images/v2/next_bt.png"></image>
-              </view>
+              </tap-action>
             </view>
             <view class="right-answers">{{item.rightAnswer}}</view>
           </view>
@@ -39,10 +39,10 @@
     </view>
     <view class="btn-group-layout-split__divider"></view>
     <view class="btn-group-layout-split__footer">
-      <view class="btn-action" data-icon="save" bind:tap="returnPage" hover-class="tap-active" hover-stay-time="100">
+      <tap-action icon="save" bind:tap="returnPage">
         <view>保存并返回</view>
         <image src="/images/v2/save_bt.png"></image>
-      </view>
+      </tap-action>
     </view>
   </view>
 </view>

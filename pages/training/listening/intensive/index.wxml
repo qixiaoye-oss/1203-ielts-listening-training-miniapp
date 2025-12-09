@@ -32,46 +32,50 @@
 <view class="btn-page-bottom">
   <view class="btn-group-layout-split">
     <view class="btn-group-layout-split__header btn-pos-center">
-      <view class="btn-action" data-icon="replay" bindtap="listenAgain" hover-class="tap-active" hover-stay-time="100">
+      <tap-action icon="replay" bind:tap="listenAgain">
         <view>重播</view>
         <image src="/images/v2/replay_bt.png"></image>
-      </view>
-      <view class="btn-action" data-icon="play" wx:if="{{audioState === 'none'}}" bindtap="playAudio" hover-class="tap-active" hover-stay-time="100">
+      </tap-action>
+      <tap-action icon="play" wx:if="{{audioState === 'none'}}" bind:tap="playAudio">
         <view>播放</view>
         <image src="/images/v2/play_bt.png"></image>
-      </view>
-      <view class="btn-action" data-icon="pause" wx:if="{{audioState === 'playing'}}" bindtap="stopAudio" hover-class="tap-active" hover-stay-time="100">
+      </tap-action>
+      <tap-action icon="pause" wx:if="{{audioState === 'playing'}}" bind:tap="stopAudio">
         <view>暂停</view>
         <image src="/images/v2/pause_bt.png"></image>
-      </view>
-      <view class="btn-action" data-icon="next" wx:if="{{!completelyOver && audioState === 'stop'}}" bindtap="nextSentence" hover-class="tap-active" hover-stay-time="100">
+      </tap-action>
+      <tap-action icon="next" wx:if="{{!completelyOver && audioState === 'stop'}}" bind:tap="nextSentence">
         <view>下句</view>
         <image src="/images/v2/next_bt.png"></image>
-      </view>
-      <view class="btn-action" data-icon="submit" wx:if="{{completelyOver && audioState === 'stop'}}" bindtap="toExam" hover-class="tap-active" hover-stay-time="100">
+      </tap-action>
+      <tap-action icon="submit" wx:if="{{completelyOver && audioState === 'stop'}}" bind:tap="toExam">
         <view>保存</view>
         <image src="/images/v2/submit_bt.png"></image>
-      </view>
-      <view class="btn-action {{list[swiperCurrent].label || list[swiperCurrent].status == 0 ?'btn--dis' :''}}" data-icon="correct" bind:tap="nextSentence2" hover-class="tap-active" hover-stay-time="100">
+      </tap-action>
+      <tap-action icon="correct" disabled="{{list[swiperCurrent].label || list[swiperCurrent].status == 0}}" bind:tap="nextSentence2">
         <view>听懂</view>
         <image src="/images/v2/correct_bt.png"></image>
-      </view>
+      </tap-action>
     </view>
     <view class="btn-group-layout-split__divider"></view>
     <view class="btn-group-layout-split__footer">
-      <view class="btn-action-icon" data-icon="setting" bindtap="playSet" hover-class="tap-active" hover-stay-time="100">
-        <image src="/images/v2/setting_bt.png"></image>
+      <view class="btn-pos-left">
+        <tap-action icon="setting" bind:tap="playSet">
+          <image src="/images/v2/setting_bt.png"></image>
+        </tap-action>
+        <tap-action icon="visible" wx:if="{{baseShowArticle}}">
+          <image src="/images/v2/visible_bt.png"></image>
+        </tap-action>
+        <tap-action icon="visible" wx:if="{{!baseShowArticle}}" bind:tap="showArticle">
+          <image wx:if="{{!showArticle}}" src="/images/v2/hidden_bt.png"></image>
+          <image wx:if="{{showArticle}}" src="/images/v2/visible_bt.png"></image>
+        </tap-action>
       </view>
-      <view class="btn-action-icon" data-icon="visible" wx:if="{{baseShowArticle}}">
-        <image src="/images/v2/visible_bt.png"></image>
-      </view>
-      <view class="btn-action-icon" data-icon="visible" wx:if="{{!baseShowArticle}}">
-        <image wx:if="{{!showArticle}}" src="/images/v2/hidden_bt.png" bindtap="showArticle"></image>
-        <image wx:if="{{showArticle}}" src="/images/v2/visible_bt.png" bindtap="showArticle"></image>
-      </view>
-      <view class="btn-action" data-icon="list" bindtap="toList" hover-class="tap-active" hover-stay-time="100">
-        <view>句子列表</view>
-        <image src="/images/v2/list_bt.png" class="but-img-2"></image>
+      <view class="btn-pos-right">
+        <tap-action icon="list" bind:tap="toList">
+          <view>句子列表</view>
+          <image src="/images/v2/list_bt.png" class="but-img-2"></image>
+        </tap-action>
       </view>
     </view>
   </view>

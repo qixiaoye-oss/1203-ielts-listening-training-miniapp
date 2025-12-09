@@ -1,8 +1,10 @@
 <import src="/templates/page-loading.wxml"/>
 <template is="pageLoading" data="{{loading, loadProgress}}"/>
 <view class="menu">
-  <view class="menu-item" wx:for="{{list}}" wx:key="item" bindtap="toDetail" data-item="{{item}}" hover-class="tap-active" hover-stay-time="100">
-    <view class="list_title">{{item.resourceName}}</view>
-    <switch checked="{{item.isShow}}" color="#3478F6" bindchange="resourceChange" data-item="{{item}}" data-index="{{index}}"></switch>
-  </view>
+  <tap-action type="card" wx:for="{{list}}" wx:key="item" bind:tap="toDetail" data-item="{{item}}">
+    <view class="menu-item">
+      <view class="list_title">{{item.resourceName}}</view>
+      <switch checked="{{item.isShow}}" color="#3478F6" bindchange="resourceChange" data-item="{{item}}" data-index="{{index}}"></switch>
+    </view>
+  </tap-action>
 </view>

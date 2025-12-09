@@ -31,34 +31,38 @@
 <view class="btn-page-bottom">
   <view class="btn-group-layout-split">
     <view class="btn-group-layout-split__header btn-pos-center">
-      <view class="btn-action" data-icon="play" wx:if="{{audioStatus === 0}}" bindtap="playAudio" hover-class="tap-active" hover-stay-time="100">
+      <tap-action icon="play" wx:if="{{audioStatus === 0}}" bind:tap="playAudio">
         <view>播放</view>
         <image src="/images/v2/play_bt.png"></image>
         <view class="btn-corner-mark" style="background: rgba(0, 166, 237, 0.8);">{{playbackRate}}x</view>
-      </view>
-      <view class="btn-action" data-icon="pause" wx:if="{{audioStatus === 1}}" bindtap="pauseAudio" hover-class="tap-active" hover-stay-time="100">
+      </tap-action>
+      <tap-action icon="pause" wx:if="{{audioStatus === 1}}" bind:tap="pauseAudio">
         <view>暂停</view>
         <image src="/images/v2/pause_bt.png"></image>
         <view class="btn-corner-mark" style="background: rgba(0, 166, 237, 0.8);">{{playbackRate}}x</view>
-      </view>
-      <view class="btn-action" data-icon="replay" wx:if="{{audioStatus === 2}}" bindtap="refreshAudio" hover-class="tap-active" hover-stay-time="100">
+      </tap-action>
+      <tap-action icon="replay" wx:if="{{audioStatus === 2}}" bind:tap="refreshAudio">
         <view>重新播放</view>
         <image src="/images/v2/replay_bt.png"></image>
         <view class="btn-corner-mark" style="background: rgba(0, 166, 237, 0.8);">{{playbackRate}}x</view>
-      </view>
-      <view class="btn-action" data-icon="goto" bindtap="toExam" hover-class="tap-active" hover-stay-time="100">
+      </tap-action>
+      <tap-action icon="goto" bind:tap="toExam">
         <view>前往答题</view>
         <image src="/images/v2/goto_bt.png"></image>
-      </view>
+      </tap-action>
     </view>
     <view class="btn-group-layout-split__divider"></view>
     <view class="btn-group-layout-split__footer">
-      <view class="btn-action-icon" data-icon="setting" bindtap="playSet" hover-class="tap-active" hover-stay-time="100">
-        <image src="/images/v2/setting_bt.png" class="img_flag"></image>
+      <view class="btn-pos-left">
+        <tap-action icon="setting" bind:tap="playSet">
+          <image src="/images/v2/setting_bt.png" class="img_flag"></image>
+        </tap-action>
       </view>
-      <view class="btn-action" data-icon="list" bindtap="toList" hover-class="tap-active" hover-stay-time="100">
-        <view>原文内容</view>
-        <image src="/images/v2/list_bt.png" class="img_flag"></image>
+      <view class="btn-pos-right">
+        <tap-action icon="list" bind:tap="toList">
+          <view>原文内容</view>
+          <image src="/images/v2/list_bt.png" class="img_flag"></image>
+        </tap-action>
       </view>
     </view>
   </view>
