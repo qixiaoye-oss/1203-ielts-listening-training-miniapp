@@ -95,6 +95,7 @@ page {
   justify-content: center;
   position: relative;
   box-sizing: border-box;
+  width: fit-content;
 }
 
 .btn-action image {
