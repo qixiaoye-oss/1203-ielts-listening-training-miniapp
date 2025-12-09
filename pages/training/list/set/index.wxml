@@ -13,16 +13,17 @@
       <view class="main-item__title--text">{{item.title}}</view>
     </view>
     <block wx:for="{{item.list}}" wx:for-item="chapter" wx:for-index="chapterIndex" wx:key="id">
-      <view class="sub-item" bind:tap="toWriting" data-module-index="{{index}}" data-unit-index="{{chapterIndex}}" style="border-color: {{chapter.colorRgb}};" hover-class="tap-active" hover-stay-time="100">
-        <view class="sub-item__header">
-          <view class="sub-item__title" style="background: {{chapter.colorRgba}};">
-            <image class="sub-item__title--icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
-            <view class="sub-item__title--text" wx:if="{{chapter.title}}">{{chapter.title}}</view>
-            <!-- <view class="sub-item__type-badge">简</view> -->
+      <tap-action type="card" bind:tap="toWriting" data-module-index="{{index}}" data-unit-index="{{chapterIndex}}">
+        <view class="sub-item" style="border-color: {{chapter.colorRgb}};">
+          <view class="sub-item__header">
+            <view class="sub-item__title" style="background: {{chapter.colorRgba}};">
+              <image class="sub-item__title--icon" wx:if="{{chapter.iconUrl}}" src="{{chapter.iconUrl}}" />
+              <view class="sub-item__title--text" wx:if="{{chapter.title}}">{{chapter.title}}</view>
+              <!-- <view class="sub-item__type-badge">简</view> -->
+            </view>
           </view>
-        </view>
-        <view class="sub-item__intervals" style="background: {{chapter.colorRgb}};"></view>
-        <view class="sub-item__footer">
+          <view class="sub-item__intervals" style="background: {{chapter.colorRgb}};"></view>
+          <view class="sub-item__footer">
           <block wx:if="{{chapter.statusExercise == 0}}">
             <view class="tag tag__multi tag__multi--gray">
               <view>正确率（未作）</view>
@@ -52,7 +53,8 @@
             <view>无需精听</view>
           </view>
         </view>
-      </view>
+        </view>
+      </tap-action>
     </block>
   </view>
 </view>

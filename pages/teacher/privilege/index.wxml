@@ -7,14 +7,18 @@
       <input type="text" class="search_input_cell" placeholder="请输入学员姓名或考号" value="{{inputVal}}" bindinput="inputTyping" />
       <icon type="clear" size="24" wx:if="{{inputVal.length > 0}}" bindtap="clearInput"></icon>
     </view>
-    <view class="search_but_cell" bindtap="hideInput" hover-class="tap-active" hover-stay-time="100">取消</view>
+    <tap-action type="card" bind:tap="hideInput">
+      <view class="search_but_cell">取消</view>
+    </tap-action>
   </view>
 </view>
 <view class="interval"></view>
 <scroll-view scroll-y="{{true}}" class="user_list_container" hidden="{{hideScroll}}">
   <view class="prompt">请选择</view>
   <view wx:for="{{userList}}" wx:key="item">
-    <view id="{{item.id}}" bindtap="offline" class="user_cell" data-item="{{item}}" hover-class="tap-active" hover-stay-time="100">{{item.no}} - {{item.nickName || '暂无昵称'}}</view>
+    <tap-action type="card" id="{{item.id}}" bind:tap="offline" data-item="{{item}}">
+      <view class="user_cell">{{item.no}} - {{item.nickName || '暂无昵称'}}</view>
+    </tap-action>
   </view>
 </scroll-view>
 <view class="form_container">

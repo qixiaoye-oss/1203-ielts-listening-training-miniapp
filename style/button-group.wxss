@@ -1,18 +1,19 @@
 /**
  * 按钮组样式库 (Button Group Styles)
- * @version 1.8.0
+ * @version 1.9.0
  * @date 2025-12-09
  * @description 微信小程序通用按钮组 CSS 样式工具类库，包含固定底部容器、多种布局模式和蒙版功能
  * @author 开发团队
  * @note 这是一个纯 CSS 样式库，不是微信小程序自定义组件。通过 @import 引入后直接使用类名即可。
  *
  * @构建流程
- *   Step 1: 选择基础类 - .btn-action（通用按钮样式）
- *   Step 2: 指定颜色 - 添加 data-icon="xxx" 属性，自动映射颜色
+ *   Step 1: 使用 <tap-action> 组件包裹按钮内容
+ *   Step 2: 指定 icon="xxx" 属性，自动映射颜色
  *   Step 3: 可选布局 - 使用按钮组容器(.btn-page-bottom等)或单独使用
  *
  * @changelog
- *   v1.8.0 (2025-12-09) - 合并.btn-action-icon到.btn-action，移除.tap-active（由tap-action组件管理）
+ *   v1.9.0 (2025-12-09) - 全局迁移到<tap-action>组件，移除.btn-action-icon类
+ *   v1.8.0 (2025-12-09) - 合并.btn-action-icon到.btn-action，点击效果由tap-action组件管理
  *   v1.7.1 (2025-12-07) - 清理废弃代码，移除.btn--xxx类和组件type属性
  *   v1.7.0 (2025-12-07) - 实现icon颜色映射机制，全局迁移为data-icon方式
  *   v1.6.1 (2025-12-06) - 新增btn-pos-center通用居中类，__header/__footer仅提供基础布局
@@ -105,26 +106,6 @@ page {
 /* 有文字时，图标需要左边距 */
 .btn-action image:not(:first-child) {
   margin-left: var(--button-icon-margin);
-}
-
-/* 向后兼容：.btn-action-icon 别名 */
-.btn-action-icon {
-  font-size: var(--button-font-size);
-  line-height: var(--button-line-height);
-  border-radius: var(--button-border-radius);
-  padding: var(--button-padding);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-sizing: border-box;
-}
-
-.btn-action-icon image {
-  flex-shrink: 0;
-  width: var(--button-icon-size);
-  height: var(--button-icon-size);
 }
 
 /* ==================== 2. 按钮组布局 - 双层结构 ==================== */

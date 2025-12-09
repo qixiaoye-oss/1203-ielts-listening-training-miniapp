@@ -10,6 +10,8 @@
       <view class="user__no">（{{user.no}}）</view>
     </view>
   </view>
-  <view class="menu-item menu-item--access" bind:tap="toUpdateUserInfo" hover-class="tap-active" hover-stay-time="100">修改用户信息</view>
+  <tap-action type="card" bind:tap="toUpdateUserInfo">
+    <view class="menu-item menu-item--access">修改用户信息</view>
+  </tap-action>
   <view class="menu-item">版本号 {{version || '2.2.2'}}</view>
 </view>
