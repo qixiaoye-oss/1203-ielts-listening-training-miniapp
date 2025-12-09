@@ -59,20 +59,24 @@
     </view>
     <view class="btn-group-layout-split__divider"></view>
     <view class="btn-group-layout-split__footer">
-      <tap-action icon="setting" bind:tap="playSet">
-        <image src="/images/v2/setting_bt.png"></image>
-      </tap-action>
-      <tap-action icon="visible" wx:if="{{baseShowArticle}}">
-        <image src="/images/v2/visible_bt.png"></image>
-      </tap-action>
-      <tap-action icon="visible" wx:if="{{!baseShowArticle}}" bind:tap="showArticle">
-        <image wx:if="{{!showArticle}}" src="/images/v2/hidden_bt.png"></image>
-        <image wx:if="{{showArticle}}" src="/images/v2/visible_bt.png"></image>
-      </tap-action>
-      <tap-action icon="list" bind:tap="toList">
-        <view>句子列表</view>
-        <image src="/images/v2/list_bt.png" class="but-img-2"></image>
-      </tap-action>
+      <view class="btn-pos-left">
+        <tap-action icon="setting" bind:tap="playSet">
+          <image src="/images/v2/setting_bt.png"></image>
+        </tap-action>
+        <tap-action icon="visible" wx:if="{{baseShowArticle}}">
+          <image src="/images/v2/visible_bt.png"></image>
+        </tap-action>
+        <tap-action icon="visible" wx:if="{{!baseShowArticle}}" bind:tap="showArticle">
+          <image wx:if="{{!showArticle}}" src="/images/v2/hidden_bt.png"></image>
+          <image wx:if="{{showArticle}}" src="/images/v2/visible_bt.png"></image>
+        </tap-action>
+      </view>
+      <view class="btn-pos-right">
+        <tap-action icon="list" bind:tap="toList">
+          <view>句子列表</view>
+          <image src="/images/v2/list_bt.png" class="but-img-2"></image>
+        </tap-action>
+      </view>
     </view>
   </view>
 </view>
