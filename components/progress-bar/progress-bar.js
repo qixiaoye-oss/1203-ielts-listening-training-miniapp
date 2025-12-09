@@ -13,31 +13,22 @@ Component({
   },
 
   data: {
-    percent: 0,
+    percent: 100,
     textMargin: '0px'
   },
 
   observers: {
     'current, total': function (current, total) {
-      if (total <= 0) return
-      const percent = (current / total) * 100
+      // 确保 current 至少为 1
+      const validCurrent = Math.max(1, current || 1)
+      // 确保 total 至少为 1
+      const validTotal = Math.max(1, total || 1)
+      // 计算百分比
+      const percent = (validCurrent / validTotal) * 100
       this.setData({
         percent,
         textMargin: this.calcTextMargin(percent)
       })
-    }
-  },
-
-  lifetimes: {
-    attached() {
-      const { current, total } = this.properties
-      if (total > 0) {
-        const percent = (current / total) * 100
-        this.setData({
-          percent,
-          textMargin: this.calcTextMargin(percent)
-        })
-      }
     }
   },
 
