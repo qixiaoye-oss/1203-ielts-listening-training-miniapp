@@ -1,17 +1,18 @@
 /**
  * 按钮组样式库 (Button Group Styles)
- * @version 1.7.1
- * @date 2025-12-07
+ * @version 1.8.0
+ * @date 2025-12-09
  * @description 微信小程序通用按钮组 CSS 样式工具类库，包含固定底部容器、多种布局模式和蒙版功能
  * @author 开发团队
  * @note 这是一个纯 CSS 样式库，不是微信小程序自定义组件。通过 @import 引入后直接使用类名即可。
  *
  * @构建流程
- *   Step 1: 选择基础类 - .btn-action(文字+图标) 或 .btn-action-icon(纯图标)
+ *   Step 1: 选择基础类 - .btn-action（通用按钮样式）
  *   Step 2: 指定颜色 - 添加 data-icon="xxx" 属性，自动映射颜色
  *   Step 3: 可选布局 - 使用按钮组容器(.btn-page-bottom等)或单独使用
  *
  * @changelog
+ *   v1.8.0 (2025-12-09) - 合并.btn-action-icon到.btn-action，移除.tap-active（由tap-action组件管理）
  *   v1.7.1 (2025-12-07) - 清理废弃代码，移除.btn--xxx类和组件type属性
  *   v1.7.0 (2025-12-07) - 实现icon颜色映射机制，全局迁移为data-icon方式
  *   v1.6.1 (2025-12-06) - 新增btn-pos-center通用居中类，__header/__footer仅提供基础布局
@@ -27,7 +28,7 @@
  *   - data-icon 颜色自动映射（基于 images/v2/icon_color_mapping.json）
  *   - 固定底部按钮组容器（含蒙版A和蒙版B）
  *   - 双层结构布局（split）/ 单行居中布局（inline-center）
- *   - 基础按钮样式（文字+图标、纯图标）
+ *   - 基础按钮样式（统一使用 .btn-action）
  *   - 零外部依赖，开箱即用
  */
 
@@ -76,7 +77,12 @@ page {
 
 /* ==================== 1. 基础按钮样式 ==================== */
 
-/* 带文字和图标的按钮 */
+/**
+ * 通用按钮样式
+ * 适用于带文字按钮和纯图标按钮，无需区分
+ * - 有文字时：文字 + 图标，图标有 margin-left
+ * - 无文字时：仅图标，margin-left 不影响布局
+ */
 .btn-action {
   font-size: var(--button-font-size);
   line-height: var(--button-line-height);
@@ -94,17 +100,23 @@ page {
   flex-shrink: 0;
   width: var(--button-icon-size);
   height: var(--button-icon-size);
+}
+
+/* 有文字时，图标需要左边距 */
+.btn-action image:not(:first-child) {
   margin-left: var(--button-icon-margin);
 }
 
-/* 纯图标按钮 */
+/* 向后兼容：.btn-action-icon 别名 */
 .btn-action-icon {
+  font-size: var(--button-font-size);
+  line-height: var(--button-line-height);
+  border-radius: var(--button-border-radius);
+  padding: var(--button-padding);
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--button-border-radius);
-  padding: var(--button-padding);
   position: relative;
   box-sizing: border-box;
 }
@@ -280,14 +292,14 @@ page {
  * 使用 data-icon 属性指定 icon 名称，自动应用对应主色
  *
  * 使用示例：
- * <view class="btn-action" data-icon="save">
+ * <tap-action icon="save">
  *   <view>保存</view>
  *   <image src="/images/v2/save_bt.png"></image>
- * </view>
+ * </tap-action>
  *
- * <view class="btn-action-icon" data-icon="play">
+ * <tap-action icon="play">
  *   <image src="/images/v2/play_bt.png"></image>
- * </view>
+ * </tap-action>
  */
 
 /* 蓝色系 #00A6ED */
@@ -373,7 +385,11 @@ page {
   80% { transform: translateX(3px); }
 }
 
-/* 点击动效 - 与组件配合使用 */
+/**
+ * 点击动效
+ * 推荐使用 <tap-action> 组件自动封装
+ * 此处保留供直接使用 CSS 类名方式（向后兼容）
+ */
 .tap-active {
   opacity: 0.7;
   transform: scale(0.98);

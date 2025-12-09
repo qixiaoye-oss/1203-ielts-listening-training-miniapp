@@ -4,9 +4,10 @@
 
 > **注意**：这是一个纯 CSS 样式库，不是微信小程序自定义组件。
 > 通过 `@import` 引入样式后，直接在 wxml 中使用 CSS 类名即可。
+> 推荐配合 `tap-action` 组件使用，自动封装点击动效。
 
-**版本：** v1.7.1
-**更新日期：** 2025-12-07
+**版本：** v1.8.0
+**更新日期：** 2025-12-09
 **样式文件：** `style/button-group.wxss`
 
 ---
@@ -24,18 +25,27 @@
 
 ### 1.1 单独按钮（推荐方式）
 
-只需指定 **基础类** + **data-icon 属性**，颜色自动映射：
+使用 `tap-action` 组件，自动封装点击动效：
 
 ```xml
 <!-- 文字+图标按钮 -->
-<view class="btn-action" data-icon="save" bindtap="onSave">
+<tap-action icon="save" bind:tap="onSave">
   <view>保存</view>
   <image src="/images/v2/save_bt.png"></image>
-</view>
+</tap-action>
 
 <!-- 纯图标按钮 -->
-<view class="btn-action-icon" data-icon="play" bindtap="onPlay">
+<tap-action icon="play" bind:tap="onPlay">
   <image src="/images/v2/play_bt.png"></image>
+</tap-action>
+```
+
+或使用 CSS 类名方式：
+
+```xml
+<view class="btn-action" data-icon="save" hover-class="tap-active" hover-stay-time="100" bindtap="onSave">
+  <view>保存</view>
+  <image src="/images/v2/save_bt.png"></image>
 </view>
 ```
 
@@ -46,13 +56,13 @@
 │                     按钮组构建流程                                │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  Step 1: 选择基础类                                              │
-│     ├─ .btn-action      → 文字+图标按钮                          │
-│     └─ .btn-action-icon → 纯图标按钮                             │
+│  Step 1: 使用组件或基础类                                        │
+│     ├─ <tap-action>     → 推荐，自动封装动效                     │
+│     └─ .btn-action      → CSS类名方式                           │
 │                                                                 │
 │  Step 2: 指定颜色                                                │
-│     └─ 添加 data-icon="xxx" 属性，自动映射颜色                    │
-│        （基于 images/icon_color_mapping.json）                │
+│     └─ 添加 icon/data-icon="xxx" 属性，自动映射颜色              │
+│        （基于 images/icon_color_mapping.json）                   │
 │                                                                 │
 │  Step 3: 可选布局                                                │
 │     ├─ 单独使用：无需额外容器                                     │
@@ -162,9 +172,11 @@
 
 | 类名 | 用途 | 包含内容 |
 |------|------|---------|
-| `.btn-action` | 带文字和图标的按钮 | 文字 + icon |
-| `.btn-action-icon` | 纯图标按钮 | 仅 icon |
+| `.btn-action` | 通用按钮样式 | 文字 + icon 或 仅 icon |
+| `.btn-action-icon` | 向后兼容别名 | 等同于 .btn-action |
 | `.btn-text-content` | 纯文字内容（无按钮） | 仅文字 |
+
+> **推荐**：使用 `<tap-action>` 组件代替直接使用 CSS 类名。
 
 ### 4.1 纯文字层规范
 
@@ -279,10 +291,11 @@
 
 ## 八、更新记录
 
-### v1.7.2 (2025-12-09)
-- **组件合并**：将 `btn-action-icon` 合并到 `btn-action` 组件
-- **新增属性**：`btn-action` 组件新增 `iconOnly` 属性，设为 true 时使用纯图标模式
-- **删除冗余**：移除 `btn-action-icon` 组件目录
+### v1.8.0 (2025-12-09)
+- **组件重命名**：`btn-action` 组件更名为 `tap-action`
+- **新增卡片模式**：`tap-action` 组件新增 `type="card"` 模式，仅提供点击动效
+- **统一按钮样式**：`.btn-action` 和 `.btn-action-icon` 合并为统一的 `.btn-action`
+- **职责分离**：点击动效由 `tap-action` 组件管理，样式库专注布局
 
 ### v1.7.1 (2025-12-07)
 - **清理废弃代码**：移除 `.btn--audio`、`.btn--correct` 等10个废弃类
@@ -309,6 +322,6 @@
 
 ---
 
-**文档版本：** v1.7.2
+**文档版本：** v1.8.0
 **最后更新：** 2025-12-09
 **维护者：** 开发团队

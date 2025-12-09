@@ -1,9 +1,0 @@
-<view
-  class="{{iconOnly ? 'btn-action-icon' : 'btn-action'}} {{disabled ? 'btn--dis' : ''}}"
-  data-icon="{{icon}}"
-  hover-class="{{disabled ? '' : 'tap-active'}}"
-  hover-stay-time="100"
-  bindtap="onTap"
->
-  <slot></slot>
-</view>

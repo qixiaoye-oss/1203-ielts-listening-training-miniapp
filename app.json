@@ -55,7 +55,7 @@
   },
   "resizable": true,
   "usingComponents": {
-    "btn-action": "/components/btn-action/index"
+    "tap-action": "/components/tap-action/index"
   },
   "sitemapLocation": "sitemap.json",
   "useExtendedLib": {

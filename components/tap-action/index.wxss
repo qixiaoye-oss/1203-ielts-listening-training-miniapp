@@ -1,5 +1,5 @@
-/* btn-action 组件样式 */
-/* 基础样式从全局 button-group.wxss 继承 */
+/* tap-action 组件样式 */
+/* 点击动效 - 组件核心功能 */
 
 .tap-active {
   opacity: 0.7;
