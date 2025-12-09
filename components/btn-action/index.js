@@ -1,6 +1,7 @@
 /**
  * btn-action 组件
- * 带文字和图标的按钮，自动封装点击动效
+ * 通用按钮组件，自动封装点击动效
+ * 支持带文字按钮和纯图标按钮两种模式
  */
 const app = getApp()
 
@@ -16,6 +17,11 @@ Component({
     },
     // 是否禁用
     disabled: {
+      type: Boolean,
+      value: false
+    },
+    // 是否为纯图标模式（原 btn-action-icon）
+    iconOnly: {
       type: Boolean,
       value: false
     }

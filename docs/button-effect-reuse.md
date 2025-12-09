@@ -3,7 +3,7 @@
 ## 概述
 
 本项目提供两种方式实现按钮点击动效：
-1. **组件方式**（推荐）：使用 `btn-action` / `btn-action-icon` 组件
+1. **组件方式**（推荐）：使用 `btn-action` 组件
 2. **类名方式**：直接使用 CSS 类名 + `hover-class`
 
 ---
@@ -17,66 +17,64 @@
 ```json
 {
   "usingComponents": {
-    "btn-action": "/components/btn-action/index",
-    "btn-action-icon": "/components/btn-action-icon/index"
+    "btn-action": "/components/btn-action/index"
   }
 }
 ```
 
 ### 使用示例
 
-#### btn-action（带文字按钮）
+#### 带文字按钮（默认模式）
 
 ```xml
-<btn-action type="audio" bind:tap="onPlay">
+<btn-action icon="play" bind:tap="onPlay">
   <text>播放</text>
   <image src="/images/play.png"></image>
 </btn-action>
 
-<btn-action type="correct" bind:tap="onSubmit">
+<btn-action icon="correct" bind:tap="onSubmit">
   <text>提交</text>
   <image src="/images/correct.png"></image>
 </btn-action>
 
 <!-- 禁用状态 -->
-<btn-action type="audio" disabled="{{true}}">
+<btn-action icon="play" disabled="{{true}}">
   <text>禁用</text>
 </btn-action>
 ```
 
-#### btn-action-icon（纯图标按钮）
+#### 纯图标按钮（icon-only 模式）
 
 ```xml
-<btn-action-icon type="setting" bind:tap="onSetting">
+<btn-action icon="setting" icon-only bind:tap="onSetting">
   <image src="/images/setting.png"></image>
-</btn-action-icon>
+</btn-action>
 
-<btn-action-icon type="visible" bind:tap="onToggle">
+<btn-action icon="visible" icon-only bind:tap="onToggle">
   <image src="/images/visible.png"></image>
-</btn-action-icon>
+</btn-action>
 ```
 
 ### 组件属性
 
 | 属性 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| type | String | '' | 功能色彩类型 |
+| icon | String | '' | icon 名称，自动映射颜色 |
 | disabled | Boolean | false | 是否禁用 |
+| iconOnly | Boolean | false | 是否为纯图标模式 |
 
-### type 可选值
+### icon 可选值
 
 | 值 | 颜色 | 用途 |
 |---|------|------|
-| audio | #00A6ED 蓝色 | 音频播放 |
+| save | #00A6ED 蓝色 | 保存 |
+| play | #00A6ED 蓝色 | 音频播放 |
 | correct | #00D26A 绿色 | 正确确认 |
-| wrong | #F92F60 红色 | 错误删除 |
-| list | #FFB02D 黄色 | 列表导航 |
+| flag | #F8312F 红色 | 标记 |
+| list | #FFB02E 黄色 | 列表导航 |
 | setting | #998EA4 紫灰 | 设置配置 |
 | visible | #7D4533 棕色 | 显示隐藏 |
-| label | #F8312F 红色 | 标记标签 |
-| recording | #212121 黑色 | 录音相关 |
-| practice | #433B6B 深紫 | 练习模式 |
-| exercise | #533566 紫色 | 习题练习 |
+| me | #533566 紫色 | 个人中心 |
 
 ---
 
@@ -177,11 +175,11 @@
   <view class="btn-group-layout-split">
     <!-- 上层：使用 btn-pos-center 实现居中 -->
     <view class="btn-group-layout-split__header btn-pos-center">
-      <btn-action type="audio" bind:tap="onReplay">
+      <btn-action icon="replay" bind:tap="onReplay">
         <text>重播</text>
         <image src="/images/replay.png"></image>
       </btn-action>
-      <btn-action type="correct" bind:tap="onConfirm">
+      <btn-action icon="correct" bind:tap="onConfirm">
         <text>确认</text>
         <image src="/images/correct.png"></image>
       </btn-action>
@@ -192,10 +190,10 @@
 
     <!-- 下层 -->
     <view class="btn-group-layout-split__footer">
-      <btn-action-icon type="setting" bind:tap="onSetting">
+      <btn-action icon="setting" icon-only bind:tap="onSetting">
         <image src="/images/setting.png"></image>
-      </btn-action-icon>
-      <btn-action type="list" bind:tap="onList">
+      </btn-action>
+      <btn-action icon="list" bind:tap="onList">
         <text>列表</text>
         <image src="/images/list.png"></image>
       </btn-action>
@@ -210,12 +208,7 @@
 
 ```
 components/
-├── btn-action/           # 带文字按钮组件
-│   ├── index.js
-│   ├── index.json
-│   ├── index.wxml
-│   └── index.wxss
-└── btn-action-icon/      # 纯图标按钮组件
+└── btn-action/           # 通用按钮组件（支持带文字和纯图标模式）
     ├── index.js
     ├── index.json
     ├── index.wxml
@@ -231,5 +224,5 @@ docs/
 
 ---
 
-**文档版本：** v1.0
-**更新日期：** 2025-12-06
+**文档版本：** v1.1
+**更新日期：** 2025-12-09
