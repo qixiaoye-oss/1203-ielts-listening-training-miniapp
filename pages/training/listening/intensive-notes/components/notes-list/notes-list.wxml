@@ -27,14 +27,16 @@
           <view class="state but-warning warning-bg" wx:if="{{item.status === '2'}}">需要再次复习</view>
           <view class="state but-success success-bg" wx:if="{{item.status === '1'}}">有效复习</view>
           <view class="tag tag__multi--green" wx:if="{{item.reviseContent}}">有订正</view>
-          <tap-action icon="play" bind:tap="playAudio" data-index="{{index}}">
-            <image src="/images/v2/pause_bt.png" data-value="pause" wx:if="{{nowPlayAudio == index}}"></image>
-            <image src="/images/v2/play_bt.png" data-value="play" wx:else></image>
-          </tap-action>
-          <tap-action icon="visible" bind:tap="showContent" data-index="{{index}}">
-            <image src="/images/v2/visible_bt.png" wx:if="{{item.show}}"></image>
-            <image src="/images/v2/hidden_bt.png" wx:else></image>
-          </tap-action>
+          <view class="btn-pos-right">
+            <tap-action icon="play" bind:tap="playAudio" data-index="{{index}}">
+              <image src="/images/v2/pause_bt.png" data-value="pause" wx:if="{{nowPlayAudio == index}}"></image>
+              <image src="/images/v2/play_bt.png" data-value="play" wx:else></image>
+            </tap-action>
+            <tap-action icon="visible" bind:tap="showContent" data-index="{{index}}">
+              <image src="/images/v2/visible_bt.png" wx:if="{{item.show}}"></image>
+              <image src="/images/v2/hidden_bt.png" wx:else></image>
+            </tap-action>
+          </view>
         </view>
       </view>
       <view class="again-buts-cell" bind:tap="againButChange" data-index="{{index}}" wx:if="{{item.againFun}}">
