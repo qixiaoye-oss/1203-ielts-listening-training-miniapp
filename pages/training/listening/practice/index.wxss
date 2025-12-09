@@ -14,7 +14,7 @@
 }
 
 .parctice {
-  border: 1px solid var(--question-color);
+  border: 1px solid var(--theme-color);
   border-radius: 9px;
   padding: 15px;
   display: flex;
@@ -30,8 +30,8 @@
 }
 
 .question__num {
-  background-color: var(--question-bcakground-color);
-  color: var(--question-color);
+  background-color: var(--theme-bcakground-color);
+  color: var(--theme-color);
   flex-shrink: 0;
   width: 28px;
   height: 28px;

@@ -5,11 +5,7 @@
 <wxs src="/utils/util.wxs" module="wxsUtil" />
 <view class="page-wrapper">
   <view class="base-container">
-    <view class="progress-cell">
-      <view class="progress-bg"></view>
-      <view class="progress-sel-bg" style="width: {{schedule+'%'}};"></view>
-      <view style="margin-left: calc({{schedule+'%'}} - 22px);">{{swiperCurrent+1}}/{{list.length}}</view>
-    </view>
+    <progress-bar current="{{swiperCurrent + 1}}" total="{{list.length}}" />
   </view>
   <view class="body">
     <view class="label-container">

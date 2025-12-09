@@ -1,5 +1,5 @@
 .explain {
-  border: 1px solid var(--question-color);
+  border: 1px solid var(--theme-color);
   border-radius: 9px;
   position: relative;
   box-sizing: border-box;
@@ -10,7 +10,7 @@
 }
 
 .tag--transparent {
-  background-color: var(--question-color);
+  background-color: var(--theme-color);
 }
 
 .explain__question {
@@ -40,7 +40,7 @@
   display: flex;
   gap: 10px;
   width: 100%;
-  border-top: 1px solid var(--question-color);
+  border-top: 1px solid var(--theme-color);
 }
 
 .explain__article--content {
@@ -55,7 +55,7 @@
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  border-top: 1px solid var(--question-color);
+  border-top: 1px solid var(--theme-color);
 }
 
 .explain__analysis--ordinary {
@@ -63,7 +63,7 @@
   display: flex;
   gap: 10px;
   width: 100%;
-  border-top: 1px solid var(--question-color);
+  border-top: 1px solid var(--theme-color);
 }
 
 /* 内嵌式按钮组 - 用于内容区域的轻量按钮组，无外边框和padding */
@@ -79,7 +79,7 @@
 }
 
 .font_color_base {
-  color: var(--question-color);
+  color: var(--theme-color);
 }
 
 .sentence_analysis_cell {
@@ -110,8 +110,8 @@
 
 .col1 {
   color: #FFFFFF;
-  border: 1px solid var(--question-color);
-  background: var(--question-color);
+  border: 1px solid var(--theme-color);
+  background: var(--theme-color);
 }
 
 .col2 {
