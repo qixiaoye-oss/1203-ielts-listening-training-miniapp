@@ -126,19 +126,6 @@ function getTranslate(item) {
   return item.translate || item.chinese || ''
 }
 
-/**
- * 计算进度文字的安全 margin-left 值
- * 确保进度文字在最左和最右时不会超出容器边界
- * @param schedule 进度百分比 0-100
- * @returns CSS margin-left 值
- */
-function calcProgressTextMargin(schedule) {
-  // 使用 min 和 max 限制边界
-  // 最小 0（左边界），最大 calc(100% - 44px)（右边界，假设文字宽度 44px）
-  // 中间值为 schedule% - 22px（使文字中心对齐到进度位置）
-  return 'max(0px, min(calc(' + schedule + '% - 22px), calc(100% - 44px)))'
-}
-
 module.exports = {
   formatDate: formatDate,
   isCheck: isCheck,
@@ -148,6 +135,5 @@ module.exports = {
   accuracyStyle: accuracyStyle,
   calcGradientStop: calcGradientStop,
   calcProgressWidth: calcProgressWidth,
-  getTranslate: getTranslate,
-  calcProgressTextMargin: calcProgressTextMargin
+  getTranslate: getTranslate
 }
