@@ -53,13 +53,17 @@
     </view>
     <view class="btn-group-layout-split__divider"></view>
     <view class="btn-group-layout-split__footer">
-      <tap-action icon="setting" bind:tap="playSet">
-        <image src="/images/v2/setting_bt.png" class="img_flag"></image>
-      </tap-action>
-      <tap-action icon="list" bind:tap="toList">
-        <view>原文内容</view>
-        <image src="/images/v2/list_bt.png" class="img_flag"></image>
-      </tap-action>
+      <view class="btn-pos-left">
+        <tap-action icon="setting" bind:tap="playSet">
+          <image src="/images/v2/setting_bt.png" class="img_flag"></image>
+        </tap-action>
+      </view>
+      <view class="btn-pos-right">
+        <tap-action icon="list" bind:tap="toList">
+          <view>原文内容</view>
+          <image src="/images/v2/list_bt.png" class="img_flag"></image>
+        </tap-action>
+      </view>
     </view>
   </view>
 </view>
