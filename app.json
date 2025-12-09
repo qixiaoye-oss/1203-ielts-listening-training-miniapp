@@ -62,8 +62,5 @@
     "kbone": true,
     "weui": true
   },
-  "requiredPrivateInfos": [
-    "getFuzzyLocation"
-  ],
   "lazyCodeLoading": "requiredComponents"
 }
