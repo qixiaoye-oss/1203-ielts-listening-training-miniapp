@@ -26,9 +26,9 @@
       </block>
     </view>
     <view class="home-view-all">
-      <tap-action type="card" bind:tap="toNoticeListPage">
-        <view class="home-view-all__button" style="background: {{popularScience.colorRgba}};">
-          <view style="color: {{popularScience.colorRgb}};">查看所有</view>
+      <tap-action bind:tap="toNoticeListPage">
+        <view class="home-view-all__inner" style="background: {{popularScience.colorRgba}}; color: {{popularScience.colorRgb}};">
+          <view>查看所有</view>
           <image src="/images/v2/next_bt.png"></image>
         </view>
       </tap-action>
