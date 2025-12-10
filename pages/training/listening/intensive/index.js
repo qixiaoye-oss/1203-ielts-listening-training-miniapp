@@ -159,7 +159,6 @@ Page({
 
   // 大句子播放（使用 this.data.list）
   playAudio() {
-    console.log('=== playAudio 被调用 ===', 'swiperCurrent:', this.data.swiperCurrent)
     const { swiperCurrent, list } = this.data
     if (!list || !list[swiperCurrent]) return
 
@@ -180,9 +179,7 @@ Page({
 
   // 切换下一个大句子（使用节流防重复）
   nextSentence() {
-    console.log('=== nextSentence 被调用 ===')
     this.throttleAction('nextSentence', () => {
-      console.log('nextSentence throttle 内部执行')
       this.stopAudio()
       this.nextAudio()
     })
@@ -190,9 +187,7 @@ Page({
 
   // 切换下一句-完全听懂（使用节流防重复）
   nextSentence2() {
-    console.log('=== nextSentence2 被调用 ===')
     this.throttleAction('nextSentence2', () => {
-      console.log('nextSentence2 throttle 内部执行')
       const { swiperCurrent, list } = this.data
       if (!list || !list[swiperCurrent]) return
 
@@ -216,21 +211,17 @@ Page({
 
   // 播放下一个
   nextAudio() {
-    console.log('=== nextAudio 被调用 ===', 'swiperCurrent:', this.data.swiperCurrent)
-    console.trace('nextAudio 调用堆栈')
     this.validationLabel()
     const { swiperCurrent, list } = this.data
     if (!list || swiperCurrent >= (list.length - 1)) {
       api.toast('已经最后一句啦！')
       return
     }
-    console.log('nextAudio setData 前: swiperCurrent =', swiperCurrent, '将设置为', swiperCurrent + 1)
     this.setData({
       swiperCurrent: swiperCurrent + 1,
       schedule: (((swiperCurrent + 2) / list.length) * 100),
       showArticle: false
     })
-    console.log('nextAudio setData 后: swiperCurrent =', this.data.swiperCurrent)
     this.playAudio()
   },
 
