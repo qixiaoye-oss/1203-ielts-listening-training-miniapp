@@ -3,7 +3,7 @@
   data-icon="{{type === 'button' ? icon : ''}}"
   hover-class="{{disabled ? '' : 'tap-active'}}"
   hover-stay-time="100"
-  bindtap="onTap"
+  catchtap="onTap"
 >
   <slot></slot>
 </view>
