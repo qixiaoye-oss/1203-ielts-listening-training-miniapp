@@ -1,6 +1,6 @@
-const api = require('utils/api.js')
-const audioApi = require('utils/audioApi.js')
-const pageGuard = require('behaviors/pageGuard.js')
+const api = require('./utils/api.js')
+const audioApi = require('./utils/audioApi.js')
+const pageGuard = require('./behaviors/pageGuard.js')
 const CustomHook = require('spa-custom-hooks')
 let userData = {
   login: false
