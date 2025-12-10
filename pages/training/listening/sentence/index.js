@@ -85,28 +85,21 @@ Page({
   },
   toDetail(e) {
     let pages = getCurrentPages()
-    // 调试：打印页面栈信息
-    console.log('页面栈数量:', pages.length)
-    console.log('页面栈:', pages.map(p => p.route))
 
     // 检查页面栈中是否有 intensive 页面
     const intensiveIndex = pages.findIndex(p => p.route && p.route.includes('intensive/index'))
     if (intensiveIndex === -1) {
       console.error('错误：页面栈中没有 intensive 页面！')
-      // 直接返回上一页，不设置 index
       wx.navigateBack()
       return
     }
 
-    // 获取 intensive 页面并设置 index
-    const intensivePage = pages[intensiveIndex]
-    intensivePage.setData({
-      index: e.currentTarget.dataset.idx
-    })
+    // 使用 Storage 传递要跳转的句子索引，避免跨页面直接 setData
+    const targetIndex = e.currentTarget.dataset.idx
+    wx.setStorageSync('intensiveTargetIndex', targetIndex)
 
     // 计算需要返回的层数
     const delta = pages.length - 1 - intensiveIndex
-    console.log('返回层数:', delta)
     wx.navigateBack({ delta: delta })
   },
 })
