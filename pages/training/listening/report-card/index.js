@@ -1,9 +1,9 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageGuard.behavior, pageLoading],
   data: {},
   // ===========生命周期 Start===========
   onShow() { },
@@ -38,7 +38,7 @@ Page({
     api.request(this, `/result/v1/result/${this.options.resultId}`, {}, isPull).then(() => {
       _this.finishLoading()
     }).catch(() => {
-      errorHandler.goBack(_this)
+      pageGuard.goBack(_this)
     })
   },
 })

@@ -1,9 +1,9 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageGuard.behavior, pageLoading],
   data: {
     list: [],
     detail: null,
@@ -36,7 +36,7 @@ Page({
       this.setData({ isAllRady: true })
       this.finishLoading()
     }).catch(() => {
-      errorHandler.goBack(this)
+      pageGuard.goBack(this)
     })
   },
   toEditPage({ detail }) {

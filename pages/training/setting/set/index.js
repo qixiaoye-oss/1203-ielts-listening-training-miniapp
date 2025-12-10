@@ -1,9 +1,9 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageGuard.behavior, pageLoading],
   data: {
     groups: [
       {
@@ -51,7 +51,7 @@ Page({
       this.updateGroupsFromResponse(res)
       this.finishLoading()
     }).catch(() => {
-      errorHandler.goBack(this)
+      pageGuard.goBack(this)
     })
   },
   updateGroupsFromResponse(res) {

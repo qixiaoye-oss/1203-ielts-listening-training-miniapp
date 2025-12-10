@@ -1,10 +1,10 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../behaviors/pageGuard')
 const pageLoading = require('../../../behaviors/pageLoading')
 
 var timer
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageGuard.behavior, pageLoading],
   data: {
     inputVal: "",
     hideScroll: true,
@@ -68,7 +68,7 @@ Page({
     api.request(this, '/sys/albumLabel', {}, true, false).then(() => {
       this.finishLoading()
     }).catch(() => {
-      errorHandler.goBack(this)
+      pageGuard.goBack(this)
     })
   },
   listUserRole(userId) {
