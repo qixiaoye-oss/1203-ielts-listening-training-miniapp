@@ -46,7 +46,7 @@
 .explain__article--content {
   display: flex;
   flex-direction: column;
-  /* 样式由 sentence-block 组件自包含 */
+  gap: 15px;
 }
 
 .explain__analysis {
