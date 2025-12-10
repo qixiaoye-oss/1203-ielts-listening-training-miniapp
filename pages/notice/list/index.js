@@ -1,11 +1,11 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../behaviors/pageLoading')
+const loadError = require('../../../behaviors/loadError')
 
 Page({
-  behaviors: [pageLoading],
-  data: {
-    loadError: false
-  },
+  behaviors: [pageLoading, loadError],
+  data: {},
   // ===========生命周期 Start===========
   onShow() {
     this.startLoading()
@@ -24,12 +24,11 @@ Page({
   // ===========数据获取 Start===========
   // 访问接口获取数据
   listData() {
-    this.setData({ loadError: false })
+    this.hideLoadError()
     api.request(this, '/popular/science/v1/miniapp/list', {}, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      this.setData({ loadError: true })
+      errorHandler.showRetry(this)
     })
   },
   // 重试加载

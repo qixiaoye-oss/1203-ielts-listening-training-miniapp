@@ -1,5 +1,6 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../../behaviors/pageLoading')
 const audioLoading = require('../../../../behaviors/audioLoading')
 
@@ -300,21 +301,19 @@ Page({
       wx.setStorageSync('listenings', res.list)
       this.setData({
         schedule: (((res.swiperCurrent + 1) / res.list.length) * 100),
-        audioUrl: res.audioUrl,
-        audioDownProgress: 0 // 开始下载音频
+        audioUrl: res.audioUrl
       })
+      _this.startAudioLoading()
       audioApi.initAudio(res.audioUrl, (progress) => {
-        _this.setData({ audioDownProgress: progress })
+        _this.updateAudioProgress(progress)
       }).then(data => {
         audioContext = data
         _this.audioContextListener()
         _this.finishLoading()
-        _this.setData({ audioDownProgress: 100 })
+        _this.finishAudioLoading()
       })
     }).catch(() => {
-      _this.finishLoading()
-      _this.setData({ audioDownProgress: 100 })
-      setTimeout(() => wx.navigateBack(), 1500)
+      errorHandler.goBack(_this)
     })
   },
   // 标注先期验证

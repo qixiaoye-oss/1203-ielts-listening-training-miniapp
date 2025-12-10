@@ -1,4 +1,5 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
@@ -24,8 +25,7 @@ Page({
     api.request(this, `/question/v1/list/part/${this.options.unitId}/miniapp`, {}, true, false).then(() => {
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      setTimeout(() => wx.navigateBack(), 1500)
+      errorHandler.goBack(this)
     })
   },
   saveQue() {

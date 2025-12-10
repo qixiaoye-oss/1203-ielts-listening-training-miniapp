@@ -1,11 +1,12 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../behaviors/pageLoading')
+const loadError = require('../../../behaviors/loadError')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageLoading, loadError],
   data: {
-    version: '1.4.37',
-    loadError: false
+    version: '1.4.37'
   },
   onShow: function () {
     this.getUser(this)
@@ -27,12 +28,11 @@ Page({
     })
   },
   getUser() {
-    this.setData({ loadError: false })
+    this.hideLoadError()
     api.request(this, '/user/v1/user/info', {}, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      this.setData({ loadError: true })
+      errorHandler.showRetry(this)
     })
   },
   // 重试加载

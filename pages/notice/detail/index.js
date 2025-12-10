@@ -1,4 +1,5 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../behaviors/pageLoading')
 
 Page({
@@ -41,8 +42,7 @@ Page({
     api.request(this, `/popular/science/v1/detail//${this.options.id}`, {}, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      setTimeout(() => wx.navigateBack(), 1500)
+      errorHandler.goBack(this)
     })
   },
   lable(type) {

@@ -1,4 +1,5 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../../behaviors/pageLoading')
 const audioLoading = require('../../../../behaviors/audioLoading')
 const audioApi = require('../../../../utils/audioApi')
@@ -100,8 +101,7 @@ Page({
       audio.seek(startTime)
       _this.finishLoading()
     }).catch(() => {
-      _this.finishLoading()
-      setTimeout(() => wx.navigateBack(), 1500)
+      errorHandler.goBack(_this)
     })
   },
   checkImg(e) {

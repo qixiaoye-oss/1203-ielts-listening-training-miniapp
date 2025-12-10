@@ -4,8 +4,8 @@
 
 > **注意**：这是一个基于 Behavior 的可复用方案，包含 JS 逻辑、WXML 模板和 WXSS 样式三部分。
 
-**版本：** v2.0.0
-**更新日期：** 2025-12-08
+**版本：** v3.0.0
+**更新日期：** 2025-12-10
 
 ---
 
@@ -25,23 +25,24 @@
 │  第2层：全局API兜底                                              │
 │    └─ api.js 延迟1秒显示原生 loading                            │
 │                                                                 │
-│  第3层：错误处理策略                                             │
-│    ├─ 策略A：退回上一级（详情页）                                │
-│    ├─ 策略B：显示重试按钮（首页/列表页）                         │
-│    ├─ 策略C：仅提示（用户操作）                                  │
-│    ├─ 策略D：静默失败（后台操作）                                │
-│    └─ 策略E：仅结束进度（非关键数据）                            │
+│  第3层：错误处理策略（utils/errorHandler.js）                    │
+│    ├─ 策略A：errorHandler.goBack() - 退回上一级                 │
+│    ├─ 策略B：errorHandler.showRetry() - 显示重试按钮            │
+│    ├─ 策略C：仅提示（api.js 自动 toast）                        │
+│    ├─ 策略D：静默失败（空 catch）                               │
+│    └─ 策略E：errorHandler.finishProgress() - 仅结束进度         │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ### 1.2 相关文件
 
-| 类型 | Behavior | WXML 模板 | 样式文件 |
-|------|----------|-----------|----------|
-| 页面进度条 | `behaviors/pageLoading.js` | `templates/page-loading.wxml` | `style/page-loading.wxss` |
-| 音频加载 | `behaviors/audioLoading.js` | `templates/audio-loading.wxml` | `style/audio-loading.wxss` |
-| 加载失败 | - | `templates/load-error.wxml` | `style/load-error.wxss` |
+| 类型 | Behavior | WXML 模板 | 样式文件 | 工具函数 |
+|------|----------|-----------|----------|----------|
+| 页面进度条 | `behaviors/pageLoading.js` | `templates/page-loading.wxml` | `style/page-loading.wxss` | - |
+| 音频加载 | `behaviors/audioLoading.js` | `templates/audio-loading.wxml` | `style/audio-loading.wxss` | - |
+| 加载失败 | `behaviors/loadError.js` | `templates/load-error.wxml` | `style/load-error.wxss` | - |
+| 错误处理 | - | - | - | `utils/errorHandler.js` |
 
 ---
 
@@ -315,27 +316,47 @@ function request(that, url, data, hasToast, method) {
 
 ### 6.1 快速引入
 
+**JS 文件：**
+```js
+const pageLoading = require('../../behaviors/pageLoading')
+const loadError = require('../../behaviors/loadError')
+
+Page({
+  behaviors: [pageLoading, loadError],
+  // ...
+})
+```
+
 **WXML 文件：**
 ```xml
 <import src="/templates/load-error.wxml" />
 <template is="loadError" data="{{loadError}}" />
 ```
 
-### 6.2 配套 JS 代码
+### 6.2 API 方法
+
+| 方法 | 说明 |
+|------|------|
+| `this.showLoadError()` | 显示加载失败状态 |
+| `this.hideLoadError()` | 隐藏加载失败状态 |
+
+### 6.3 配套 JS 代码
 
 ```js
+const api = getApp().api
+const errorHandler = getApp().errorHandler
+const pageLoading = require('../../behaviors/pageLoading')
+const loadError = require('../../behaviors/loadError')
+
 Page({
-  data: {
-    loadError: false
-  },
+  behaviors: [pageLoading, loadError],
 
   listData() {
-    this.setData({ loadError: false })
+    this.hideLoadError()
     api.request(this, '/api/list', {}, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      this.setData({ loadError: true })
+      errorHandler.showRetry(this)
     })
   },
 
@@ -346,7 +367,7 @@ Page({
 })
 ```
 
-### 6.3 样式说明
+### 6.4 样式说明
 
 ```css
 .load-error {
@@ -373,34 +394,62 @@ Page({
 
 ---
 
-## 七、代码模板
+## 七、错误处理工具（errorHandler）
 
-### 7.1 策略A：退回上一级
+### 7.1 快速引入
 
 ```js
+const errorHandler = getApp().errorHandler
+```
+
+### 7.2 API 方法
+
+| 方法 | 说明 | 适用场景 |
+|------|------|----------|
+| `errorHandler.goBack(page)` | 结束加载 → 1.5秒后退回 | 详情页、子页面加载失败 |
+| `errorHandler.showRetry(page)` | 结束加载 → 显示重试按钮 | 首页、列表页加载失败 |
+| `errorHandler.finishProgress(page)` | 仅结束加载状态 | 非关键数据加载失败 |
+
+### 7.3 特性
+
+- **自动处理多种加载状态**：自动检测并结束 `pageLoading` 和 `audioLoading`
+- **减少重复代码**：无需手动调用 `finishLoading()` + `finishAudioLoading()`
+- **统一入口**：所有错误处理走同一套逻辑
+
+---
+
+## 八、代码模板
+
+### 8.1 策略A：退回上一级
+
+```js
+const errorHandler = getApp().errorHandler
+
 listData() {
   api.request(this, '/api/detail', {}, true).then(() => {
     this.finishLoading()
   }).catch(() => {
-    this.finishLoading()
-    setTimeout(() => wx.navigateBack(), 1500)
+    errorHandler.goBack(this)
   })
 }
 ```
 
-### 7.2 策略B：显示重试按钮
+### 8.2 策略B：显示重试按钮
 
 ```js
+const errorHandler = getApp().errorHandler
+const pageLoading = require('../../behaviors/pageLoading')
+const loadError = require('../../behaviors/loadError')
+
 Page({
-  data: { loadError: false },
+  behaviors: [pageLoading, loadError],
 
   listData() {
-    this.setData({ loadError: false })
+    this.hideLoadError()
     api.request(this, '/api/list', {}, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      this.setData({ loadError: true })
+      errorHandler.showRetry(this)
     })
   },
 
@@ -411,7 +460,7 @@ Page({
 })
 ```
 
-### 7.3 策略C：仅提示
+### 8.3 策略C：仅提示
 
 ```js
 saveData() {
@@ -423,7 +472,7 @@ saveData() {
 }
 ```
 
-### 7.4 策略D：静默失败
+### 8.4 策略D：静默失败
 
 ```js
 autoSave() {
@@ -433,7 +482,21 @@ autoSave() {
 }
 ```
 
-### 7.5 策略C + 恢复状态
+### 8.5 策略E：仅结束进度
+
+```js
+const errorHandler = getApp().errorHandler
+
+loadOptionalData() {
+  api.request(this, '/api/optional', {}, true).then(() => {
+    this.finishLoading()
+  }).catch(() => {
+    errorHandler.finishProgress(this)
+  })
+}
+```
+
+### 8.6 策略C + 恢复状态
 
 ```js
 onToggleChange(e) {
@@ -451,16 +514,16 @@ onToggleChange(e) {
 
 ---
 
-## 八、注意事项
+## 九、注意事项
 
-### 8.1 确保 .catch() 存在
+### 9.1 确保 .catch() 存在
 
 每个 `api.request()` 调用都应该有 `.catch()` 处理，否则：
 - 控制台会出现 "Uncaught (in promise)" 错误
 - 进度条可能卡住不消失
 - 页面状态可能异常
 
-### 8.2 与 pageLoading 配合
+### 9.2 与 pageLoading 配合
 
 确保在 `.catch()` 中调用 `this.finishLoading()`，否则进度条会卡在 90%：
 
@@ -471,13 +534,13 @@ onToggleChange(e) {
 })
 ```
 
-### 8.3 退回时机
+### 9.3 退回时机
 
 使用策略A（退回）时，延迟 1.5 秒是为了让用户看到错误提示。
 
 ---
 
-## 九、已使用的页面
+## 十、已使用的页面
 
 ### 页面进度条
 
@@ -509,14 +572,15 @@ onToggleChange(e) {
 
 ---
 
-## 十、迁移到其他项目
+## 十一、迁移到其他项目
 
-### 10.1 复制文件
+### 11.1 复制文件
 
 ```
 behaviors/
 ├── pageLoading.js
-└── audioLoading.js
+├── audioLoading.js
+└── loadError.js
 
 templates/
 ├── page-loading.wxml
@@ -529,10 +593,22 @@ style/
 └── load-error.wxss
 
 utils/
-└── api.js（确保包含 reject 逻辑）
+├── api.js（确保包含 reject 逻辑）
+└── errorHandler.js
 ```
 
-### 10.2 在 app.wxss 中引入
+### 11.2 在 app.js 中引入
+
+```js
+const errorHandler = require('utils/errorHandler.js')
+
+App({
+  errorHandler: errorHandler,
+  // ...
+})
+```
+
+### 11.3 在 app.wxss 中引入
 
 ```css
 @import "style/page-loading.wxss";
@@ -540,7 +616,7 @@ utils/
 @import "style/load-error.wxss";
 ```
 
-### 10.3 逐页面接入
+### 11.4 逐页面接入
 
 1. 引入 pageLoading behavior
 2. 在 WXML 中添加模板
@@ -548,17 +624,18 @@ utils/
 
 ---
 
-## 十一、完整示例
+## 十二、完整示例
 
 ```js
 // pages/example/index.js
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../behaviors/pageLoading')
+const loadError = require('../../behaviors/loadError')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageLoading, loadError],
   data: {
-    loadError: false,
     list: []
   },
 
@@ -569,13 +646,12 @@ Page({
 
   // 策略B：初始化加载，失败显示重试
   listData() {
-    this.setData({ loadError: false })
+    this.hideLoadError()
     api.request(this, '/api/list', {}, true).then((data) => {
       this.setData({ list: data })
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      this.setData({ loadError: true })
+      errorHandler.showRetry(this)
     })
   },
 
@@ -619,7 +695,7 @@ Page({
 
 ---
 
-## 十二、Toast 提示规范
+## 十三、Toast 提示规范
 
 ### 应该使用 Toast 的场景
 
@@ -639,6 +715,6 @@ Page({
 
 ---
 
-**文档版本：** v2.0.0
-**最后更新：** 2025-12-08
+**文档版本：** v3.0.0
+**最后更新：** 2025-12-10
 **维护者：** 开发团队
