@@ -297,7 +297,8 @@ Page({
   // 获取数据
   listListening(isPull) {
     let _this = this
-    api.request(this, `/part/v1/sentence`, { ...this.options }, isPull, true).then(res => {
+    // hasToast=true 跳过全局loading，使用页面自定义进度条
+    api.request(this, `/part/v1/sentence`, { ...this.options }, true, 'GET').then(res => {
       wx.setStorageSync('listenings', res.list)
       this.setData({
         schedule: (((res.swiperCurrent + 1) / res.list.length) * 100),

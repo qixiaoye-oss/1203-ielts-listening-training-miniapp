@@ -1,7 +1,7 @@
 <import src="/templates/page-loading.wxml" />
 <import src="/templates/audio-loading.wxml" />
 <template is="pageLoading" data="{{loading, loadProgress}}" />
-<template is="audioLoading" data="{{audioDownProgress}}" />
+<template is="audioLoading" data="{{audioLoading, audioDownProgress}}" />
 <wxs src="/utils/util.wxs" module="wxsUtil" />
 <view class="explain">
   <view class="explain__question">
