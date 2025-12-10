@@ -177,32 +177,36 @@ Page({
     this.saveSentencePlayingRecord()
   },
 
-  // 切换下一个大句子
+  // 切换下一个大句子（使用节流防重复）
   nextSentence() {
-    this.stopAudio()
-    this.nextAudio()
+    this.throttleAction('nextSentence', () => {
+      this.stopAudio()
+      this.nextAudio()
+    })
   },
 
-  // 切换下一句-完全听懂
+  // 切换下一句-完全听懂（使用节流防重复）
   nextSentence2() {
-    const { swiperCurrent, list } = this.data
-    if (!list || !list[swiperCurrent]) return
+    this.throttleAction('nextSentence2', () => {
+      const { swiperCurrent, list } = this.data
+      if (!list || !list[swiperCurrent]) return
 
-    if (list[swiperCurrent].status == 0 || list[swiperCurrent].label) {
-      return
-    }
+      if (list[swiperCurrent].status == 0 || list[swiperCurrent].label) {
+        return
+      }
 
-    // 更新 this.data.list
-    this.setData({
-      [`list[${swiperCurrent}].status`]: '2',
+      // 更新 this.data.list
+      this.setData({
+        [`list[${swiperCurrent}].status`]: '2',
+      })
+
+      // 同步到 storage
+      list[swiperCurrent].status = '2'
+      wx.setStorageSync('listenings', list)
+
+      this.stopAudio()
+      this.nextAudio()
     })
-
-    // 同步到 storage
-    list[swiperCurrent].status = '2'
-    wx.setStorageSync('listenings', list)
-
-    this.stopAudio()
-    this.nextAudio()
   },
 
   // 播放下一个
