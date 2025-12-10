@@ -1,0 +1,70 @@
+<!--
+  骨架屏组件
+  支持多种预设类型：list / card / detail / user
+-->
+
+<view class="skeleton {{animate ? 'skeleton--animate' : ''}}" wx:if="{{loading}}">
+
+  <!-- 列表类型 -->
+  <block wx:if="{{type === 'list'}}">
+    <view class="skeleton-item" wx:for="{{rowsArray}}" wx:key="index">
+      <view class="skeleton-avatar {{avatarShape === 'square' ? 'skeleton-avatar--square' : ''}}" wx:if="{{avatar}}"></view>
+      <view class="skeleton-content">
+        <view class="skeleton-title" wx:if="{{title}}"></view>
+        <view class="skeleton-row"></view>
+        <view class="skeleton-row skeleton-row--short"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 卡片类型 -->
+  <block wx:elif="{{type === 'card'}}">
+    <view class="skeleton-card" wx:for="{{rowsArray}}" wx:key="index">
+      <view class="skeleton-card__image"></view>
+      <view class="skeleton-card__content">
+        <view class="skeleton-title"></view>
+        <view class="skeleton-row"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 详情类型 -->
+  <block wx:elif="{{type === 'detail'}}">
+    <view class="skeleton-detail">
+      <view class="skeleton-detail__title"></view>
+      <view class="skeleton-detail__meta">
+        <view class="skeleton-tag"></view>
+        <view class="skeleton-tag"></view>
+      </view>
+      <view class="skeleton-detail__content">
+        <view class="skeleton-row"></view>
+        <view class="skeleton-row"></view>
+        <view class="skeleton-row"></view>
+        <view class="skeleton-row skeleton-row--short"></view>
+      </view>
+      <view class="skeleton-detail__content">
+        <view class="skeleton-row"></view>
+        <view class="skeleton-row"></view>
+        <view class="skeleton-row skeleton-row--medium"></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 用户信息类型 -->
+  <block wx:elif="{{type === 'user'}}">
+    <view class="skeleton-user">
+      <view class="skeleton-user__avatar"></view>
+      <view class="skeleton-user__info">
+        <view class="skeleton-title"></view>
+        <view class="skeleton-row skeleton-row--short"></view>
+      </view>
+    </view>
+    <view class="skeleton-user__menu">
+      <view class="skeleton-menu-item" wx:for="{{3}}" wx:key="index">
+        <view class="skeleton-icon"></view>
+        <view class="skeleton-row skeleton-row--tiny"></view>
+      </view>
+    </view>
+  </block>
+
+</view>

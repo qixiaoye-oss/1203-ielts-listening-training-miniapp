@@ -4,7 +4,7 @@
 
 > **本文档目标**：确保其他项目通过阅读本文档，可以**完整、正确地复用**整套加载状态管理系统。
 
-**版本：** v4.1.0
+**版本：** v4.2.0
 **更新日期：** 2025-12-10
 
 ---
@@ -1464,7 +1464,59 @@ retryLoad() {
 
 ---
 
-## 九、变更日志
+## 九、骨架屏（可选扩展）
+
+骨架屏用于在内容加载时显示占位轮廓，提升用户感知体验。
+
+> 详细使用指南请参考：[骨架屏组件文档](./skeleton-guide.md)
+
+### 9.1 快速使用
+
+```xml
+<!-- 骨架屏（loading 为 true 时显示） -->
+<skeleton type="list" loading="{{loading}}" rows="5" avatar />
+
+<!-- 正常内容（loading 为 false 时显示） -->
+<view wx:if="{{!loading}}">
+  <view wx:for="{{list}}" wx:key="id">{{item.name}}</view>
+</view>
+```
+
+### 9.2 预设类型
+
+| 类型 | 说明 | 适用场景 |
+|------|------|----------|
+| `list` | 列表骨架 | 通知列表、训练列表 |
+| `card` | 卡片骨架 | 专辑卡片、课程卡片 |
+| `detail` | 详情骨架 | 文章详情、通知详情 |
+| `user` | 用户信息骨架 | 用户中心 |
+
+### 9.3 与加载系统配合
+
+```xml
+<!-- 进度条 -->
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+
+<!-- 骨架屏（loading 时显示，错误时隐藏） -->
+<skeleton type="list" loading="{{loading}}" rows="5" wx:if="{{!loadError}}" />
+
+<!-- 错误重试 -->
+<template is="loadError" data="{{loadError}}" />
+
+<!-- 正常内容 -->
+<view wx:if="{{!loading && !loadError}}">...</view>
+```
+
+---
+
+## 十、变更日志
+
+### v4.2.0 (2025-12-10)
+
+**新增功能：**
+- 添加骨架屏组件 `components/skeleton`
+- 添加骨架屏样式 `style/skeleton.wxss`
+- 添加骨架屏文档 `docs/skeleton-guide.md`
 
 ### v4.1.0 (2025-12-10)
 
@@ -1492,6 +1544,6 @@ retryLoad() {
 
 ---
 
-**文档版本：** v4.1.0
+**文档版本：** v4.2.0
 **最后更新：** 2025-12-10
 **维护者：** 开发团队
