@@ -2,10 +2,24 @@
 
 微信小程序加载状态管理的统一方案，包含加载动效、错误处理策略、页面安全守卫和复用指南。
 
-> **注意**：这是一个基于 Behavior 的可复用方案，包含 JS 逻辑、WXML 模板和 WXSS 样式三部分。
+> **本文档目标**：确保其他项目通过阅读本文档，可以**完整、正确地复用**整套加载状态管理系统。
 
-**版本：** v4.0.0
+**版本：** v4.1.0
 **更新日期：** 2025-12-10
+
+---
+
+## 目录
+
+1. [概述](#一概述)
+2. [文件结构与依赖](#二文件结构与依赖)
+3. [完整源码](#三完整源码)
+4. [使用方法](#四使用方法)
+5. [错误处理策略](#五错误处理策略)
+6. [迁移到其他项目](#六迁移到其他项目)
+7. [常见问题](#七常见问题)
+8. [迁移检查清单](#八迁移检查清单)
+9. [变更日志](#九变更日志)
 
 ---
 
@@ -14,187 +28,773 @@
 ### 1.1 架构图
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     加载状态管理体系                              │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  第1层：加载动效                                                 │
-│    ├─ pageLoading（页面进度条）                                  │
-│    └─ audioLoading（音频圆饼进度）                                │
-│                                                                 │
-│  第2层：全局API兜底                                              │
-│    └─ api.js 延迟1秒显示原生 loading                            │
-│                                                                 │
-│  第3层：页面守卫 + 错误处理（behaviors/pageGuard.js）            │
-│    ├─ 定时器安全管理（页面切换时自动清理）                       │
-│    ├─ 导航锁（防重复点击/导航）                                  │
-│    ├─ 数据就绪状态追踪                                          │
-│    ├─ 策略A：pageGuard.goBack() - 退回上一级                    │
-│    ├─ 策略B：pageGuard.showRetry() - 显示重试按钮               │
-│    ├─ 策略C：仅提示（api.js 自动 toast）                        │
-│    ├─ 策略D：静默失败（空 catch）                               │
-│    └─ 策略E：pageGuard.finishProgress() - 仅结束进度            │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           加载状态管理体系                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ 第1层：加载动效（视觉反馈）                                           │   │
+│  │   ├─ pageLoading     页面顶部进度条，模拟加载进度 0→90→100           │   │
+│  │   ├─ audioLoading    全屏圆饼进度，显示实际音频下载进度               │   │
+│  │   └─ audioPageLoading 组合上述两者，用于音频页面                      │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ 第2层：全局 API 兜底                                                  │   │
+│  │   └─ api.js 请求超过1秒自动显示原生 loading                          │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ 第3层：页面守卫 + 错误处理（pageGuard）                               │   │
+│  │   ├─ 定时器安全管理    页面隐藏/卸载时自动清理，防止内存泄漏          │   │
+│  │   ├─ 导航锁            防止快速点击导致多次跳转                       │   │
+│  │   ├─ 数据就绪状态      确保数据加载完成后才响应操作                   │   │
+│  │   └─ 错误处理策略      goBack / showRetry / finishProgress          │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │ 第4层：加载失败 UI（loadError）                                       │   │
+│  │   └─ 显示"加载失败"文案 + 重试按钮                                   │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.2 相关文件
+### 1.2 模块关系图
 
-| 类型 | Behavior | WXML 模板 | 样式文件 |
-|------|----------|-----------|----------|
-| 页面守卫 | `behaviors/pageGuard.js` | - | - |
-| 页面进度条 | `behaviors/pageLoading.js` | `templates/page-loading.wxml` | `style/page-loading.wxss` |
-| 音频加载 | `behaviors/audioLoading.js` | `templates/audio-loading.wxml` | `style/audio-loading.wxss` |
-| 加载失败 | `behaviors/loadError.js` | `templates/load-error.wxml` | `style/load-error.wxss` |
+```
+                    ┌──────────────────┐
+                    │    pageGuard     │ ← 页面守卫（必须）
+                    │   .behavior      │
+                    └────────┬─────────┘
+                             │
+            ┌────────────────┼────────────────┐
+            │                │                │
+            ▼                ▼                ▼
+    ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+    │ pageLoading  │ │ audioLoading │ │  loadError   │
+    │  页面进度条   │ │  音频进度    │ │  失败重试    │
+    └──────────────┘ └──────────────┘ └──────────────┘
+            │                │
+            └────────┬───────┘
+                     ▼
+            ┌──────────────────┐
+            │ audioPageLoading │ ← 组合 Behavior
+            │  音频页面专用     │
+            └──────────────────┘
+```
+
+### 1.3 文件清单
+
+| 类型 | 文件路径 | 说明 |
+|------|----------|------|
+| **Behavior** | `behaviors/pageGuard.js` | 页面守卫（核心） |
+| **Behavior** | `behaviors/pageLoading.js` | 页面进度条 |
+| **Behavior** | `behaviors/audioLoading.js` | 音频加载进度 |
+| **Behavior** | `behaviors/audioPageLoading.js` | 组合 Behavior |
+| **Behavior** | `behaviors/loadError.js` | 加载失败状态 |
+| **模板** | `templates/page-loading.wxml` | 进度条模板 |
+| **模板** | `templates/audio-loading.wxml` | 音频加载模板 |
+| **模板** | `templates/load-error.wxml` | 失败重试模板 |
+| **样式** | `style/page-loading.wxss` | 进度条样式 |
+| **样式** | `style/audio-loading.wxss` | 音频加载样式 |
+| **样式** | `style/load-error.wxss` | 失败重试样式 |
 
 ---
 
-## 二、页面进度条（pageLoading）
+## 二、文件结构与依赖
 
-用于页面数据加载时显示顶部进度条动画。
+### 2.1 目录结构
 
-### 2.1 快速引入
+```
+project/
+├── app.js                      # 全局注册 pageGuard
+├── app.wxss                    # 引入所有样式
+├── behaviors/
+│   ├── pageGuard.js            # 【核心】页面守卫
+│   ├── pageLoading.js          # 页面进度条
+│   ├── audioLoading.js         # 音频加载进度
+│   ├── audioPageLoading.js     # 组合 Behavior
+│   └── loadError.js            # 加载失败状态
+├── templates/
+│   ├── page-loading.wxml       # 进度条模板
+│   ├── audio-loading.wxml      # 音频加载模板
+│   └── load-error.wxml         # 失败重试模板
+├── style/
+│   ├── page-loading.wxss       # 进度条样式
+│   ├── audio-loading.wxss      # 音频加载样式
+│   └── load-error.wxss         # 失败重试样式
+└── pages/
+    └── xxx/
+        ├── index.js            # 引入 behaviors
+        └── index.wxml          # 引入 templates
+```
 
-**JS 文件：**
+### 2.2 依赖关系
+
+```
+app.wxss
+  └── @import "style/page-loading.wxss"
+  └── @import "style/audio-loading.wxss"
+  └── @import "style/load-error.wxss"
+
+页面.js
+  └── require('behaviors/pageGuard')      → 导出 { behavior, goBack, showRetry, finishProgress }
+  └── require('behaviors/pageLoading')    → 导出 Behavior
+  └── require('behaviors/loadError')      → 导出 Behavior
+
+页面.wxml
+  └── <import src="/templates/page-loading.wxml" />
+  └── <import src="/templates/load-error.wxml" />
+```
+
+---
+
+## 三、完整源码
+
+### 3.1 behaviors/pageGuard.js
+
+> **说明**：页面守卫是整套系统的核心，提供定时器管理、导航锁、错误处理策略。
+
 ```js
-const pageLoading = require('../../behaviors/pageLoading')
+/**
+ * 页面守卫 Behavior
+ *
+ * 功能：
+ * 1. 定时器安全管理（页面切换时自动清理）
+ * 2. 页面状态追踪（活跃、数据就绪）
+ * 3. 错误处理策略（goBack、showRetry、finishProgress）
+ * 4. 防重复点击/导航
+ *
+ * 使用方式：
+ * const pageGuard = require('../../behaviors/pageGuard')
+ *
+ * Page({
+ *   behaviors: [pageGuard.behavior],
+ *
+ *   loadData() {
+ *     api.request(...).then(() => {
+ *       this.setDataReady()
+ *     }).catch(() => {
+ *       pageGuard.goBack(this)
+ *     })
+ *   },
+ *
+ *   onButtonTap() {
+ *     this.navigateTo('/pages/xxx/index')
+ *   }
+ * })
+ */
 
-Page({
-  behaviors: [pageLoading],
-  // ...
+// ============================================================
+// 全局状态
+// ============================================================
+
+const pageTimers = new WeakMap()
+let isNavigating = false
+let navigatingTimer = null
+
+// ============================================================
+// 定时器管理（内部）
+// ============================================================
+
+function _registerTimer(page, name, callback, delay) {
+  if (!pageTimers.has(page)) {
+    pageTimers.set(page, new Map())
+  }
+  const timers = pageTimers.get(page)
+
+  if (timers.has(name)) {
+    clearTimeout(timers.get(name))
+  }
+
+  const timerId = setTimeout(() => {
+    timers.delete(name)
+    if (page.data._isPageActive) {
+      callback()
+    }
+  }, delay)
+
+  timers.set(name, timerId)
+  return timerId
+}
+
+function _clearPageTimers(page) {
+  const timers = pageTimers.get(page)
+  if (timers) {
+    timers.forEach(id => clearTimeout(id))
+    timers.clear()
+  }
+}
+
+// ============================================================
+// 导航锁管理（内部）
+// ============================================================
+
+function _lockNavigation(duration = 1500) {
+  isNavigating = true
+  if (navigatingTimer) {
+    clearTimeout(navigatingTimer)
+  }
+  navigatingTimer = setTimeout(() => {
+    isNavigating = false
+  }, duration)
+}
+
+function _unlockNavigation() {
+  isNavigating = false
+  if (navigatingTimer) {
+    clearTimeout(navigatingTimer)
+    navigatingTimer = null
+  }
+}
+
+// ============================================================
+// 错误处理工具函数（静态方法）
+// ============================================================
+
+function _finishAllLoading(page) {
+  if (page.finishLoading) page.finishLoading()
+  if (page.finishAudioLoading) page.finishAudioLoading()
+}
+
+/**
+ * 策略A：退回上一级
+ * 适用场景：详情页、子页面初始化加载失败
+ * @param {Object} page - 页面实例
+ */
+function goBack(page) {
+  _finishAllLoading(page)
+
+  if (page.registerTimer) {
+    page.registerTimer('__goBack', () => wx.navigateBack(), 1500)
+  } else {
+    // 降级处理：兼容未使用 pageGuard 的页面
+    setTimeout(() => {
+      const pages = getCurrentPages()
+      if (pages[pages.length - 1] === page) {
+        wx.navigateBack()
+      }
+    }, 1500)
+  }
+}
+
+/**
+ * 策略B：显示重试按钮
+ * 适用场景：首页、列表页初始化加载失败
+ * @param {Object} page - 页面实例
+ */
+function showRetry(page) {
+  _finishAllLoading(page)
+  if (page.showLoadError) {
+    page.showLoadError()
+  } else {
+    page.setData({ loadError: true })
+  }
+}
+
+/**
+ * 策略E：仅结束进度
+ * 适用场景：非关键数据加载失败
+ * @param {Object} page - 页面实例
+ */
+function finishProgress(page) {
+  _finishAllLoading(page)
+}
+
+/**
+ * 检查是否正在导航中
+ * @returns {boolean}
+ */
+function checkIsNavigating() {
+  return isNavigating
+}
+
+// ============================================================
+// Behavior 定义
+// ============================================================
+
+const behavior = Behavior({
+  data: {
+    _isPageActive: true,
+    _isDataReady: false
+  },
+
+  pageLifetimes: {
+    show() {
+      this.setData({ _isPageActive: true })
+      _unlockNavigation()
+    },
+    hide() {
+      this.setData({ _isPageActive: false })
+      _clearPageTimers(this)
+    }
+  },
+
+  lifetimes: {
+    detached() {
+      _clearPageTimers(this)
+    }
+  },
+
+  methods: {
+    // ==================== 定时器管理 ====================
+
+    /**
+     * 注册安全定时器（页面隐藏时自动取消）
+     * @param {string} name - 定时器名称
+     * @param {Function} callback - 回调函数
+     * @param {number} delay - 延迟毫秒数
+     */
+    registerTimer(name, callback, delay) {
+      return _registerTimer(this, name, callback, delay)
+    },
+
+    /**
+     * 取消指定定时器
+     * @param {string} name - 定时器名称
+     */
+    cancelTimer(name) {
+      const timers = pageTimers.get(this)
+      if (timers && timers.has(name)) {
+        clearTimeout(timers.get(name))
+        timers.delete(name)
+      }
+    },
+
+    // ==================== 数据状态管理 ====================
+
+    /**
+     * 标记数据已就绪
+     */
+    setDataReady() {
+      this.setData({ _isDataReady: true })
+    },
+
+    /**
+     * 检查数据是否就绪
+     * @returns {boolean}
+     */
+    isDataReady() {
+      return this.data._isDataReady
+    },
+
+    // ==================== 安全导航（防重复点击） ====================
+
+    /**
+     * 安全导航到新页面
+     * @param {string} url - 页面路径
+     * @param {object} options - 配置项
+     * @param {boolean} options.checkReady - 是否检查数据就绪，默认 true
+     * @param {string} options.loadingMsg - 数据未就绪时的提示
+     * @returns {boolean} 是否成功发起导航
+     */
+    navigateTo(url, options = {}) {
+      if (isNavigating) return false
+
+      if (options.checkReady !== false && !this.data._isDataReady) {
+        wx.showToast({ title: options.loadingMsg || '数据加载中...', icon: 'none' })
+        return false
+      }
+
+      _lockNavigation()
+      wx.navigateTo({
+        url,
+        fail: () => _unlockNavigation()
+      })
+      return true
+    },
+
+    /**
+     * 安全重定向
+     * @param {string} url - 页面路径
+     * @returns {boolean}
+     */
+    redirectTo(url) {
+      if (isNavigating) return false
+      _lockNavigation()
+      wx.redirectTo({
+        url,
+        fail: () => _unlockNavigation()
+      })
+      return true
+    },
+
+    /**
+     * 安全返回
+     * @param {number} delta - 返回层数，默认 1
+     * @returns {boolean}
+     */
+    navigateBack(delta = 1) {
+      if (isNavigating) return false
+      _lockNavigation()
+      wx.navigateBack({
+        delta,
+        fail: () => _unlockNavigation()
+      })
+      return true
+    },
+
+    /**
+     * 安全切换 Tab
+     * @param {string} url - Tab 页面路径
+     * @returns {boolean}
+     */
+    switchTab(url) {
+      if (isNavigating) return false
+      _lockNavigation()
+      wx.switchTab({
+        url,
+        fail: () => _unlockNavigation()
+      })
+      return true
+    },
+
+    // ==================== 防重复操作 ====================
+
+    /**
+     * 节流操作（同一操作在指定时间内只执行一次）
+     * @param {string} name - 操作名称
+     * @param {Function} fn - 要执行的函数
+     * @param {number} delay - 节流时间（毫秒），默认 1000
+     * @returns {boolean} 是否成功执行
+     */
+    throttleAction(name, fn, delay = 1000) {
+      const key = `_throttle_${name}`
+      if (this[key]) return false
+
+      this[key] = true
+      this.registerTimer(`__throttle_${name}`, () => {
+        this[key] = false
+      }, delay)
+
+      fn()
+      return true
+    }
+  }
+})
+
+// ============================================================
+// 导出（使用包装对象避免修改 Behavior 返回值）
+// ============================================================
+
+module.exports = {
+  // Behavior 本身（用于 behaviors 数组）
+  behavior: behavior,
+  // 静态方法
+  goBack: goBack,
+  showRetry: showRetry,
+  finishProgress: finishProgress,
+  isNavigating: checkIsNavigating
+}
+```
+
+### 3.2 behaviors/pageLoading.js
+
+```js
+/**
+ * 页面加载进度条 Behavior
+ * 用于在页面数据加载时显示顶部进度条动画
+ */
+module.exports = Behavior({
+  data: {
+    // 加载进度条状态
+    loading: false,
+    loadProgress: 0
+  },
+
+  methods: {
+    /**
+     * 开始加载进度条动画
+     */
+    startLoading() {
+      this.setData({
+        loading: true,
+        loadProgress: 0
+      })
+      this.simulateProgress()
+    },
+
+    /**
+     * 模拟进度增长动画
+     * 进度增长速度逐渐变慢，最多到90%
+     */
+    simulateProgress() {
+      const that = this
+      let progress = 0
+      // 清除之前的定时器
+      if (this.progressTimer) {
+        clearInterval(this.progressTimer)
+      }
+      this.progressTimer = setInterval(() => {
+        if (progress < 90) {
+          // 模拟进度增长，速度逐渐变慢
+          const increment = Math.max(1, (90 - progress) / 10)
+          progress = Math.min(90, progress + increment)
+          that.setData({
+            loadProgress: progress
+          })
+        }
+      }, 100)
+    },
+
+    /**
+     * 完成加载，进度条快速到100%后隐藏
+     */
+    finishLoading() {
+      // 清除模拟进度的定时器
+      if (this.progressTimer) {
+        clearInterval(this.progressTimer)
+        this.progressTimer = null
+      }
+      // 快速完成到100%
+      this.setData({
+        loadProgress: 100
+      })
+      // 延迟隐藏进度条
+      setTimeout(() => {
+        this.setData({
+          loading: false,
+          loadProgress: 0
+        })
+      }, 300)
+    }
+  }
 })
 ```
 
-**WXML 文件：**
+### 3.3 behaviors/audioLoading.js
+
+```js
+/**
+ * 音频加载进度 Behavior
+ * 用于显示音频下载的圆饼进度
+ */
+module.exports = Behavior({
+  data: {
+    // 音频下载进度 (0-100)，默认100表示不显示遮罩
+    audioDownProgress: 100
+  },
+
+  methods: {
+    /**
+     * 开始音频加载（重置进度为0）
+     */
+    startAudioLoading() {
+      this.setData({ audioDownProgress: 0 })
+    },
+
+    /**
+     * 更新音频加载进度
+     * @param {number} progress - 进度值 (0-100)
+     */
+    updateAudioProgress(progress) {
+      this.setData({ audioDownProgress: progress })
+    },
+
+    /**
+     * 完成音频加载
+     */
+    finishAudioLoading() {
+      this.setData({ audioDownProgress: 100 })
+    }
+  }
+})
+```
+
+### 3.4 behaviors/audioPageLoading.js
+
+```js
+/**
+ * 音频页面加载 Behavior（组合）
+ *
+ * 整合 pageLoading 和 audioLoading，提供统一的加载体验：
+ * 1. 页面加载时同时启动进度条和音频遮罩
+ * 2. 音频遮罩优先显示，避免页面内容闪烁
+ * 3. 加载完成后先隐藏遮罩，再完成进度条动画
+ *
+ * 使用方式：
+ * const audioPageLoading = require('../../behaviors/audioPageLoading')
+ *
+ * Page({
+ *   behaviors: [audioPageLoading],
+ *
+ *   onLoad() {
+ *     this.startAudioPageLoading()
+ *     this.loadData()
+ *   },
+ *
+ *   loadData() {
+ *     api.request(...).then(() => {
+ *       return audioApi.initAudio(url, (progress) => {
+ *         this.updateAudioProgress(progress)
+ *       })
+ *     }).then(() => {
+ *       this.finishAudioPageLoading()
+ *     })
+ *   }
+ * })
+ */
+
+const pageLoading = require('./pageLoading')
+const audioLoading = require('./audioLoading')
+
+module.exports = Behavior({
+  behaviors: [pageLoading, audioLoading],
+
+  methods: {
+    /**
+     * 开始音频页面加载
+     * 同时启动进度条和音频遮罩，遮罩会覆盖在进度条上方
+     */
+    startAudioPageLoading() {
+      this.startLoading()
+      this.startAudioLoading()
+    },
+
+    /**
+     * 完成音频页面加载
+     * 先隐藏遮罩，再完成进度条动画（90% → 100%）
+     */
+    finishAudioPageLoading() {
+      this.finishAudioLoading()
+      this.finishLoading()
+    }
+  }
+})
+```
+
+### 3.5 behaviors/loadError.js
+
+```js
+/**
+ * 加载失败重试 Behavior
+ * 用于策略B：显示重试按钮
+ *
+ * 使用方式：
+ * 1. 在页面 JS 中引入：const loadError = require('../../behaviors/loadError')
+ * 2. 添加到 behaviors：behaviors: [pageGuard.behavior, pageLoading, loadError]
+ * 3. 在 WXML 中引入模板：<import src="/templates/load-error.wxml" />
+ * 4. 使用模板：<template is="loadError" data="{{loadError}}" />
+ * 5. 实现 retryLoad 方法
+ */
+module.exports = Behavior({
+  data: {
+    loadError: false
+  },
+
+  methods: {
+    /**
+     * 显示加载失败状态
+     */
+    showLoadError() {
+      this.setData({ loadError: true })
+    },
+
+    /**
+     * 隐藏加载失败状态
+     */
+    hideLoadError() {
+      this.setData({ loadError: false })
+    }
+  }
+})
+```
+
+### 3.6 templates/page-loading.wxml
+
 ```xml
-<import src="/templates/page-loading.wxml" />
-<template is="pageLoading" data="{{loading, loadProgress}}" />
+<template name="pageLoading">
+  <view class="page-loading-bar" wx:if="{{loading}}">
+    <view class="page-loading-bar__inner" style="width: {{loadProgress}}%;"></view>
+  </view>
+</template>
 ```
 
-### 2.2 API 方法
+### 3.7 templates/audio-loading.wxml
 
-| 方法 | 说明 |
-|------|------|
-| `this.startLoading()` | 开始加载，显示进度条并启动动画 |
-| `this.finishLoading()` | 完成加载，进度条快速到 100% 后隐藏 |
-
-### 2.3 Data 属性
-
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `loading` | Boolean | 是否显示进度条 |
-| `loadProgress` | Number | 当前进度值 (0-100) |
-
-### 2.4 动画机制
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     进度条动画流程                                │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  startLoading() 调用后：                                         │
-│     1. 显示进度条 (loading = true)                               │
-│     2. 启动模拟进度动画                                           │
-│        └─ 每 100ms 增长，速度逐渐变慢                             │
-│        └─ 最多增长到 90%（等待实际完成）                          │
-│                                                                 │
-│  finishLoading() 调用后：                                        │
-│     1. 停止模拟动画                                              │
-│     2. 快速跳到 100%                                             │
-│     3. 延迟 300ms 后隐藏进度条                                   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+```xml
+<template name="audioLoading">
+  <view class="audio-loading-mask" wx:if="{{audioDownProgress < 100}}">
+    <view class="audio-loading-pie" style="background: conic-gradient(var(--theme-color, #3478F6) {{audioDownProgress * 3.6}}deg, #f5f5f5 {{audioDownProgress * 3.6}}deg);"></view>
+    <view class="audio-loading-text">音频加载中...</view>
+  </view>
+</template>
 ```
 
-### 2.5 样式说明
+### 3.8 templates/load-error.wxml
 
-进度条固定在页面顶部，高度 3px，带有渐变色和光泽动画效果。
+```xml
+<template name="loadError">
+  <view class="load-error" wx:if="{{loadError}}">
+    <view class="load-error__text">加载失败</view>
+    <view class="load-error__btn" bindtap="retryLoad">点击重试</view>
+  </view>
+</template>
+```
+
+### 3.9 style/page-loading.wxss
 
 ```css
+/* 页面加载进度条样式 */
 .page-loading-bar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 3px;
+  background-color: rgba(0, 0, 0, 0.05);
   z-index: 9999;
+  overflow: hidden;
 }
 
 .page-loading-bar__inner {
+  height: 100%;
   background: linear-gradient(90deg, var(--theme-color, #007bff), #00c6ff);
-  /* 带有闪光动画效果 */
+  transition: width 0.1s ease-out;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+  position: relative;
+}
+
+.page-loading-bar__inner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4));
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100px);
+  }
+  100% {
+    transform: translateX(100px);
+  }
 }
 ```
 
----
-
-## 三、音频加载进度（audioLoading）
-
-用于音频下载时显示全屏圆饼进度动画。
-
-### 3.1 快速引入
-
-**JS 文件：**
-```js
-const audioLoading = require('../../behaviors/audioLoading')
-
-Page({
-  behaviors: [audioLoading],
-  // ...
-})
-```
-
-**WXML 文件：**
-```xml
-<import src="/templates/audio-loading.wxml" />
-<template is="audioLoading" data="{{audioDownProgress}}" />
-```
-
-### 3.2 API 方法
-
-| 方法 | 说明 |
-|------|------|
-| `this.startAudioLoading()` | 开始加载，重置进度为 0 |
-| `this.updateAudioProgress(progress)` | 更新进度值 (0-100) |
-| `this.finishAudioLoading()` | 完成加载，进度设为 100 |
-
-### 3.3 Data 属性
-
-| 属性 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `audioDownProgress` | Number | 100 | 音频下载进度 (0-100)，100 时隐藏遮罩 |
-
-### 3.4 使用示例
-
-```js
-const audioLoading = require('../../behaviors/audioLoading')
-const audioApi = require('../../utils/audioApi')
-
-Page({
-  behaviors: [audioLoading],
-
-  loadAudio(url) {
-    this.startAudioLoading()
-    audioApi.initAudio(url, (progress) => {
-      this.updateAudioProgress(progress)
-    }).then(() => {
-      this.finishAudioLoading()
-    }).catch(() => {
-      this.finishAudioLoading()
-    })
-  }
-})
-```
-
-### 3.5 样式说明
-
-全屏白色遮罩 + 圆饼进度动画，使用 CSS `conic-gradient` 实现。
+### 3.10 style/audio-loading.wxss
 
 ```css
+/* 音频加载圆饼进度样式 */
 .audio-loading-mask {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   z-index: 9999;
 }
 
@@ -202,300 +802,21 @@ Page({
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  /* 使用 conic-gradient 实现圆饼进度 */
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.audio-loading-text {
+  margin-top: 16px;
+  color: #333;
+  font-size: 14px;
 }
 ```
 
----
-
-## 四、全局 API 兜底机制
-
-位于 `utils/api.js` 中，作为加载提示的兜底方案。
-
-### 4.1 核心逻辑
-
-```js
-// 请求超过 1 秒才显示 loading
-if (!hasToast) {
-  timer = setTimeout(function () {
-    wx.showLoading({ title: '努力加载中...' })
-  }, 1000)
-}
-```
-
-### 4.2 设计原则
-
-- **快速请求（<1秒）**：不显示任何全局提示
-- **慢速请求（>1秒）**：自动显示原生 loading 作为兜底
-- **页面使用进度条时**：传入 `hasToast=true` 跳过全局 loading
-
----
-
-## 五、错误处理策略
-
-### 5.1 API reject 机制
-
-```js
-function request(that, url, data, hasToast, method) {
-  return new Promise((resolve, reject) => {
-    wx.request({
-      success: function (res) {
-        wx.hideLoading()
-        if (res.data.code == '200') {
-          resolve(res.data.data)
-        } else {
-          // 业务错误：显示错误信息并 reject
-          toast(res.data.msg || res.data.message)
-          reject(res.data)
-        }
-      },
-      fail: function (res) {
-        // 网络错误：显示通用错误并 reject
-        wx.hideLoading()
-        toast('请求失败，请稍候再试')
-        reject(res)
-      }
-    })
-  })
-}
-```
-
-### 5.2 五种处理策略
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        错误处理策略                              │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  策略A【退回】：显示错误 → 1.5秒后退回上一级                       │
-│     适用：详情页、子页面初始化加载失败                            │
-│     代码：setTimeout(() => wx.navigateBack(), 1500)             │
-│                                                                 │
-│  策略B【重试】：显示错误 → 展示重试按钮                           │
-│     适用：首页、列表页初始化加载失败                              │
-│     代码：this.setData({ loadError: true })                     │
-│                                                                 │
-│  策略C【提示】：仅显示错误提示（已在 api.js 中 toast）            │
-│     适用：用户操作失败（保存、提交、删除等）                       │
-│     代码：.catch(() => { /* 错误已提示 */ })                    │
-│                                                                 │
-│  策略D【静默】：不显示错误，静默失败                              │
-│     适用：自动保存、埋点上报、播放记录等后台操作                   │
-│     代码：.catch(() => { /* 静默失败 */ })                      │
-│                                                                 │
-│  策略E【结束进度】：仅结束进度条，不额外处理                       │
-│     适用：非关键的辅助数据加载                                   │
-│     代码：.catch(() => { this.finishLoading() })                │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### 5.3 策略选择指南
-
-**按请求类型选择：**
-
-| 请求类型 | 推荐策略 | 说明 |
-|----------|----------|------|
-| 页面初始化（有上一级） | A 退回 | 用户可返回重新进入 |
-| 页面初始化（无上一级） | B 重试 | 首页、入口页等 |
-| 用户主动操作 | C 提示 | 保存、提交、删除等 |
-| 后台自动操作 | D 静默 | 自动保存、埋点、记录等 |
-| 辅助数据加载 | E 结束进度 | 非必需数据 |
-
-**按页面类型选择：**
-
-| 页面类型 | 初始化加载 | 用户操作 |
-|----------|------------|----------|
-| 首页 | B 重试 | C 提示 |
-| 列表页 | B 重试 | C 提示 |
-| 详情页 | A 退回 | C 提示 |
-| 设置页 | A 退回 | C 提示 + 恢复状态 |
-| 编辑页 | A 退回 | C 提示 |
-| 训练页 | A 退回 | D 静默（自动保存） |
-
----
-
-## 六、页面守卫（pageGuard）
-
-提供定时器安全管理、导航锁、数据就绪状态追踪和错误处理策略。
-
-### 6.1 快速引入
-
-**JS 文件：**
-```js
-const pageGuard = require('../../behaviors/pageGuard')
-const pageLoading = require('../../behaviors/pageLoading')
-
-Page({
-  behaviors: [pageGuard, pageLoading],
-  // ...
-})
-```
-
-### 6.2 核心功能
-
-#### 定时器安全管理
-
-页面切换时自动清理定时器，防止页面隐藏后定时器仍然执行导致的问题：
-
-```js
-// 注册定时器（会在页面隐藏/卸载时自动清理）
-this.registerTimer('myTimer', () => {
-  // 只有页面活跃时才会执行
-  console.log('定时器执行')
-}, 1500)
-
-// 手动取消定时器
-this.cancelTimer('myTimer')
-```
-
-#### 导航锁（防重复点击）
-
-防止快速连续点击导致多次页面跳转：
-
-```js
-// 使用安全导航方法（自动加锁）
-this.navigateTo('/pages/detail/index?id=123')
-this.redirectTo('/pages/result/index')
-this.navigateBack()
-
-// 使用节流方法包装操作
-this.throttleAction('submit', () => {
-  // 1秒内只会执行一次
-  this.submitForm()
-})
-```
-
-#### 数据就绪状态
-
-确保页面数据加载完成后才响应用户操作：
-
-```js
-// 在数据加载完成后标记
-listData() {
-  api.request(this, '/api/list', {}).then(res => {
-    this.setData({ list: res })
-    this.setDataReady()  // 标记数据就绪
-  })
-}
-
-// 在需要检查数据的地方
-handleClick() {
-  if (!this.isDataReady()) {
-    return  // 数据未就绪，不处理
-  }
-  // 处理点击...
-}
-```
-
-### 6.3 错误处理方法
-
-| 方法 | 说明 | 适用场景 |
-|------|------|----------|
-| `pageGuard.goBack(page)` | 结束加载 → 1.5秒后退回 | 详情页、子页面加载失败 |
-| `pageGuard.showRetry(page)` | 结束加载 → 显示重试按钮 | 首页、列表页加载失败 |
-| `pageGuard.finishProgress(page)` | 仅结束加载状态 | 非关键数据加载失败 |
-
-### 6.4 使用示例
-
-```js
-const api = getApp().api
-const pageGuard = require('../../behaviors/pageGuard')
-const pageLoading = require('../../behaviors/pageLoading')
-
-Page({
-  behaviors: [pageGuard, pageLoading],
-
-  onLoad() {
-    this.startLoading()
-    this.listData()
-  },
-
-  listData() {
-    api.request(this, '/api/detail', {}, true).then(res => {
-      this.setData({ detail: res })
-      this.setDataReady()
-      this.finishLoading()
-    }).catch(() => {
-      pageGuard.goBack(this)
-    })
-  },
-
-  // 使用安全导航
-  toDetail(e) {
-    this.navigateTo('/pages/sub/index?id=' + e.currentTarget.dataset.id)
-  },
-
-  // 使用节流防重复提交
-  submit() {
-    this.throttleAction('submit', () => {
-      this.doSubmit()
-    })
-  }
-})
-```
-
----
-
-## 七、加载失败模板（loadError）
-
-### 7.1 快速引入
-
-**JS 文件：**
-```js
-const pageGuard = require('../../behaviors/pageGuard')
-const pageLoading = require('../../behaviors/pageLoading')
-const loadError = require('../../behaviors/loadError')
-
-Page({
-  behaviors: [pageGuard, pageLoading, loadError],
-  // ...
-})
-```
-
-**WXML 文件：**
-```xml
-<import src="/templates/load-error.wxml" />
-<template is="loadError" data="{{loadError}}" />
-```
-
-### 7.2 API 方法
-
-| 方法 | 说明 |
-|------|------|
-| `this.showLoadError()` | 显示加载失败状态 |
-| `this.hideLoadError()` | 隐藏加载失败状态 |
-
-### 7.3 配套 JS 代码
-
-```js
-const api = getApp().api
-const pageGuard = require('../../behaviors/pageGuard')
-const pageLoading = require('../../behaviors/pageLoading')
-const loadError = require('../../behaviors/loadError')
-
-Page({
-  behaviors: [pageGuard, pageLoading, loadError],
-
-  listData() {
-    this.hideLoadError()
-    api.request(this, '/api/list', {}, true).then(() => {
-      this.finishLoading()
-    }).catch(() => {
-      pageGuard.showRetry(this)
-    })
-  },
-
-  retryLoad() {
-    this.startLoading()
-    this.listData()
-  }
-})
-```
-
-### 7.4 样式说明
+### 3.11 style/load-error.wxss
 
 ```css
+/* 加载失败重试样式 */
 .load-error {
   display: flex;
   flex-direction: column;
@@ -515,25 +836,164 @@ Page({
   background: var(--theme-color, #007bff);
   color: #fff;
   border-radius: 6px;
+  font-size: 15px;
+}
+
+.load-error__btn:active {
+  opacity: 0.8;
 }
 ```
 
 ---
 
-## 八、代码模板
+## 四、使用方法
 
-### 8.1 策略A：退回上一级
+### 4.1 引入方式总览
+
+**重要：** `pageGuard` 导出的是一个对象，使用时需要用 `pageGuard.behavior`：
 
 ```js
+const pageGuard = require('../../behaviors/pageGuard')   // 导出 { behavior, goBack, showRetry, ... }
+const pageLoading = require('../../behaviors/pageLoading') // 导出 Behavior
+const loadError = require('../../behaviors/loadError')     // 导出 Behavior
+
+Page({
+  behaviors: [pageGuard.behavior, pageLoading, loadError],  // 注意是 pageGuard.behavior
+  // ...
+})
+```
+
+### 4.2 四种页面类型模板
+
+#### 类型1：详情页（策略A - 失败退回）
+
+```js
+// pages/detail/index.js
+const api = getApp().api
 const pageGuard = require('../../behaviors/pageGuard')
 const pageLoading = require('../../behaviors/pageLoading')
 
 Page({
-  behaviors: [pageGuard, pageLoading],
+  behaviors: [pageGuard.behavior, pageLoading],
+  data: {},
+
+  onLoad(options) {
+    this.startLoading()
+    this.loadDetail(options.id)
+  },
+
+  loadDetail(id) {
+    api.request(this, `/api/detail/${id}`, {}, true).then(res => {
+      this.setData({ detail: res })
+      this.setDataReady()
+      this.finishLoading()
+    }).catch(() => {
+      pageGuard.goBack(this)  // 失败后1.5秒自动退回
+    })
+  },
+
+  // 使用安全导航
+  toSubPage(e) {
+    this.navigateTo('/pages/sub/index?id=' + e.currentTarget.dataset.id)
+  }
+})
+```
+
+```xml
+<!-- pages/detail/index.wxml -->
+<import src="/templates/page-loading.wxml" />
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+
+<view class="content">
+  <!-- 页面内容 -->
+</view>
+```
+
+#### 类型2：列表页（策略B - 失败重试）
+
+```js
+// pages/list/index.js
+const api = getApp().api
+const pageGuard = require('../../behaviors/pageGuard')
+const pageLoading = require('../../behaviors/pageLoading')
+const loadError = require('../../behaviors/loadError')
+
+Page({
+  behaviors: [pageGuard.behavior, pageLoading, loadError],
+  data: {
+    list: []
+  },
+
+  onShow() {
+    this.startLoading()
+    this.listData()
+  },
 
   listData() {
-    api.request(this, '/api/detail', {}, true).then(() => {
+    this.hideLoadError()  // 重试时先隐藏错误
+    api.request(this, '/api/list', {}, true).then(res => {
+      this.setData({ list: res })
+      this.setDataReady()
       this.finishLoading()
+    }).catch(() => {
+      pageGuard.showRetry(this)  // 显示重试按钮
+    })
+  },
+
+  // 必须实现此方法，供模板调用
+  retryLoad() {
+    this.startLoading()
+    this.listData()
+  },
+
+  toDetail(e) {
+    this.navigateTo('/pages/detail/index?id=' + e.currentTarget.dataset.id)
+  }
+})
+```
+
+```xml
+<!-- pages/list/index.wxml -->
+<import src="/templates/page-loading.wxml" />
+<import src="/templates/load-error.wxml" />
+
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+<template is="loadError" data="{{loadError}}" />
+
+<!-- 正常内容，loadError 时隐藏 -->
+<view class="content" wx:if="{{!loadError}}">
+  <view wx:for="{{list}}" wx:key="id">{{item.name}}</view>
+</view>
+```
+
+#### 类型3：音频页面（使用组合 Behavior）
+
+```js
+// pages/audio/index.js
+const api = getApp().api
+const audioApi = getApp().audioApi
+const pageGuard = require('../../behaviors/pageGuard')
+const audioPageLoading = require('../../behaviors/audioPageLoading')
+
+Page({
+  behaviors: [pageGuard.behavior, audioPageLoading],
+  data: {},
+
+  onLoad(options) {
+    this.startAudioPageLoading()  // 同时启动进度条和音频遮罩
+    this.loadData(options)
+  },
+
+  loadData(options) {
+    api.request(this, '/api/audio', options, true).then(res => {
+      this.setData({ detail: res })
+      // 加载音频，实时更新进度
+      return audioApi.initAudio(res.audioUrl, (progress) => {
+        this.updateAudioProgress(progress)
+      })
+    }).then(() => {
+      this.setDataReady()
+      this.finishAudioPageLoading()  // 同时结束进度条和遮罩
     }).catch(() => {
       pageGuard.goBack(this)
     })
@@ -541,339 +1001,494 @@ Page({
 })
 ```
 
-### 8.2 策略B：显示重试按钮
+```xml
+<!-- pages/audio/index.wxml -->
+<import src="/templates/page-loading.wxml" />
+<import src="/templates/audio-loading.wxml" />
+
+<template is="pageLoading" data="{{loading, loadProgress}}" />
+<template is="audioLoading" data="{{audioDownProgress}}" />
+
+<view class="content">
+  <!-- 音频页面内容 -->
+</view>
+```
+
+#### 类型4：简单表单页（无初始化加载）
 
 ```js
-const pageGuard = require('../../behaviors/pageGuard')
-const pageLoading = require('../../behaviors/pageLoading')
-const loadError = require('../../behaviors/loadError')
+// pages/form/index.js
+const api = getApp().api
 
 Page({
-  behaviors: [pageGuard, pageLoading, loadError],
+  data: {},
 
-  listData() {
-    this.hideLoadError()
-    api.request(this, '/api/list', {}, true).then(() => {
-      this.finishLoading()
+  // 策略C：用户操作，失败仅提示
+  submit(e) {
+    const data = e.detail.value
+    api.request(this, '/api/save', data, true, 'POST').then(() => {
+      api.toast('保存成功')
+      wx.navigateBack()
     }).catch(() => {
-      pageGuard.showRetry(this)
-    })
-  },
-
-  retryLoad() {
-    this.startLoading()
-    this.listData()
-  }
-})
-```
-
-### 8.3 策略C：仅提示
-
-```js
-saveData() {
-  api.request(this, '/api/save', data, true, 'POST').then(() => {
-    api.toast('保存成功')
-  }).catch(() => {
-    // 错误已在 api.js 中 toast
-  })
-}
-```
-
-### 8.4 策略D：静默失败
-
-```js
-autoSave() {
-  api.request(this, '/api/auto-save', data, true, 'POST').catch(() => {
-    // 静默失败
-  })
-}
-```
-
-### 8.5 策略E：仅结束进度
-
-```js
-const pageGuard = require('../../behaviors/pageGuard')
-const pageLoading = require('../../behaviors/pageLoading')
-
-Page({
-  behaviors: [pageGuard, pageLoading],
-
-  loadOptionalData() {
-    api.request(this, '/api/optional', {}, true).then(() => {
-      this.finishLoading()
-    }).catch(() => {
-      pageGuard.finishProgress(this)
+      // 错误已在 api.js 中 toast，无需额外处理
     })
   }
 })
 ```
 
-### 8.6 策略C + 恢复状态
+### 4.3 API 方法速查表
 
-```js
-onToggleChange(e) {
-  const newValue = e.detail.value
-  const oldValue = this.data.item.value
-  // 先乐观更新 UI
-  this.setData({ 'item.value': newValue })
+#### pageGuard 实例方法（通过 this 调用）
 
-  api.request(this, '/api/update', { value: newValue }, true, 'POST').catch(() => {
-    // 失败时恢复状态
-    this.setData({ 'item.value': oldValue })
-  })
-}
-```
+| 方法 | 说明 | 示例 |
+|------|------|------|
+| `this.registerTimer(name, fn, delay)` | 注册安全定时器 | `this.registerTimer('auto', () => {}, 3000)` |
+| `this.cancelTimer(name)` | 取消定时器 | `this.cancelTimer('auto')` |
+| `this.setDataReady()` | 标记数据就绪 | 数据加载完成后调用 |
+| `this.isDataReady()` | 检查数据是否就绪 | `if (this.isDataReady()) {...}` |
+| `this.navigateTo(url, options)` | 安全跳转 | `this.navigateTo('/pages/x/index')` |
+| `this.redirectTo(url)` | 安全重定向 | `this.redirectTo('/pages/x/index')` |
+| `this.navigateBack(delta)` | 安全返回 | `this.navigateBack()` |
+| `this.switchTab(url)` | 安全切换 Tab | `this.switchTab('/pages/home/index')` |
+| `this.throttleAction(name, fn, delay)` | 节流操作 | `this.throttleAction('submit', () => {})` |
+
+#### pageGuard 静态方法（通过模块调用）
+
+| 方法 | 说明 | 适用场景 |
+|------|------|----------|
+| `pageGuard.goBack(this)` | 结束加载 → 1.5秒后退回 | 详情页加载失败 |
+| `pageGuard.showRetry(this)` | 结束加载 → 显示重试按钮 | 列表页加载失败 |
+| `pageGuard.finishProgress(this)` | 仅结束加载状态 | 非关键数据失败 |
+
+#### pageLoading 方法
+
+| 方法 | 说明 |
+|------|------|
+| `this.startLoading()` | 开始显示进度条 |
+| `this.finishLoading()` | 结束进度条（100% 后隐藏） |
+
+#### audioLoading 方法
+
+| 方法 | 说明 |
+|------|------|
+| `this.startAudioLoading()` | 开始显示音频遮罩（进度归零） |
+| `this.updateAudioProgress(progress)` | 更新进度 (0-100) |
+| `this.finishAudioLoading()` | 结束音频遮罩（进度设为100） |
+
+#### loadError 方法
+
+| 方法 | 说明 |
+|------|------|
+| `this.showLoadError()` | 显示加载失败状态 |
+| `this.hideLoadError()` | 隐藏加载失败状态 |
 
 ---
 
-## 九、注意事项
+## 五、错误处理策略
 
-### 9.1 确保 .catch() 存在
+### 5.1 五种策略对照表
 
-每个 `api.request()` 调用都应该有 `.catch()` 处理，否则：
-- 控制台会出现 "Uncaught (in promise)" 错误
-- 进度条可能卡住不消失
-- 页面状态可能异常
+| 策略 | 名称 | 代码 | 适用场景 |
+|------|------|------|----------|
+| **A** | 退回 | `pageGuard.goBack(this)` | 详情页、子页面加载失败 |
+| **B** | 重试 | `pageGuard.showRetry(this)` | 首页、列表页加载失败 |
+| **C** | 提示 | `.catch(() => {})` | 用户操作失败（api.js 自动 toast） |
+| **D** | 静默 | `.catch(() => {})` | 自动保存、埋点、后台操作 |
+| **E** | 结束 | `pageGuard.finishProgress(this)` | 非关键辅助数据加载失败 |
 
-### 9.2 与 pageLoading 配合
+### 5.2 按页面类型选择
 
-确保在 `.catch()` 中调用 `this.finishLoading()`，否则进度条会卡在 90%：
+| 页面类型 | 初始化加载 | 用户操作 | 后台操作 |
+|----------|:----------:|:--------:|:--------:|
+| 首页 | B 重试 | C 提示 | D 静默 |
+| 列表页 | B 重试 | C 提示 | D 静默 |
+| 详情页 | A 退回 | C 提示 | D 静默 |
+| 设置页 | A 退回 | C 提示+恢复 | D 静默 |
+| 训练页 | A 退回 | D 静默 | D 静默 |
+| 表单页 | - | C 提示 | - |
+
+### 5.3 策略实现代码
 
 ```js
+// 策略A：退回
 .catch(() => {
-  this.finishLoading()  // 必须调用
-  // 其他处理...
+  pageGuard.goBack(this)
 })
+
+// 策略B：重试（需配合 loadError behavior）
+listData() {
+  this.hideLoadError()
+  api.request(...).then(() => {
+    this.finishLoading()
+  }).catch(() => {
+    pageGuard.showRetry(this)
+  })
+},
+retryLoad() {
+  this.startLoading()
+  this.listData()
+}
+
+// 策略C：仅提示（错误已在 api.js toast）
+.catch(() => {
+  // 无需处理
+})
+
+// 策略D：静默失败
+.catch(() => {
+  // 静默
+})
+
+// 策略E：仅结束进度
+.catch(() => {
+  pageGuard.finishProgress(this)
+})
+
+// 策略C + 恢复状态
+onToggle(e) {
+  const newVal = e.detail.value
+  const oldVal = this.data.item.value
+  this.setData({ 'item.value': newVal })
+  api.request(...).catch(() => {
+    this.setData({ 'item.value': oldVal })  // 恢复
+  })
+}
 ```
 
-### 9.3 退回时机
-
-使用策略A（退回）时，延迟 1.5 秒是为了让用户看到错误提示。
-
 ---
 
-## 十、已使用的页面
+## 六、迁移到其他项目
 
-### 页面进度条
+### 6.1 Step 1：复制文件
 
-| 页面 | 路径 |
-|------|------|
-| 精听训练 | `pages/training/listening/intensive/index` |
-| 泛听训练 | `pages/training/listening/extensive/index` |
-| 听力讲解 | `pages/training/listening/explanation/index` |
-| 精听笔记 | `pages/training/listening/intensive-notes/index` |
-| 通知详情 | `pages/notice/detail/index` |
-| 首页 | `pages/home/index` |
-
-### 音频加载进度
-
-| 页面 | 路径 |
-|------|------|
-| 精听训练 | `pages/training/listening/intensive/index` |
-| 泛听训练 | `pages/training/listening/extensive/index` |
-| 听力讲解 | `pages/training/listening/explanation/index` |
-
-### 加载失败重试
-
-| 页面 | 路径 |
-|------|------|
-| 首页 | `pages/home/index` |
-| 通知列表 | `pages/notice/list/index` |
-| 训练列表 | `pages/training/list/album/index` |
-| 用户中心 | `pages/user/user/user` |
-
----
-
-## 十一、迁移到其他项目
-
-### 11.1 复制文件
+将以下文件复制到目标项目：
 
 ```
 behaviors/
-├── pageGuard.js
-├── pageLoading.js
-├── audioLoading.js
-└── loadError.js
+├── pageGuard.js           # 必须
+├── pageLoading.js         # 必须
+├── audioLoading.js        # 可选（有音频页面才需要）
+├── audioPageLoading.js    # 可选（有音频页面才需要）
+└── loadError.js           # 可选（有重试功能才需要）
 
 templates/
-├── page-loading.wxml
-├── audio-loading.wxml
-└── load-error.wxml
+├── page-loading.wxml      # 必须
+├── audio-loading.wxml     # 可选
+└── load-error.wxml        # 可选
 
 style/
-├── page-loading.wxss
-├── audio-loading.wxss
-└── load-error.wxss
-
-utils/
-└── api.js（确保包含 reject 逻辑）
+├── page-loading.wxss      # 必须
+├── audio-loading.wxss     # 可选
+└── load-error.wxss        # 可选
 ```
 
-### 11.2 在 app.js 中引入
+### 6.2 Step 2：配置 app.wxss
+
+```css
+/* app.wxss */
+@import "style/page-loading.wxss";
+@import "style/audio-loading.wxss";   /* 可选 */
+@import "style/load-error.wxss";      /* 可选 */
+
+/* 可自定义主题色 */
+page {
+  --theme-color: #007bff;
+}
+```
+
+### 6.3 Step 3：配置 app.js（可选）
 
 ```js
-const pageGuard = require('behaviors/pageGuard.js')
+// app.js
+const pageGuard = require('./behaviors/pageGuard.js')
 
 App({
-  pageGuard: pageGuard,
+  pageGuard: pageGuard,  // 全局访问（可选）
   // ...
 })
 ```
 
-### 11.3 在 app.wxss 中引入
+### 6.4 Step 4：配置 api.js
 
-```css
-@import "style/page-loading.wxss";
-@import "style/audio-loading.wxss";
-@import "style/load-error.wxss";
-```
-
-### 11.4 逐页面接入
-
-1. 引入 pageGuard 和 pageLoading behavior
-2. 在 WXML 中添加模板
-3. 按策略选择指南添加错误处理
-4. 使用安全导航方法和节流方法
-
----
-
-## 十二、完整示例
+确保 api.js 中的 request 方法符合以下要求：
 
 ```js
-// pages/example/index.js
-const api = getApp().api
+// utils/api.js
+function request(that, url, data, hasToast, method = 'GET') {
+  return new Promise((resolve, reject) => {
+    let timer = null
+
+    // 超过1秒显示 loading（兜底）
+    if (!hasToast) {
+      timer = setTimeout(() => {
+        wx.showLoading({ title: '努力加载中...' })
+      }, 1000)
+    }
+
+    wx.request({
+      url: BASE_URL + url,
+      data: data,
+      method: method,
+      header: { /* ... */ },
+      success(res) {
+        clearTimeout(timer)
+        wx.hideLoading()
+
+        if (res.data.code == '200') {
+          // 成功时将数据 setData 到页面
+          if (res.data.data && that.setData) {
+            that.setData(res.data.data)
+          }
+          resolve(res.data.data)
+        } else {
+          // 业务错误：toast 并 reject
+          wx.showToast({ title: res.data.msg || '请求失败', icon: 'none' })
+          reject(res.data)
+        }
+      },
+      fail(err) {
+        clearTimeout(timer)
+        wx.hideLoading()
+        // 网络错误：toast 并 reject
+        wx.showToast({ title: '网络错误，请重试', icon: 'none' })
+        reject(err)
+      }
+    })
+  })
+}
+
+module.exports = { request, /* ... */ }
+```
+
+**关键点：**
+- `hasToast=true` 时跳过全局 loading（页面已有进度条）
+- 错误时自动 toast 并 reject（配合策略C）
+- 成功时自动 setData（可选）
+
+### 6.5 Step 5：逐页面接入
+
+按以下顺序为每个页面接入：
+
+1. **引入 behaviors**
+```js
 const pageGuard = require('../../behaviors/pageGuard')
 const pageLoading = require('../../behaviors/pageLoading')
+// 按需引入
 const loadError = require('../../behaviors/loadError')
 
 Page({
-  behaviors: [pageGuard, pageLoading, loadError],
-  data: {
-    list: []
-  },
-
-  onLoad() {
-    this.startLoading()
-    this.listData()
-  },
-
-  // 策略B：初始化加载，失败显示重试
-  listData() {
-    this.hideLoadError()
-    api.request(this, '/api/list', {}, true).then((data) => {
-      this.setData({ list: data })
-      this.setDataReady()
-      this.finishLoading()
-    }).catch(() => {
-      pageGuard.showRetry(this)
-    })
-  },
-
-  retryLoad() {
-    this.startLoading()
-    this.listData()
-  },
-
-  // 策略C：用户操作，失败仅提示（使用节流防重复）
-  deleteItem(e) {
-    this.throttleAction('delete', () => {
-      const id = e.currentTarget.dataset.id
-      api.request(this, `/api/delete/${id}`, {}, true, 'DELETE').then(() => {
-        api.toast('删除成功')
-        this.listData()
-      }).catch(() => {
-        // 错误已提示
-      })
-    })
-  },
-
-  // 使用安全导航
-  toDetail(e) {
-    this.navigateTo('/pages/detail/index?id=' + e.currentTarget.dataset.id)
-  },
-
-  // 策略D：后台操作，静默失败
-  trackView() {
-    api.request(this, '/api/track', { page: 'example' }, true, 'POST').catch(() => {
-      // 静默失败
-    })
-  }
+  behaviors: [pageGuard.behavior, pageLoading, loadError],
+  // ...
 })
 ```
 
+2. **引入 templates**
 ```xml
-<!-- pages/example/index.wxml -->
 <import src="/templates/page-loading.wxml" />
 <import src="/templates/load-error.wxml" />
+
 <template is="pageLoading" data="{{loading, loadProgress}}" />
 <template is="loadError" data="{{loadError}}" />
+```
 
-<!-- 正常内容 -->
-<view class="content" wx:if="{{!loadError}}">
-  <view wx:for="{{list}}" wx:key="id">{{item.name}}</view>
-</view>
+3. **添加生命周期调用**
+```js
+onLoad() {
+  this.startLoading()
+  this.loadData()
+}
+```
+
+4. **选择错误处理策略**
+```js
+loadData() {
+  this.hideLoadError()  // 仅策略B需要
+  api.request(this, '/api/xxx', {}, true).then(res => {
+    this.setDataReady()
+    this.finishLoading()
+  }).catch(() => {
+    pageGuard.showRetry(this)  // 或 goBack / finishProgress
+  })
+}
+```
+
+5. **实现重试方法**（仅策略B需要）
+```js
+retryLoad() {
+  this.startLoading()
+  this.loadData()
+}
 ```
 
 ---
 
-## 十三、Toast 提示规范
+## 七、常见问题
 
-### 应该使用 Toast 的场景
+### Q1：进度条卡在 90% 不动
 
-| 场景 | 示例 | 必要性 |
-|------|------|--------|
-| 操作成功反馈 | "保存成功" | 必要 |
-| 表单验证提示 | "请填写用户昵称" | 必要 |
-| 边界提示 | "已经最后一句啦！" | 必要 |
-| 错误提示 | "更新失败" | 必要 |
+**原因**：`.catch()` 中没有调用 `finishLoading()`
 
-### 不应该使用 Toast 的场景
+**解决**：
+```js
+.catch(() => {
+  this.finishLoading()  // 必须调用
+  // 或使用 pageGuard 方法，它们内部会自动调用
+  pageGuard.goBack(this)
+})
+```
 
-| 场景 | 替代方案 |
-|------|----------|
-| 页面数据加载中 | 使用进度条 |
-| 长时间等待提示 | 使用进度条 + 内容区骨架屏 |
+### Q2：控制台报 "Uncaught (in promise)" 错误
+
+**原因**：`api.request()` 没有 `.catch()` 处理
+
+**解决**：每个 `api.request()` 都必须有 `.catch()`，即使是空的：
+```js
+api.request(...).catch(() => {
+  // 静默失败也要写 catch
+})
+```
+
+### Q3：页面跳转时定时器仍在执行
+
+**原因**：使用了原生 `setTimeout` 而非 `registerTimer`
+
+**解决**：
+```js
+// 错误 ❌
+setTimeout(() => { /* ... */ }, 1000)
+
+// 正确 ✅
+this.registerTimer('myTimer', () => { /* ... */ }, 1000)
+```
+
+### Q4：快速点击导致多次跳转
+
+**原因**：使用了原生 `wx.navigateTo`
+
+**解决**：
+```js
+// 错误 ❌
+wx.navigateTo({ url: '/pages/xxx' })
+
+// 正确 ✅
+this.navigateTo('/pages/xxx')
+```
+
+### Q5：pageGuard is not a Behavior
+
+**原因**：直接使用 `pageGuard` 而非 `pageGuard.behavior`
+
+**解决**：
+```js
+// 错误 ❌
+behaviors: [pageGuard, pageLoading]
+
+// 正确 ✅
+behaviors: [pageGuard.behavior, pageLoading]
+```
+
+### Q6：音频遮罩不显示
+
+**原因**：`audioDownProgress` 默认值是 100（表示已加载完成）
+
+**解决**：确保先调用 `startAudioLoading()` 将进度重置为 0：
+```js
+this.startAudioLoading()  // 进度归零，显示遮罩
+// 加载音频...
+this.finishAudioLoading() // 进度设为100，隐藏遮罩
+```
+
+### Q7：重试按钮点击无反应
+
+**原因**：页面没有实现 `retryLoad` 方法
+
+**解决**：
+```js
+// 必须实现此方法
+retryLoad() {
+  this.startLoading()
+  this.loadData()  // 重新加载数据
+}
+```
+
+### Q8：样式不生效
+
+**原因**：没有在 app.wxss 中引入样式文件
+
+**解决**：
+```css
+/* app.wxss */
+@import "style/page-loading.wxss";
+@import "style/load-error.wxss";
+```
 
 ---
 
-## 十四、变更日志
+## 八、迁移检查清单
+
+### 8.1 文件检查
+
+- [ ] `behaviors/pageGuard.js` 已复制
+- [ ] `behaviors/pageLoading.js` 已复制
+- [ ] `behaviors/loadError.js` 已复制（如需重试功能）
+- [ ] `behaviors/audioLoading.js` 已复制（如有音频页面）
+- [ ] `behaviors/audioPageLoading.js` 已复制（如有音频页面）
+- [ ] `templates/page-loading.wxml` 已复制
+- [ ] `templates/load-error.wxml` 已复制（如需重试功能）
+- [ ] `templates/audio-loading.wxml` 已复制（如有音频页面）
+- [ ] `style/page-loading.wxss` 已复制
+- [ ] `style/load-error.wxss` 已复制（如需重试功能）
+- [ ] `style/audio-loading.wxss` 已复制（如有音频页面）
+
+### 8.2 配置检查
+
+- [ ] `app.wxss` 已引入所有样式文件
+- [ ] `api.js` 支持 `hasToast` 参数
+- [ ] `api.js` 错误时会 `reject`
+
+### 8.3 页面检查（每个页面）
+
+- [ ] 使用 `pageGuard.behavior` 而非 `pageGuard`
+- [ ] WXML 中引入了对应的模板
+- [ ] `onLoad/onShow` 中调用了 `startLoading()`
+- [ ] 成功时调用了 `finishLoading()` 和 `setDataReady()`
+- [ ] 失败时有 `.catch()` 处理
+- [ ] 使用策略B时实现了 `retryLoad()` 方法
+- [ ] 导航使用 `this.navigateTo()` 而非 `wx.navigateTo()`
+
+### 8.4 代码规范检查
+
+- [ ] 每个 `api.request()` 都有 `.catch()` 处理
+- [ ] 定时器使用 `registerTimer()` 而非 `setTimeout()`
+- [ ] 错误处理策略选择正确（参考 5.2 表格）
+
+---
+
+## 九、变更日志
+
+### v4.1.0 (2025-12-10)
+
+**完成迁移：**
+- 所有页面已从 `errorHandler` 迁移到 `pageGuard.behavior`
+- 不再使用 `getApp().errorHandler`
+
+**文档更新：**
+- 添加完整源码章节
+- 添加详细迁移步骤
+- 添加常见问题解答
+- 添加迁移检查清单
 
 ### v4.0.0 (2025-12-10)
 
 **重大变更：**
 - 将 `utils/errorHandler.js` 合并到 `behaviors/pageGuard.js`
-- `pageGuard` 现在是一个 Behavior，需要通过 `require()` 引入并添加到 `behaviors` 数组
+- `pageGuard` 现在导出一个对象：`{ behavior, goBack, showRetry, finishProgress }`
 
 **新增功能：**
 - 定时器安全管理：`registerTimer()` / `cancelTimer()`
 - 导航锁：`navigateTo()` / `redirectTo()` / `navigateBack()` / `switchTab()`
 - 节流方法：`throttleAction()`
 - 数据就绪状态：`setDataReady()` / `isDataReady()`
-
-**迁移指南：**
-```js
-// 旧写法（已废弃，所有页面已迁移完成）
-const errorHandler = getApp().errorHandler
-Page({
-  behaviors: [pageLoading],
-  // ...
-  .catch(() => {
-    errorHandler.goBack(this)
-  })
-})
-
-// 新写法（当前标准）
-const pageGuard = require('../../behaviors/pageGuard')
-Page({
-  behaviors: [pageGuard.behavior, pageLoading],
-  // ...
-  .catch(() => {
-    pageGuard.goBack(this)
-  })
-})
-```
-
-> **注意**：v4.1.0 版本已完成所有页面迁移，不再使用 `errorHandler`。
 
 ---
 
