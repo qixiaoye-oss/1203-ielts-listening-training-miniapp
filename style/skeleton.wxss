@@ -1,0 +1,262 @@
+/**
+ * 骨架屏全局样式
+ * 包含闪光动画和各类型骨架的布局样式
+ */
+
+/* ============================================================
+   基础变量
+   ============================================================ */
+
+/* 骨架屏使用 CSS 变量便于主题定制 */
+/* --skeleton-bg: 骨架块背景色 */
+/* --skeleton-highlight: 闪光高亮色 */
+
+/* ============================================================
+   闪光动画
+   ============================================================ */
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* 动画开启时的样式 */
+.skeleton--animate .skeleton-avatar,
+.skeleton--animate .skeleton-title,
+.skeleton--animate .skeleton-row,
+.skeleton--animate .skeleton-tag,
+.skeleton--animate .skeleton-icon,
+.skeleton--animate .skeleton-card__image,
+.skeleton--animate .skeleton-user__avatar,
+.skeleton--animate .skeleton-detail__title {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-bg, #f0f0f0) 25%,
+    var(--skeleton-highlight, #e8e8e8) 50%,
+    var(--skeleton-bg, #f0f0f0) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+/* ============================================================
+   基础元素样式
+   ============================================================ */
+
+/* 骨架块基础样式 */
+.skeleton-avatar,
+.skeleton-title,
+.skeleton-row,
+.skeleton-tag,
+.skeleton-icon,
+.skeleton-card__image,
+.skeleton-user__avatar,
+.skeleton-detail__title {
+  background-color: var(--skeleton-bg, #f0f0f0);
+  border-radius: 4px;
+}
+
+/* 头像 */
+.skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-avatar--square {
+  border-radius: 8px;
+}
+
+/* 标题行 */
+.skeleton-title {
+  height: 18px;
+  width: 40%;
+  margin-bottom: 12px;
+}
+
+/* 文本行 */
+.skeleton-row {
+  height: 14px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.skeleton-row:last-child {
+  margin-bottom: 0;
+}
+
+.skeleton-row--short {
+  width: 60%;
+}
+
+.skeleton-row--medium {
+  width: 80%;
+}
+
+.skeleton-row--tiny {
+  width: 40%;
+  height: 12px;
+}
+
+/* 标签 */
+.skeleton-tag {
+  display: inline-block;
+  width: 60px;
+  height: 22px;
+  margin-right: 8px;
+  border-radius: 4px;
+}
+
+/* 图标占位 */
+.skeleton-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   列表类型 (type="list")
+   ============================================================ */
+
+.skeleton-item {
+  display: flex;
+  padding: 16px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.skeleton-item:last-child {
+  border-bottom: none;
+}
+
+.skeleton-content {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.skeleton-avatar + .skeleton-content {
+  margin-left: 12px;
+}
+
+/* 无头像时内容区不需要左边距 */
+.skeleton-item > .skeleton-content:first-child {
+  margin-left: 0;
+}
+
+/* ============================================================
+   卡片类型 (type="card")
+   ============================================================ */
+
+.skeleton-card {
+  display: flex;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.skeleton-card:last-child {
+  border-bottom: none;
+}
+
+.skeleton-card__image {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.skeleton-card__content {
+  flex: 1;
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.skeleton-card__content .skeleton-title {
+  width: 70%;
+  margin-bottom: 10px;
+}
+
+.skeleton-card__content .skeleton-row {
+  width: 50%;
+}
+
+/* ============================================================
+   详情类型 (type="detail")
+   ============================================================ */
+
+.skeleton-detail {
+  padding: 0;
+}
+
+.skeleton-detail__title {
+  height: 24px;
+  width: 80%;
+  margin-bottom: 16px;
+}
+
+.skeleton-detail__meta {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.skeleton-detail__content {
+  margin-bottom: 24px;
+}
+
+.skeleton-detail__content .skeleton-row {
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+   用户信息类型 (type="user")
+   ============================================================ */
+
+.skeleton-user {
+  display: flex;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.skeleton-user__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-user__info {
+  flex: 1;
+  margin-left: 16px;
+}
+
+.skeleton-user__info .skeleton-title {
+  width: 30%;
+  margin-bottom: 8px;
+}
+
+.skeleton-user__info .skeleton-row {
+  width: 50%;
+}
+
+.skeleton-user__menu {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 0;
+}
+
+.skeleton-menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.skeleton-menu-item .skeleton-row {
+  margin-top: 8px;
+}
