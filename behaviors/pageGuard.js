@@ -305,7 +305,7 @@ const behavior = Behavior({
       if (this[key]) return false
 
       this[key] = true
-      setTimeout(() => {
+      this.registerTimer(`__throttle_${name}`, () => {
         this[key] = false
       }, delay)
 
