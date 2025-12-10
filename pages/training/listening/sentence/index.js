@@ -5,7 +5,7 @@ const pageLoading = require('../../../../behaviors/pageLoading')
 let audio
 
 Page({
-  behaviors: [pageGuard, pageLoading],
+  behaviors: [pageGuard.behavior, pageLoading],
   data: {
     list: [],
     endTime: 0,

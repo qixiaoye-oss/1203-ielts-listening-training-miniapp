@@ -6,7 +6,7 @@ const audioLoading = require('../../../../behaviors/audioLoading')
 
 let innerAudioContext = null
 Page({
-  behaviors: [pageGuard, pageLoading, audioLoading],
+  behaviors: [pageGuard.behavior, pageLoading, audioLoading],
   data: {
     underwayIndex: 0,
     underway: {

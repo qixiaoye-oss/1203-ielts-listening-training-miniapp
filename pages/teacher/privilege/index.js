@@ -4,7 +4,7 @@ const pageLoading = require('../../../behaviors/pageLoading')
 
 var timer
 Page({
-  behaviors: [pageGuard, pageLoading],
+  behaviors: [pageGuard.behavior, pageLoading],
   data: {
     inputVal: "",
     hideScroll: true,

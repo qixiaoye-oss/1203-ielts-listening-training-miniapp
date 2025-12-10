@@ -8,7 +8,7 @@ let audioContext
 let inputTimer
 
 Page({
-  behaviors: [pageGuard, pageLoading, audioLoading],
+  behaviors: [pageGuard.behavior, pageLoading, audioLoading],
   data: {
     areaTop: -2,
     areaLeft: 0,

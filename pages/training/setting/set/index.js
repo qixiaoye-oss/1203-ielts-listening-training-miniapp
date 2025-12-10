@@ -3,7 +3,7 @@ const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
-  behaviors: [pageGuard, pageLoading],
+  behaviors: [pageGuard.behavior, pageLoading],
   data: {
     groups: [
       {

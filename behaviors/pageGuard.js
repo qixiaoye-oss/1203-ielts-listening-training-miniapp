@@ -91,6 +91,67 @@ function _unlockNavigation() {
 }
 
 // ============================================================
+// 错误处理工具函数（静态方法）
+// ============================================================
+
+function _finishAllLoading(page) {
+  if (page.finishLoading) page.finishLoading()
+  if (page.finishAudioLoading) page.finishAudioLoading()
+}
+
+/**
+ * 策略A：退回上一级
+ * 适用场景：详情页、子页面初始化加载失败
+ * @param {Object} page - 页面实例
+ */
+function goBack(page) {
+  _finishAllLoading(page)
+
+  if (page.registerTimer) {
+    page.registerTimer('__goBack', () => wx.navigateBack(), 1500)
+  } else {
+    // 降级处理：兼容未使用 pageGuard 的页面
+    setTimeout(() => {
+      const pages = getCurrentPages()
+      if (pages[pages.length - 1] === page) {
+        wx.navigateBack()
+      }
+    }, 1500)
+  }
+}
+
+/**
+ * 策略B：显示重试按钮
+ * 适用场景：首页、列表页初始化加载失败
+ * @param {Object} page - 页面实例
+ */
+function showRetry(page) {
+  _finishAllLoading(page)
+  if (page.showLoadError) {
+    page.showLoadError()
+  } else {
+    page.setData({ loadError: true })
+  }
+}
+
+/**
+ * 策略E：仅结束进度
+ * 适用场景：非关键数据加载失败
+ * @param {Object} page - 页面实例
+ */
+function finishProgress(page) {
+  _finishAllLoading(page)
+}
+
+/**
+ * 检查是否正在导航中
+ * @returns {boolean}
+ */
+function checkIsNavigating() {
+  return isNavigating
+}
+
+// ============================================================
 // Behavior 定义
 // ============================================================
 
@@ -255,68 +316,15 @@ const behavior = Behavior({
 })
 
 // ============================================================
-// 错误处理工具函数（静态方法）
+// 导出（使用包装对象避免修改 Behavior 返回值）
 // ============================================================
 
-function _finishAllLoading(page) {
-  if (page.finishLoading) page.finishLoading()
-  if (page.finishAudioLoading) page.finishAudioLoading()
+module.exports = {
+  // Behavior 本身（用于 behaviors 数组）
+  behavior: behavior,
+  // 静态方法
+  goBack: goBack,
+  showRetry: showRetry,
+  finishProgress: finishProgress,
+  isNavigating: checkIsNavigating
 }
-
-/**
- * 策略A：退回上一级
- * 适用场景：详情页、子页面初始化加载失败
- * @param {Object} page - 页面实例
- */
-behavior.goBack = function(page) {
-  _finishAllLoading(page)
-
-  if (page.registerTimer) {
-    page.registerTimer('__goBack', () => wx.navigateBack(), 1500)
-  } else {
-    // 降级处理：兼容未使用 pageGuard 的页面
-    setTimeout(() => {
-      const pages = getCurrentPages()
-      if (pages[pages.length - 1] === page) {
-        wx.navigateBack()
-      }
-    }, 1500)
-  }
-}
-
-/**
- * 策略B：显示重试按钮
- * 适用场景：首页、列表页初始化加载失败
- * @param {Object} page - 页面实例
- */
-behavior.showRetry = function(page) {
-  _finishAllLoading(page)
-  if (page.showLoadError) {
-    page.showLoadError()
-  } else {
-    page.setData({ loadError: true })
-  }
-}
-
-/**
- * 策略E：仅结束进度
- * 适用场景：非关键数据加载失败
- * @param {Object} page - 页面实例
- */
-behavior.finishProgress = function(page) {
-  _finishAllLoading(page)
-}
-
-/**
- * 检查是否正在导航中
- * @returns {boolean}
- */
-behavior.isNavigating = function() {
-  return isNavigating
-}
-
-// ============================================================
-// 导出
-// ============================================================
-
-module.exports = behavior

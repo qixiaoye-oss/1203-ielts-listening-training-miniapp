@@ -6,7 +6,7 @@ const audioApi = require('../../../../utils/audioApi')
 
 let audio
 Page({
-  behaviors: [pageGuard, pageLoading, audioLoading],
+  behaviors: [pageGuard.behavior, pageLoading, audioLoading],
   data: {
     audioPlay: false,
     noReady: true,
