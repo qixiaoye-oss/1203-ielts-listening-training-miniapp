@@ -40,7 +40,9 @@ Page({
 
   onLoad: function (options) {
     this.setData({ audioState: 'none' })
+    // 同时启动两种 loading，audio-loading 遮罩优先显示
     this.startLoading()
+    this.startAudioLoading()
     this.listListening(false)
   },
 
@@ -367,8 +369,7 @@ Page({
           audioUrl: res.audioUrl
         })
 
-        // 3. 加载音频
-        _this.startAudioLoading()
+        // 3. 加载音频（startAudioLoading 已在 onLoad 调用）
         return audioApi.initAudio(res.audioUrl, (progress) => {
           _this.updateAudioProgress(progress)
         })
@@ -377,10 +378,10 @@ Page({
         audioContext = data
         _this.audioContextListener()
 
-        // 4. 标记数据就绪
+        // 4. 标记数据就绪，先结束音频遮罩，再完成进度条动画
         _this.setDataReady()
-        _this.finishLoading()
         _this.finishAudioLoading()
+        _this.finishLoading()
       })
       .catch(() => {
         pageGuard.goBack(_this)
