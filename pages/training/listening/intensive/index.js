@@ -59,6 +59,8 @@ Page({
     }
   },
   onHide: function () {
+    // 取消可能存在的 goBack 定时器，防止页面被意外移除
+    errorHandler.cancelGoBack()
     let { audioState } = this.data
     if (audioState === 'playing') {
       this.setData({ audioState: 'none', playingSmallIndex: -1 })
