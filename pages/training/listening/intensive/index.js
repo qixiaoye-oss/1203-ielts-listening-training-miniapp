@@ -1,14 +1,13 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
 const pageGuard = require('../../../../behaviors/pageGuard')
-const pageLoading = require('../../../../behaviors/pageLoading')
-const audioLoading = require('../../../../behaviors/audioLoading')
+const audioPageLoading = require('../../../../behaviors/audioPageLoading')
 
 let audioContext
 let inputTimer
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, audioLoading],
+  behaviors: [pageGuard.behavior, audioPageLoading],
   data: {
     areaTop: -2,
     areaLeft: 0,
@@ -40,7 +39,7 @@ Page({
 
   onLoad: function (options) {
     this.setData({ audioState: 'none' })
-    this.startLoading()
+    this.startAudioPageLoading()
     this.listListening(false)
   },
 
@@ -368,7 +367,6 @@ Page({
         })
 
         // 3. 加载音频
-        _this.startAudioLoading()
         return audioApi.initAudio(res.audioUrl, (progress) => {
           _this.updateAudioProgress(progress)
         })
@@ -377,10 +375,9 @@ Page({
         audioContext = data
         _this.audioContextListener()
 
-        // 4. 标记数据就绪
+        // 4. 标记数据就绪，完成加载
         _this.setDataReady()
-        _this.finishLoading()
-        _this.finishAudioLoading()
+        _this.finishAudioPageLoading()
       })
       .catch(() => {
         pageGuard.goBack(_this)

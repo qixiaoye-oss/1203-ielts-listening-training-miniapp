@@ -1,9 +1,10 @@
 const api = getApp().api
 const pageGuard = require('../../../../behaviors/pageGuard')
-const pageLoading = require('../../../../behaviors/pageLoading')
+const audioPageLoading = require('../../../../behaviors/audioPageLoading')
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading],
+  // 预留音频功能，后续连入音频时可直接使用 startAudioPageLoading / finishAudioPageLoading
+  behaviors: [pageGuard.behavior, audioPageLoading],
   data: {
     list: [],
     detail: null,

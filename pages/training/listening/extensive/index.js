@@ -1,12 +1,11 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
 const pageGuard = require('../../../../behaviors/pageGuard')
-const pageLoading = require('../../../../behaviors/pageLoading')
-const audioLoading = require('../../../../behaviors/audioLoading')
+const audioPageLoading = require('../../../../behaviors/audioPageLoading')
 
 let innerAudioContext = null
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, audioLoading],
+  behaviors: [pageGuard.behavior, audioPageLoading],
   data: {
     underwayIndex: 0,
     underway: {
@@ -37,7 +36,7 @@ Page({
     }]
   },
   onLoad(options) {
-    this.startLoading()
+    this.startAudioPageLoading()
     this.listData()
   },
   onHide() {
@@ -130,16 +129,13 @@ Page({
     const _this = this
     const { underwayIndex } = this.data
     api.request(this, `/question/v1/list/part/${this.options.unitId}/miniapp`, {}, isPull).then(({ parts }) => {
-      // 开始下载音频，显示圆饼进度
-      _this.startAudioLoading()
       // 传入进度回调，实时更新下载进度 下载第一个音频
       audioApi.initAudio(parts[underwayIndex].audioUrl, (progress) => {
         _this.updateAudioProgress(progress)
       }).then(data => {
         innerAudioContext = data
         _this.addEventListener()
-        _this.finishLoading()
-        _this.finishAudioLoading()
+        _this.finishAudioPageLoading()
       })
     }).catch(() => {
       pageGuard.goBack(_this)
