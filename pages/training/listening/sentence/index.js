@@ -85,11 +85,19 @@ Page({
   },
   toDetail(e) {
     let pages = getCurrentPages()
-    var prevPage = pages[pages.length - 2]; //上一个页面
-    prevPage.setData({
-      index: e.currentTarget.dataset.idx
-    })
-    // iaudio.stop()
-    wx.navigateBack({})
+    var prevPage = pages[pages.length - 2] //上一个页面
+    // 验证上一页是否为 intensive 页面
+    if (prevPage && prevPage.route && prevPage.route.includes('intensive/index')) {
+      prevPage.setData({
+        index: e.currentTarget.dataset.idx
+      })
+      wx.navigateBack({})
+    } else {
+      // 如果上一页不是 intensive 页面，直接导航到 intensive 页面
+      const params = this.options
+      wx.redirectTo({
+        url: `../intensive/index?setId=${params.sid}&paragraphId=${params.paragraphId}&startIndex=${e.currentTarget.dataset.idx}`
+      })
+    }
   },
 })

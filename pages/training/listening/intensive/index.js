@@ -36,6 +36,10 @@ Page({
   // 生命周期函数==============
   onLoad: function (options) {
     this.setData({ audioState: 'none' })
+    // 保存 startIndex 供数据加载完成后使用
+    if (options.startIndex) {
+      this.startIndex = options.startIndex
+    }
     this.startLoading()
     this.listListening(false)
   },
@@ -299,8 +303,11 @@ Page({
     let _this = this
     api.request(this, `/part/v1/sentence`, { ...this.options }, isPull, true).then(res => {
       wx.setStorageSync('listenings', res.list)
+      // 如果有 startIndex 参数，使用它作为起始位置
+      let initialIndex = _this.startIndex ? Number(_this.startIndex) : res.swiperCurrent
       this.setData({
-        schedule: (((res.swiperCurrent + 1) / res.list.length) * 100),
+        swiperCurrent: initialIndex,
+        schedule: (((initialIndex + 1) / res.list.length) * 100),
         audioUrl: res.audioUrl
       })
       _this.startAudioLoading()
@@ -311,6 +318,11 @@ Page({
         _this.audioContextListener()
         _this.finishLoading()
         _this.finishAudioLoading()
+        // 如果有 startIndex，自动开始播放
+        if (_this.startIndex) {
+          _this.playAudio()
+          _this.startIndex = null // 清除，避免重复播放
+        }
       })
     }).catch(() => {
       errorHandler.goBack(_this)
