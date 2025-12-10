@@ -1,14 +1,13 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
 const pageGuard = require('../../../../behaviors/pageGuard')
-const pageLoading = require('../../../../behaviors/pageLoading')
-const audioLoading = require('../../../../behaviors/audioLoading')
+const audioPageLoading = require('../../../../behaviors/audioPageLoading')
 
 let audioContext
 let inputTimer
 
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, audioLoading],
+  behaviors: [pageGuard.behavior, audioPageLoading],
   data: {
     areaTop: -2,
     areaLeft: 0,
@@ -40,9 +39,7 @@ Page({
 
   onLoad: function (options) {
     this.setData({ audioState: 'none' })
-    // 同时启动两种 loading，audio-loading 遮罩优先显示
-    this.startLoading()
-    this.startAudioLoading()
+    this.startAudioPageLoading()
     this.listListening(false)
   },
 
@@ -369,7 +366,7 @@ Page({
           audioUrl: res.audioUrl
         })
 
-        // 3. 加载音频（startAudioLoading 已在 onLoad 调用）
+        // 3. 加载音频
         return audioApi.initAudio(res.audioUrl, (progress) => {
           _this.updateAudioProgress(progress)
         })
@@ -378,10 +375,9 @@ Page({
         audioContext = data
         _this.audioContextListener()
 
-        // 4. 标记数据就绪，先结束音频遮罩，再完成进度条动画
+        // 4. 标记数据就绪，完成加载
         _this.setDataReady()
-        _this.finishAudioLoading()
-        _this.finishLoading()
+        _this.finishAudioPageLoading()
       })
       .catch(() => {
         pageGuard.goBack(_this)

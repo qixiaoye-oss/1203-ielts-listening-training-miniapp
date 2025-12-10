@@ -1,12 +1,12 @@
 const api = getApp().api
 const pageGuard = require('../../../../behaviors/pageGuard')
-const pageLoading = require('../../../../behaviors/pageLoading')
-const audioLoading = require('../../../../behaviors/audioLoading')
+const audioPageLoading = require('../../../../behaviors/audioPageLoading')
 const audioApi = require('../../../../utils/audioApi')
 
 let audio
 Page({
-  behaviors: [pageGuard.behavior, pageLoading, audioLoading],
+  // 注：此页面音频为流式加载，不需要下载进度遮罩，仅使用 pageLoading 功能
+  behaviors: [pageGuard.behavior, audioPageLoading],
   data: {
     audioPlay: false,
     noReady: true,
