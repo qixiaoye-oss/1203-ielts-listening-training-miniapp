@@ -24,6 +24,10 @@
           <view class="writing-label">我的听写</view>
           <textarea value="{{list[swiperCurrent].label}}" style="top:{{areaTop}}px;left: {{areaLeft}}px;" confirm-type="return" bindinput="inputVal" bindfocus="textareaFocus" bindblur="textareaBlur" maxlength="1000"></textarea>
           <view class="pl-class" wx:if="{{showPl && !list[swiperCurrent].label}}">请输入你的回答...</view>
+          <view class="notes-save-status" wx:if="{{notesSaveStatus !== 'none'}}">
+            <text wx:if="{{notesSaveStatus === 'saving'}}">Saving...</text>
+            <text wx:if="{{notesSaveStatus === 'saved'}}">Saved!</text>
+          </view>
         </view>
       </view>
     </view>
