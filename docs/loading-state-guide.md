@@ -852,7 +852,7 @@ Page({
 
 **迁移指南：**
 ```js
-// 旧写法
+// 旧写法（已废弃，所有页面已迁移完成）
 const errorHandler = getApp().errorHandler
 Page({
   behaviors: [pageLoading],
@@ -862,10 +862,10 @@ Page({
   })
 })
 
-// 新写法
+// 新写法（当前标准）
 const pageGuard = require('../../behaviors/pageGuard')
 Page({
-  behaviors: [pageGuard, pageLoading],
+  behaviors: [pageGuard.behavior, pageLoading],
   // ...
   .catch(() => {
     pageGuard.goBack(this)
@@ -873,8 +873,10 @@ Page({
 })
 ```
 
+> **注意**：v4.1.0 版本已完成所有页面迁移，不再使用 `errorHandler`。
+
 ---
 
-**文档版本：** v4.0.0
+**文档版本：** v4.1.0
 **最后更新：** 2025-12-10
 **维护者：** 开发团队

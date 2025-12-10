@@ -1,10 +1,10 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 const loadError = require('../../../../behaviors/loadError')
 
 Page({
-  behaviors: [pageLoading, loadError],
+  behaviors: [pageGuard.behavior, pageLoading, loadError],
   data: {},
   // ===========生命周期 Start===========
   onShow() {
@@ -47,7 +47,7 @@ Page({
     }, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      errorHandler.showRetry(this)
+      pageGuard.showRetry(this)
     })
   },
   // 重试加载
