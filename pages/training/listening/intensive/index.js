@@ -32,7 +32,8 @@ Page({
       }
     ],
     showPl: true,
-    saveFlag: false
+    saveFlag: false,
+    notesSaveStatus: 'none'  // 'none' | 'saving' | 'saved'
   },
 
   // ==================== 生命周期 ====================
@@ -211,7 +212,7 @@ Page({
 
   // 播放下一个
   nextAudio() {
-    this.validationLabel()
+    this.validateNotes()
     const { swiperCurrent, list } = this.data
     if (!list || swiperCurrent >= (list.length - 1)) {
       api.toast('已经最后一句啦！')
@@ -275,7 +276,7 @@ Page({
   // 完成精听（使用节流防重复）
   toExam() {
     this.throttleAction('toExam', () => {
-      this.overIntensice()
+      this.overIntensive()
     })
   },
 
@@ -306,7 +307,7 @@ Page({
 
     clearTimeout(inputTimer)
     inputTimer = setTimeout(() => {
-      _this.validationLabel()
+      _this.validateNotes()
     }, 500)
   },
 
@@ -386,29 +387,36 @@ Page({
       })
   },
 
-  // 标注先期验证
-  validationLabel() {
+  // 笔记保存前验证
+  validateNotes() {
     const { progressId } = this.data
     if (!api.isEmpty(progressId)) {
-      this.saveSentenceLabel()
+      this.saveSentenceNotes()
     } else {
       this.createProgress()
     }
   },
 
-  // 创建进度后保存标注
+  // 创建进度后保存笔记
   createProgress() {
-    api.request(this, '/record/v1/create/progress', { ...this.options }, false, 'POST').then(() => {
-      this.saveSentenceLabel()
+    api.request(this, '/record/v1/create/progress', { ...this.options }, true, 'POST').then(() => {
+      this.saveSentenceNotes()
     }).catch(() => {
       // 创建进度静默失败
     })
   },
 
-  // 保存句子标注
-  saveSentenceLabel() {
+  // 保存句子笔记
+  saveSentenceNotes() {
     const { progressId, swiperCurrent, list } = this.data
     if (!list || !list[swiperCurrent]) return
+
+    const hasNotes = !!list[swiperCurrent].label
+
+    // 只有有笔记内容时才显示保存状态
+    if (hasNotes) {
+      this.setData({ notesSaveStatus: 'saving' })
+    }
 
     api.request(this, '/record/v1/save/label', {
       progressId: progressId,
@@ -416,8 +424,20 @@ Page({
       status: list[swiperCurrent].status,
       content: list[swiperCurrent].label,
       currentIndex: swiperCurrent
-    }, false, 'POST').catch(() => {
-      // 保存标注静默失败
+    }, true, 'POST').then(() => {
+      // 只有有笔记内容时才显示已保存状态
+      if (hasNotes) {
+        this.setData({ notesSaveStatus: 'saved' })
+        // 2秒后隐藏
+        this.registerTimer('hideNotesSaved', () => {
+          this.setData({ notesSaveStatus: 'none' })
+        }, 2000)
+      }
+    }).catch(() => {
+      // 保存失败，隐藏状态
+      if (hasNotes) {
+        this.setData({ notesSaveStatus: 'none' })
+      }
     })
   },
 
@@ -438,19 +458,19 @@ Page({
     list[swiperCurrent].status = newStatus
     wx.setStorageSync('listenings', list)
 
-    // API 静默保存
+    // API 静默保存（hasToast=true 不显示 loading）
     api.request(this, '/record/v1/sentence/playing', {
       ...this.options,
       sentenceId: list[swiperCurrent].id
-    }, false, 'POST').catch(() => {
+    }, true, 'POST').catch(() => {
       // 播放记录静默失败
     })
   },
 
   // 完成精听（使用安全重定向）
-  overIntensice() {
+  overIntensive() {
     const { progressId } = this.data
-    this.saveSentenceLabel()
+    this.saveSentenceNotes()
 
     api.request(this, `/record/v1/complete/progress/${this.data.progressId}`, {}, false).then(() => {
       this.redirectTo('../intensive-notes/index' + api.parseParams({

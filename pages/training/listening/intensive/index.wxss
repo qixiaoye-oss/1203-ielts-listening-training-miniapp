@@ -117,6 +117,15 @@ textarea {
   z-index: 10;
 }
 
+.notes-save-status {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
 /* 按钮部分 */
 .playback-rate {
   position: absolute;
