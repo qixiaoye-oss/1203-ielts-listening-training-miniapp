@@ -411,8 +411,12 @@ Page({
     const { progressId, swiperCurrent, list } = this.data
     if (!list || !list[swiperCurrent]) return
 
-    // 显示保存中状态
-    this.setData({ notesSaveStatus: 'saving' })
+    const hasNotes = !!list[swiperCurrent].label
+
+    // 只有有笔记内容时才显示保存状态
+    if (hasNotes) {
+      this.setData({ notesSaveStatus: 'saving' })
+    }
 
     api.request(this, '/record/v1/save/label', {
       progressId: progressId,
@@ -421,15 +425,19 @@ Page({
       content: list[swiperCurrent].label,
       currentIndex: swiperCurrent
     }, true, 'POST').then(() => {
-      // 显示已保存状态
-      this.setData({ notesSaveStatus: 'saved' })
-      // 2秒后隐藏
-      this.registerTimer('hideNotesSaved', () => {
-        this.setData({ notesSaveStatus: 'none' })
-      }, 2000)
+      // 只有有笔记内容时才显示已保存状态
+      if (hasNotes) {
+        this.setData({ notesSaveStatus: 'saved' })
+        // 2秒后隐藏
+        this.registerTimer('hideNotesSaved', () => {
+          this.setData({ notesSaveStatus: 'none' })
+        }, 2000)
+      }
     }).catch(() => {
       // 保存失败，隐藏状态
-      this.setData({ notesSaveStatus: 'none' })
+      if (hasNotes) {
+        this.setData({ notesSaveStatus: 'none' })
+      }
     })
   },
 
