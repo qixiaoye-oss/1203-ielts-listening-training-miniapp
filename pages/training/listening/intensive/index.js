@@ -235,7 +235,12 @@ Page({
     })
   },
   toList: function () {
-    let { swiperCurrent, list } = this.data
+    let { swiperCurrent } = this.data
+    let list = wx.getStorageSync('listenings')
+    if (!list || !list[swiperCurrent]) {
+      api.toast('数据加载中，请稍候')
+      return
+    }
     wx.navigateTo({
       url: '../sentence/index?sid=' + this.options.setId + "&paragraphId=" + list[swiperCurrent].id
     })
@@ -303,8 +308,15 @@ Page({
     let _this = this
     api.request(this, `/part/v1/sentence`, { ...this.options }, isPull, true).then(res => {
       wx.setStorageSync('listenings', res.list)
-      // 如果有 startIndex 参数，使用它作为起始位置
-      let initialIndex = _this.startIndex ? Number(_this.startIndex) : res.swiperCurrent
+      // 如果有 startIndex 参数，使用它作为起始位置（需验证边界）
+      let initialIndex = res.swiperCurrent
+      if (_this.startIndex) {
+        const startIdx = Number(_this.startIndex)
+        // 确保 startIndex 在有效范围内
+        if (startIdx >= 0 && startIdx < res.list.length) {
+          initialIndex = startIdx
+        }
+      }
       this.setData({
         swiperCurrent: initialIndex,
         schedule: (((initialIndex + 1) / res.list.length) * 100),
