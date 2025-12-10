@@ -1,7 +1,7 @@
 <import src="/templates/page-loading.wxml" />
 <import src="/templates/audio-loading.wxml" />
 <template is="pageLoading" data="{{loading, loadProgress}}" />
-<template is="audioLoading" data="{{audioDownProgress}}" />
+<template is="audioLoading" data="{{audioLoading, audioDownProgress}}" />
 <view class="page font_color_base">
   <view class="header_container" wx:for="{{parts}}" wx:for-item="part" wx:for-index="partIndex" wx:key="id">
     <view class="header_title">

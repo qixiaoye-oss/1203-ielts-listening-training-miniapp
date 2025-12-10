@@ -85,11 +85,21 @@ Page({
   },
   toDetail(e) {
     let pages = getCurrentPages()
-    var prevPage = pages[pages.length - 2]; //上一个页面
-    prevPage.setData({
-      index: e.currentTarget.dataset.idx
-    })
-    // iaudio.stop()
-    wx.navigateBack({})
+
+    // 检查页面栈中是否有 intensive 页面
+    const intensiveIndex = pages.findIndex(p => p.route && p.route.includes('intensive/index'))
+    if (intensiveIndex === -1) {
+      console.error('错误：页面栈中没有 intensive 页面！')
+      wx.navigateBack()
+      return
+    }
+
+    // 使用 Storage 传递要跳转的句子索引，避免跨页面直接 setData
+    const targetIndex = e.currentTarget.dataset.idx
+    wx.setStorageSync('intensiveTargetIndex', targetIndex)
+
+    // 计算需要返回的层数
+    const delta = pages.length - 1 - intensiveIndex
+    wx.navigateBack({ delta: delta })
   },
 })

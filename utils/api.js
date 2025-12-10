@@ -11,6 +11,9 @@ const version = wx.getAccountInfoSync().miniProgram.envVersion
 var uri = url[version]
 var profiles = 'ielts'
 
+// 默认请求超时时间（毫秒）
+const DEFAULT_TIMEOUT = 30000
+
 function wxPromisify(fn) {
   return function (obj = {}) {
     return new Promise((resolve, reject) => {
@@ -38,32 +41,53 @@ Promise.prototype.finally = function (callback) {
 
 /**
  * 微信请求方法
- * that 当前页面this
- * url 请求地址
- * data 以对象的格式传入
- * hasToast 是否需要显示toast(下拉刷新不需要toast)
- * hasUser 是否包含User信息
- * method GET或POST请求
+ * @param {Object} that - 当前页面this
+ * @param {string} url - 请求地址
+ * @param {Object} data - 请求数据
+ * @param {boolean} hasToast - 是否跳过全局loading（使用页面自定义进度条时传true）
+ * @param {string} method - 请求方法 GET/POST/PUT/DELETE
+ * @param {number} timeout - 超时时间（毫秒），默认30秒
  */
-function request(that, url, data, hasToast, method) {
-  let timer
+function request(that, url, data, hasToast, method, timeout) {
+  let loadingTimer
+  let isCompleted = false
+  const requestTimeout = timeout || DEFAULT_TIMEOUT
+
   if (!hasToast) {
-    timer = setTimeout(function () {
-      wx.showLoading({
-        title: '努力加载中...',
-      })
+    loadingTimer = setTimeout(function () {
+      if (!isCompleted) {
+        wx.showLoading({
+          title: '努力加载中...',
+        })
+      }
     }, 1000)
   }
+
   return new Promise((resolve, reject) => {
+    // 超时定时器
+    const timeoutTimer = setTimeout(() => {
+      if (!isCompleted) {
+        isCompleted = true
+        clearTimeout(loadingTimer)
+        wx.hideLoading()
+        toast('请求超时，请检查网络后重试')
+        reject({ code: 'TIMEOUT', message: '请求超时' })
+      }
+    }, requestTimeout)
+
     wx.request({
       url: uri + url,
       method: method || 'GET',
       data: data,
+      timeout: requestTimeout,
       header: {
         'Content-Type': 'application/json',
         'Token': wx.getStorageSync("token")
       },
       success: function (res) {
+        if (isCompleted) return
+        isCompleted = true
+        clearTimeout(timeoutTimer)
         wx.hideLoading()
         if (res.data.code == '200') {
           console.log(res.data)
@@ -77,12 +101,21 @@ function request(that, url, data, hasToast, method) {
         }
       },
       fail: function (res) {
+        if (isCompleted) return
+        isCompleted = true
+        clearTimeout(timeoutTimer)
         wx.hideLoading()
-        toast('请求失败，请稍候再试')
-        reject(res)
+        // 区分超时和其他网络错误
+        if (res.errMsg && res.errMsg.indexOf('timeout') > -1) {
+          toast('请求超时，请检查网络后重试')
+          reject({ code: 'TIMEOUT', message: '请求超时' })
+        } else {
+          toast('请求失败，请稍候再试')
+          reject(res)
+        }
       },
       complete: function (res) {
-        clearTimeout(timer)
+        clearTimeout(loadingTimer)
         wx.stopPullDownRefresh()
       }
     })

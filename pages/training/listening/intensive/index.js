@@ -44,21 +44,26 @@ Page({
     if (platform == 'ios') {
       this.setData({ areaTop: -6, areaLeft: -4 })
     }
-    if (!api.isEmpty(this.data.index)) {
+    // 从 Storage 读取要跳转的句子索引（来自 sentence 页面的返回）
+    const targetIndex = wx.getStorageSync('intensiveTargetIndex')
+    if (targetIndex !== '' && targetIndex !== undefined && targetIndex !== null) {
+      // 立即清除，避免重复触发
+      wx.removeStorageSync('intensiveTargetIndex')
       let list = wx.getStorageSync('listenings')
-      let index = Number(this.data.index) + 1
-      let i = Number(this.data.index)
+      let index = Number(targetIndex) + 1
+      let i = Number(targetIndex)
       this.setData({
         swiperCurrent: i,
         schedule: ((index / list.length) * 100),
-        showArticle: false,
-        index: ''
+        showArticle: false
       })
       this.stopAudio()
       this.playAudio()
     }
   },
   onHide: function () {
+    // 取消可能存在的 goBack 定时器，防止页面被意外移除
+    errorHandler.cancelGoBack()
     let { audioState } = this.data
     if (audioState === 'playing') {
       this.setData({ audioState: 'none', playingSmallIndex: -1 })
@@ -297,7 +302,8 @@ Page({
   // 获取数据
   listListening(isPull) {
     let _this = this
-    api.request(this, `/part/v1/sentence`, { ...this.options }, isPull, true).then(res => {
+    // hasToast=true 跳过全局loading，使用页面自定义进度条
+    api.request(this, `/part/v1/sentence`, { ...this.options }, true, 'GET').then(res => {
       wx.setStorageSync('listenings', res.list)
       this.setData({
         schedule: (((res.swiperCurrent + 1) / res.list.length) * 100),

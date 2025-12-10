@@ -4,8 +4,16 @@
 
 > **注意**：这是一个基于 Behavior 的可复用方案，包含 JS 逻辑、WXML 模板和 WXSS 样式三部分。
 
-**版本：** v3.0.0
+**版本：** v3.1.0
 **更新日期：** 2025-12-10
+
+### 更新日志（v3.1.0）
+
+- **pageLoading**：添加定时器自动清理，防止内存泄漏
+- **audioLoading**：新增 `audioLoading` 布尔变量，语义更清晰
+- **api.js**：添加请求超时机制（默认30秒）
+- **errorHandler**：新增 `cancelGoBack()` 和 `resetAndReload()` 方法
+- **loadError**：支持自定义错误提示文案
 
 ---
 
@@ -100,6 +108,9 @@ Page({
 │     2. 快速跳到 100%                                             │
 │     3. 延迟 300ms 后隐藏进度条                                   │
 │                                                                 │
+│  页面隐藏/销毁时：                                                │
+│     └─ 自动清理定时器，防止内存泄漏                               │
+│                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -144,22 +155,23 @@ Page({
 **WXML 文件：**
 ```xml
 <import src="/templates/audio-loading.wxml" />
-<template is="audioLoading" data="{{audioDownProgress}}" />
+<template is="audioLoading" data="{{audioLoading, audioDownProgress}}" />
 ```
 
 ### 3.2 API 方法
 
 | 方法 | 说明 |
 |------|------|
-| `this.startAudioLoading()` | 开始加载，重置进度为 0 |
+| `this.startAudioLoading()` | 开始加载，显示遮罩并重置进度为 0 |
 | `this.updateAudioProgress(progress)` | 更新进度值 (0-100) |
-| `this.finishAudioLoading()` | 完成加载，进度设为 100 |
+| `this.finishAudioLoading()` | 完成加载，隐藏遮罩 |
 
 ### 3.3 Data 属性
 
 | 属性 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `audioDownProgress` | Number | 100 | 音频下载进度 (0-100)，100 时隐藏遮罩 |
+| `audioLoading` | Boolean | false | 是否显示加载遮罩（v3.1.0 新增） |
+| `audioDownProgress` | Number | 0 | 音频下载进度 (0-100) |
 
 ### 3.4 使用示例
 
@@ -225,6 +237,19 @@ if (!hasToast) {
 - **快速请求（<1秒）**：不显示任何全局提示
 - **慢速请求（>1秒）**：自动显示原生 loading 作为兜底
 - **页面使用进度条时**：传入 `hasToast=true` 跳过全局 loading
+
+### 4.3 请求超时机制（v3.1.0 新增）
+
+```js
+/**
+ * @param {number} timeout - 超时时间（毫秒），默认30秒
+ */
+api.request(this, '/api/data', {}, true, 'GET', 30000)
+```
+
+- **默认超时**：30秒
+- **超时提示**：自动显示 "请求超时，请检查网络后重试"
+- **超时错误**：reject `{ code: 'TIMEOUT', message: '请求超时' }`
 
 ---
 
@@ -330,15 +355,26 @@ Page({
 **WXML 文件：**
 ```xml
 <import src="/templates/load-error.wxml" />
-<template is="loadError" data="{{loadError}}" />
+<template is="loadError" data="{{loadError, loadErrorText}}" />
 ```
 
 ### 6.2 API 方法
 
 | 方法 | 说明 |
 |------|------|
-| `this.showLoadError()` | 显示加载失败状态 |
+| `this.showLoadError(text)` | 显示加载失败状态，可传入自定义提示文案（v3.1.0 新增） |
 | `this.hideLoadError()` | 隐藏加载失败状态 |
+
+### 6.2.1 自定义错误提示（v3.1.0 新增）
+
+```js
+// 使用默认提示 "加载失败"
+this.showLoadError()
+
+// 使用自定义提示
+this.showLoadError('网络连接失败')
+this.showLoadError('数据获取超时')
+```
 
 ### 6.3 配套 JS 代码
 
@@ -407,14 +443,34 @@ const errorHandler = getApp().errorHandler
 | 方法 | 说明 | 适用场景 |
 |------|------|----------|
 | `errorHandler.goBack(page)` | 结束加载 → 1.5秒后退回 | 详情页、子页面加载失败 |
+| `errorHandler.cancelGoBack()` | 取消自动返回（v3.1.0 新增） | 用户手动返回时调用 |
 | `errorHandler.showRetry(page)` | 结束加载 → 显示重试按钮 | 首页、列表页加载失败 |
 | `errorHandler.finishProgress(page)` | 仅结束加载状态 | 非关键数据加载失败 |
+| `errorHandler.resetAndReload(page, method)` | 重置状态并重新加载（v3.1.0 新增） | 重试加载时使用 |
 
 ### 7.3 特性
 
 - **自动处理多种加载状态**：自动检测并结束 `pageLoading` 和 `audioLoading`
 - **减少重复代码**：无需手动调用 `finishLoading()` + `finishAudioLoading()`
 - **统一入口**：所有错误处理走同一套逻辑
+- **防重复返回**（v3.1.0）：`goBack()` 检查页面栈，避免多次返回
+- **统一重置**（v3.1.0）：`resetAndReload()` 一键重置所有状态
+
+### 7.4 resetAndReload 使用示例（v3.1.0 新增）
+
+```js
+// 简化 retryLoad 实现
+retryLoad() {
+  errorHandler.resetAndReload(this, 'listData')
+}
+
+// 等同于：
+retryLoad() {
+  this.hideLoadError()
+  this.startLoading()
+  this.listData()
+}
+```
 
 ---
 
@@ -715,6 +771,6 @@ Page({
 
 ---
 
-**文档版本：** v3.0.0
+**文档版本：** v3.1.0
 **最后更新：** 2025-12-10
 **维护者：** 开发团队

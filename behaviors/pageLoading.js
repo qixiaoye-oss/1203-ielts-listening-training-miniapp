@@ -9,7 +9,31 @@ module.exports = Behavior({
     loadProgress: 0
   },
 
+  // 页面生命周期 - 自动清理定时器
+  pageLifetimes: {
+    hide() {
+      this._clearProgressTimer()
+    }
+  },
+
+  // 组件生命周期 - 自动清理定时器
+  lifetimes: {
+    detached() {
+      this._clearProgressTimer()
+    }
+  },
+
   methods: {
+    /**
+     * 清理进度定时器（内部方法）
+     */
+    _clearProgressTimer() {
+      if (this.progressTimer) {
+        clearInterval(this.progressTimer)
+        this.progressTimer = null
+      }
+    },
+
     /**
      * 开始加载进度条动画
      */
@@ -18,20 +42,18 @@ module.exports = Behavior({
         loading: true,
         loadProgress: 0
       })
-      this.simulateProgress()
+      this._simulateProgress()
     },
 
     /**
-     * 模拟进度增长动画
+     * 模拟进度增长动画（内部方法）
      * 进度增长速度逐渐变慢，最多到90%
      */
-    simulateProgress() {
+    _simulateProgress() {
       const that = this
       let progress = 0
       // 清除之前的定时器
-      if (this.progressTimer) {
-        clearInterval(this.progressTimer)
-      }
+      this._clearProgressTimer()
       this.progressTimer = setInterval(() => {
         if (progress < 90) {
           // 模拟进度增长，速度逐渐变慢
@@ -49,10 +71,7 @@ module.exports = Behavior({
      */
     finishLoading() {
       // 清除模拟进度的定时器
-      if (this.progressTimer) {
-        clearInterval(this.progressTimer)
-        this.progressTimer = null
-      }
+      this._clearProgressTimer()
       // 快速完成到100%
       this.setData({
         loadProgress: 100
