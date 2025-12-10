@@ -1,9 +1,9 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../behaviors/pageGuard')
 const pageLoading = require('../../../behaviors/pageLoading')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageGuard, pageLoading],
   data: {},
   onLoad() {
     this.startLoading()
@@ -15,7 +15,7 @@ Page({
     }, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      errorHandler.goBack(this)
+      pageGuard.goBack(this)
     })
   },
   resourceChange(e) {

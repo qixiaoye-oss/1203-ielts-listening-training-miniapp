@@ -1,9 +1,9 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageGuard, pageLoading],
   data: {},
   // ===========生命周期 Start===========
   onShow() {
@@ -147,7 +147,7 @@ Page({
     }, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      errorHandler.goBack(this)
+      pageGuard.goBack(this)
     })
   },
   // 删除记录

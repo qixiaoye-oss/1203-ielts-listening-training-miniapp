@@ -1,12 +1,12 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 const audioLoading = require('../../../../behaviors/audioLoading')
 const audioApi = require('../../../../utils/audioApi')
 
 let audio
 Page({
-  behaviors: [pageLoading, audioLoading],
+  behaviors: [pageGuard, pageLoading, audioLoading],
   data: {
     audioPlay: false,
     noReady: true,
@@ -101,7 +101,7 @@ Page({
       audio.seek(startTime)
       _this.finishLoading()
     }).catch(() => {
-      errorHandler.goBack(_this)
+      pageGuard.goBack(_this)
     })
   },
   checkImg(e) {

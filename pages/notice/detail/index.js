@@ -1,9 +1,9 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../behaviors/pageGuard')
 const pageLoading = require('../../../behaviors/pageLoading')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageGuard, pageLoading],
   data: {
     usefulCount: 0,
     shaking: false
@@ -42,7 +42,7 @@ Page({
     api.request(this, `/popular/science/v1/detail//${this.options.id}`, {}, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      errorHandler.goBack(this)
+      pageGuard.goBack(this)
     })
   },
   lable(type) {

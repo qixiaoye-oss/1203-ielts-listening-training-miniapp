@@ -1,9 +1,9 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageGuard, pageLoading],
   data: { saveLoading: false },
   // ===========生命周期 Start===========
   onLoad() {
@@ -25,7 +25,7 @@ Page({
     api.request(this, `/question/v1/list/part/${this.options.unitId}/miniapp`, {}, true, false).then(() => {
       this.finishLoading()
     }).catch(() => {
-      errorHandler.goBack(this)
+      pageGuard.goBack(this)
     })
   },
   saveQue() {

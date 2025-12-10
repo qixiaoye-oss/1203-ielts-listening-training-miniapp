@@ -1,12 +1,12 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 const audioLoading = require('../../../../behaviors/audioLoading')
 
 let innerAudioContext = null
 Page({
-  behaviors: [pageLoading, audioLoading],
+  behaviors: [pageGuard, pageLoading, audioLoading],
   data: {
     underwayIndex: 0,
     underway: {
@@ -142,7 +142,7 @@ Page({
         _this.finishAudioLoading()
       })
     }).catch(() => {
-      errorHandler.goBack(_this)
+      pageGuard.goBack(_this)
     })
   },
   addEventListener() {

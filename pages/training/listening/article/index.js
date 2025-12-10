@@ -1,9 +1,9 @@
 const api = getApp().api
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageGuard, pageLoading],
   data: {
     htmlStyle: {
       p: 'margin-bottom:10px;',
@@ -27,7 +27,7 @@ Page({
     api.request(this, `/part/v1/article/${this.options.partId}`, {}, isPull, false).then(() => {
       this.finishLoading()
     }).catch(() => {
-      errorHandler.goBack(this)
+      pageGuard.goBack(this)
     })
   }
   // ===========数据获取 End===========

@@ -1,27 +1,28 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
-const errorHandler = getApp().errorHandler
+const pageGuard = require('../../../../behaviors/pageGuard')
 const pageLoading = require('../../../../behaviors/pageLoading')
 const audioLoading = require('../../../../behaviors/audioLoading')
 
 let audioContext
 let inputTimer
+
 Page({
-  behaviors: [pageLoading, audioLoading],
+  behaviors: [pageGuard, pageLoading, audioLoading],
   data: {
     areaTop: -2,
     areaLeft: 0,
     bodyHeight: '',
     swiperCurrent: 0,
-    audioState: 'none', // 音频播放状态
-    audioEndTime: 0, // 音频结束播放时间
-    playingSmallIndex: -1, // 正在播放的小句子下标
-    showArticle: false, // 是否显示文本
-    baseShowArticle: false, // 全局设置是否显示文本
-    schedule: 0, // 总进度
-    completelyOver: false, // 是否播放到最后
-    showActionsheet: false, // 倍速选择
-    playbackRate: 1, // 倍速
+    audioState: 'none',
+    audioEndTime: 0,
+    playingSmallIndex: -1,
+    showArticle: false,
+    baseShowArticle: false,
+    schedule: 0,
+    completelyOver: false,
+    showActionsheet: false,
+    playbackRate: 1,
     playbackRateStr: 1.0,
     groups: [
       {
@@ -33,51 +34,70 @@ Page({
     showPl: true,
     saveFlag: false
   },
-  // 生命周期函数==============
+
+  // ==================== 生命周期 ====================
+
   onLoad: function (options) {
     this.setData({ audioState: 'none' })
     this.startLoading()
     this.listListening(false)
   },
+
   onShow: function () {
     const { platform } = wx.getDeviceInfo()
     if (platform == 'ios') {
       this.setData({ areaTop: -6, areaLeft: -4 })
     }
-    if (!api.isEmpty(this.data.index)) {
-      let list = wx.getStorageSync('listenings')
-      let index = Number(this.data.index) + 1
-      let i = Number(this.data.index)
-      this.setData({
-        swiperCurrent: i,
-        schedule: ((index / list.length) * 100),
-        showArticle: false,
-        index: ''
-      })
-      this.stopAudio()
-      this.playAudio()
+    // 只有数据就绪后才处理从 sentence 返回的情况
+    if (!api.isEmpty(this.data.index) && this.isDataReady()) {
+      this._handleReturnFromSentence()
     }
   },
+
   onHide: function () {
     let { audioState } = this.data
     if (audioState === 'playing') {
       this.setData({ audioState: 'none', playingSmallIndex: -1 })
     }
-    // this.stopAudio()
   },
+
   onUnload: function () {
     this.stopAudio()
-    audioContext.destroy()
+    if (audioContext) {
+      audioContext.destroy()
+    }
     audioApi.delAudioFile()
   },
+
   onReady() {
     const { windowHeight } = wx.getWindowInfo()
     this.setData({ bodyHeight: (windowHeight - 185) + 'px' })
   },
-  // 业务======================
-  //切换卡片
+
+  // ==================== 业务方法 ====================
+
+  /**
+   * 处理从 sentence 页面返回
+   */
+  _handleReturnFromSentence() {
+    // 从 storage 同步最新数据
+    const storageList = wx.getStorageSync('listenings')
+    const { index } = this.data
+    const i = Number(index)
+
+    this.setData({
+      list: storageList,
+      swiperCurrent: i,
+      schedule: (((i + 1) / storageList.length) * 100),
+      showArticle: false,
+      index: ''
+    })
+    this.stopAudio()
+    this.playAudio()
+  },
+
+  // 切换卡片（遗留方法，保留兼容）
   swiperSwitch({ detail }) {
-    // 手动切换不播放音频
     if (detail.source !== "touch") {
       return
     }
@@ -94,6 +114,7 @@ Page({
       this.playAudio()
     })
   },
+
   // 音频播放监听
   audioContextListener() {
     audioContext.onEnded(() => {
@@ -120,11 +141,13 @@ Page({
       }
     })
   },
-  // 计算播放到哪个句子
+
+  // 计算播放到哪个句子（使用 this.data.list）
   setSentencePlayingStatus() {
-    let list = wx.getStorageSync('listenings')
-    let { swiperCurrent } = this.data
-    let sentence = list[swiperCurrent].list
+    const { swiperCurrent, list } = this.data
+    if (!list || !list[swiperCurrent]) return
+
+    const sentence = list[swiperCurrent].list
     for (let i = 0; i < sentence.length; i++) {
       const leftTime = audioApi.millis2Seconds(sentence[i].startTimeMillis) - 0.1
       const rightTime = audioApi.millis2Seconds(sentence[i].endTimeMillis)
@@ -133,11 +156,13 @@ Page({
       }
     }
   },
-  // 大句子播放
+
+  // 大句子播放（使用 this.data.list）
   playAudio() {
-    let list = wx.getStorageSync('listenings')
-    let { swiperCurrent } = this.data
-    let paragraph = list[swiperCurrent]
+    const { swiperCurrent, list } = this.data
+    if (!list || !list[swiperCurrent]) return
+
+    const paragraph = list[swiperCurrent]
     let startTime = audioApi.millis2Seconds(paragraph.startTimeMillis)
     startTime = startTime == 0 ? startTime : (startTime - 0.1)
     wx.nextTick(() => {
@@ -149,40 +174,42 @@ Page({
       audioEndTime: audioApi.millis2Seconds(paragraph.endTimeMillis),
       playType: 'whole',
     })
-    // 记一次句子播放记录
     this.saveSentencePlayingRecord()
   },
+
   // 切换下一个大句子
   nextSentence() {
-    // 停止播放当前句子
     this.stopAudio()
-    // 播放下一个句子
     this.nextAudio()
   },
+
   // 切换下一句-完全听懂
   nextSentence2() {
-    let { swiperCurrent, list } = this.data
-    // 如果没听过该句或者该句进行了标注则无法点击完全听懂
+    const { swiperCurrent, list } = this.data
+    if (!list || !list[swiperCurrent]) return
+
     if (list[swiperCurrent].status == 0 || list[swiperCurrent].label) {
       return
     }
-    // 修改该句子标注状态
-    list[swiperCurrent].status = '2'
-    wx.setStorageSync('listenings', list)
+
+    // 更新 this.data.list
     this.setData({
       [`list[${swiperCurrent}].status`]: '2',
     })
-    // 停止播放当前句子
+
+    // 同步到 storage
+    list[swiperCurrent].status = '2'
+    wx.setStorageSync('listenings', list)
+
     this.stopAudio()
-    // 播放下一个句子
     this.nextAudio()
   },
-  //播放下一个
+
+  // 播放下一个
   nextAudio() {
-    // 切换之前先保存一下标注
     this.validationLabel()
-    let { swiperCurrent, list } = this.data
-    if (swiperCurrent >= (list.length - 1)) {
+    const { swiperCurrent, list } = this.data
+    if (!list || swiperCurrent >= (list.length - 1)) {
       api.toast('已经最后一句啦！')
       return
     }
@@ -193,13 +220,15 @@ Page({
     })
     this.playAudio()
   },
-  //小句子播放
+
+  // 小句子播放
   listenSentenceAgain(e) {
     this.stopAudio()
-    let { swiperCurrent, list } = this.data
-    // 兼容组件事件（e.detail）和原生事件（e.currentTarget.dataset）
-    let idx = e.detail?.idx ?? e.currentTarget?.dataset?.idx
-    let sentence = list[swiperCurrent].list[idx]
+    const { swiperCurrent, list } = this.data
+    if (!list || !list[swiperCurrent]) return
+
+    const idx = e.detail?.idx ?? e.currentTarget?.dataset?.idx
+    const sentence = list[swiperCurrent].list[idx]
     this.setData({
       audioEndTime: audioApi.millis2Seconds(sentence.endTimeMillis),
       playingSmallIndex: idx,
@@ -213,61 +242,76 @@ Page({
       audioContext.play()
     })
   },
-  //重新播放
+
+  // 重新播放
   listenAgain: function () {
     this.stopAudio()
     this.playAudio()
   },
-  //停止播放
+
+  // 停止播放
   stopAudio() {
-    if (!audioContext.paused) {
+    if (audioContext && !audioContext.paused) {
       audioContext.stop()
-      // audioContext.pause()
     }
-    // 判断是否是最后一个
     const { swiperCurrent, list } = this.data
-    this.setData({
-      completelyOver: (swiperCurrent + 1) === list.length
-    })
+    if (list) {
+      this.setData({
+        completelyOver: (swiperCurrent + 1) === list.length
+      })
+    }
   },
+
+  // 跳转到句子列表（使用安全导航）
   toList: function () {
-    let { swiperCurrent, list } = this.data
-    wx.navigateTo({
-      url: '../sentence/index?sid=' + this.options.setId + "&paragraphId=" + list[swiperCurrent].id
+    const { swiperCurrent, list } = this.data
+    this.navigateTo('../sentence/index?sid=' + this.options.setId + '&paragraphId=' + list[swiperCurrent].id)
+  },
+
+  // 完成精听（使用节流防重复）
+  toExam() {
+    this.throttleAction('toExam', () => {
+      this.overIntensice()
     })
   },
-  toExam() {
-    this.overIntensice()
-  },
+
   textareaFocus() {
     this.setData({ showPl: false })
   },
+
   textareaBlur() {
     this.setData({ showPl: true })
   },
-  // 标注句子
+
+  // 标注句子（同步更新 data 和 storage）
   inputVal({ detail }) {
     const _this = this
-    let { swiperCurrent } = this.data
-    let list = wx.getStorageSync('listenings')
-    list[swiperCurrent].label = detail.value
-    list[swiperCurrent].status = '3'
-    wx.setStorageSync('listenings', list)
+    const { swiperCurrent, list } = this.data
+    if (!list || !list[swiperCurrent]) return
+
+    // 更新 this.data.list
     this.setData({
       [`list[${swiperCurrent}].label`]: detail.value,
       [`list[${swiperCurrent}].status`]: '3',
     })
-    // 定时
+
+    // 同步到 storage
+    list[swiperCurrent].label = detail.value
+    list[swiperCurrent].status = '3'
+    wx.setStorageSync('listenings', list)
+
     clearTimeout(inputTimer)
     inputTimer = setTimeout(() => {
       _this.validationLabel()
-    }, 500);
+    }, 500)
   },
+
   showArticle: function () {
     this.setData({
       showArticle: !this.data.showArticle
     })
   },
+
   playSet() {
     let path = `groups[${this.data.groups.length - 1}].text`
     this.setData({
@@ -275,6 +319,7 @@ Page({
       showActionsheet: true
     })
   },
+
   btnClick(e) {
     const val = e.detail.value
     if (val === 3) {
@@ -293,32 +338,52 @@ Page({
       })
     }
   },
-  // 请求数据 ================================
-  // 获取数据
+
+  // ==================== 数据请求 ====================
+
+  /**
+   * 获取数据（修复版）
+   * - 显式设置 list 到 data
+   * - 加载完成后标记数据就绪
+   */
   listListening(isPull) {
-    let _this = this
-    api.request(this, `/part/v1/sentence`, { ...this.options }, isPull, true).then(res => {
-      wx.setStorageSync('listenings', res.list)
-      this.setData({
-        schedule: (((res.swiperCurrent + 1) / res.list.length) * 100),
-        audioUrl: res.audioUrl
+    const _this = this
+    api.request(this, `/part/v1/sentence`, { ...this.options }, isPull, true)
+      .then(res => {
+        // 1. 存入 storage（供 sentence 页面使用）
+        wx.setStorageSync('listenings', res.list)
+
+        // 2. 显式设置 list 到 data（确保数据源统一）
+        _this.setData({
+          list: res.list,
+          swiperCurrent: res.swiperCurrent || 0,
+          progressId: res.progressId,
+          schedule: (((res.swiperCurrent || 0) + 1) / res.list.length) * 100,
+          audioUrl: res.audioUrl
+        })
+
+        // 3. 加载音频
+        _this.startAudioLoading()
+        return audioApi.initAudio(res.audioUrl, (progress) => {
+          _this.updateAudioProgress(progress)
+        })
       })
-      _this.startAudioLoading()
-      audioApi.initAudio(res.audioUrl, (progress) => {
-        _this.updateAudioProgress(progress)
-      }).then(data => {
+      .then(data => {
         audioContext = data
         _this.audioContextListener()
+
+        // 4. 标记数据就绪
+        _this.setDataReady()
         _this.finishLoading()
         _this.finishAudioLoading()
       })
-    }).catch(() => {
-      errorHandler.goBack(_this)
-    })
+      .catch(() => {
+        pageGuard.goBack(_this)
+      })
   },
+
   // 标注先期验证
   validationLabel() {
-    // 判断是否存在进度ID
     const { progressId } = this.data
     if (!api.isEmpty(progressId)) {
       this.saveSentenceLabel()
@@ -326,6 +391,7 @@ Page({
       this.createProgress()
     }
   },
+
   // 创建进度后保存标注
   createProgress() {
     api.request(this, '/record/v1/create/progress', { ...this.options }, false, 'POST').then(() => {
@@ -334,9 +400,12 @@ Page({
       // 创建进度静默失败
     })
   },
+
   // 保存句子标注
   saveSentenceLabel() {
     const { progressId, swiperCurrent, list } = this.data
+    if (!list || !list[swiperCurrent]) return
+
     api.request(this, '/record/v1/save/label', {
       progressId: progressId,
       sentenceId: list[swiperCurrent].id,
@@ -347,15 +416,25 @@ Page({
       // 保存标注静默失败
     })
   },
-  // 保存句子播放状态
+
+  // 保存句子播放状态（同步更新 data 和 storage）
   saveSentencePlayingRecord() {
     const { swiperCurrent, list } = this.data
+    if (!list || !list[swiperCurrent]) return
+
     const state = list[swiperCurrent].status
-    list[swiperCurrent].status = state == '0' ? '1' : state
-    wx.setStorageSync('listenings', list)
+    const newStatus = state == '0' ? '1' : state
+
+    // 更新 this.data.list
     this.setData({
-      [`list[${swiperCurrent}].status`]: state == '0' ? '1' : state,
+      [`list[${swiperCurrent}].status`]: newStatus,
     })
+
+    // 同步到 storage
+    list[swiperCurrent].status = newStatus
+    wx.setStorageSync('listenings', list)
+
+    // API 静默保存
     api.request(this, '/record/v1/sentence/playing', {
       ...this.options,
       sentenceId: list[swiperCurrent].id
@@ -363,19 +442,17 @@ Page({
       // 播放记录静默失败
     })
   },
-  // 完成精听
+
+  // 完成精听（使用安全重定向）
   overIntensice() {
     const { progressId } = this.data
-    // 保存一下最后一个句子的标注
     this.saveSentenceLabel()
-    // 提交完成状态
+
     api.request(this, `/record/v1/complete/progress/${this.data.progressId}`, {}, false).then(() => {
-      wx.redirectTo({
-        url: '../intensive-notes/index' + api.parseParams({
-          ...this.options,
-          progressId: progressId,
-        }),
-      })
+      this.redirectTo('../intensive-notes/index' + api.parseParams({
+        ...this.options,
+        progressId: progressId,
+      }))
     }).catch(() => {
       // 完成失败提示重试
     })
