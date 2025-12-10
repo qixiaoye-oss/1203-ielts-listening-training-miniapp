@@ -1,5 +1,6 @@
 const api = getApp().api
 const audioApi = getApp().audioApi
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../../behaviors/pageLoading')
 const audioLoading = require('../../../../behaviors/audioLoading')
 
@@ -130,29 +131,18 @@ Page({
     const { underwayIndex } = this.data
     api.request(this, `/question/v1/list/part/${this.options.unitId}/miniapp`, {}, isPull).then(({ parts }) => {
       // 开始下载音频，显示圆饼进度
-      _this.setData({
-        audioDownProgress: 0,
-      })
+      _this.startAudioLoading()
       // 传入进度回调，实时更新下载进度 下载第一个音频
       audioApi.initAudio(parts[underwayIndex].audioUrl, (progress) => {
-        _this.setData({
-          audioDownProgress: progress
-        })
+        _this.updateAudioProgress(progress)
       }).then(data => {
         innerAudioContext = data
         _this.addEventListener()
         _this.finishLoading()
-        // 确保进度显示完成
-        _this.setData({
-          audioDownProgress: 100
-        })
+        _this.finishAudioLoading()
       })
     }).catch(() => {
-      _this.finishLoading()
-      _this.setData({
-        audioDownProgress: 100
-      })
-      setTimeout(() => wx.navigateBack(), 1500)
+      errorHandler.goBack(_this)
     })
   },
   addEventListener() {

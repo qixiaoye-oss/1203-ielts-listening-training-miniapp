@@ -1,11 +1,11 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../../behaviors/pageLoading')
+const loadError = require('../../../../behaviors/loadError')
 
 Page({
-  behaviors: [pageLoading],
-  data: {
-    loadError: false
-  },
+  behaviors: [pageLoading, loadError],
+  data: {},
   // ===========生命周期 Start===========
   onShow() {
     this.startLoading()
@@ -41,14 +41,13 @@ Page({
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
   listData() {
-    this.setData({ loadError: false })
+    this.hideLoadError()
     api.request(this, '/module/v1/list', {
       ...this.options
     }, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      this.setData({ loadError: true })
+      errorHandler.showRetry(this)
     })
   },
   // 重试加载

@@ -1,4 +1,5 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
@@ -50,8 +51,7 @@ Page({
       this.updateGroupsFromResponse(res)
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      setTimeout(() => wx.navigateBack(), 1500)
+      errorHandler.goBack(this)
     })
   },
   updateGroupsFromResponse(res) {

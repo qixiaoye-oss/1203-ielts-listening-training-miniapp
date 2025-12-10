@@ -1,4 +1,5 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../behaviors/pageLoading')
 
 var timer
@@ -67,8 +68,7 @@ Page({
     api.request(this, '/sys/albumLabel', {}, true, false).then(() => {
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      setTimeout(() => wx.navigateBack(), 1500)
+      errorHandler.goBack(this)
     })
   },
   listUserRole(userId) {

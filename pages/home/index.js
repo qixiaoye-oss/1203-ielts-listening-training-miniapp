@@ -1,16 +1,17 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../behaviors/pageLoading')
+const loadError = require('../../behaviors/loadError')
 
 Page({
-  behaviors: [pageLoading],
+  behaviors: [pageLoading, loadError],
   data: {
     url: {
       "TRAINING": "/pages/training/list/album/index"
     },
     popularScience: {
       url: []
-    },
-    loadError: false
+    }
   },
   // ===========生命周期 Start===========
   onShow() { },
@@ -59,12 +60,11 @@ Page({
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
   listData() {
-    this.setData({ loadError: false })
+    this.hideLoadError()
     api.request(this, '/home/v1/list', {}, true).then(() => {
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      this.setData({ loadError: true })
+      errorHandler.showRetry(this)
     })
   },
   listPopularScienceData() {

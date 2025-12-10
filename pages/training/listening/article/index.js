@@ -1,4 +1,5 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
@@ -26,8 +27,7 @@ Page({
     api.request(this, `/part/v1/article/${this.options.partId}`, {}, isPull, false).then(() => {
       this.finishLoading()
     }).catch(() => {
-      this.finishLoading()
-      setTimeout(() => wx.navigateBack(), 1500)
+      errorHandler.goBack(this)
     })
   }
   // ===========数据获取 End===========

@@ -1,5 +1,6 @@
 const api = require('utils/api.js')
 const audioApi = require('utils/audioApi.js')
+const errorHandler = require('utils/errorHandler.js')
 const CustomHook = require('spa-custom-hooks')
 let userData = {
   login: false
@@ -17,6 +18,7 @@ CustomHook.install({
 App({
   api: api,
   audioApi: audioApi,
+  errorHandler: errorHandler,
   onShow: function () {
     if (wx.canIUse('getUpdateManager')) {
       const updateManager = wx.getUpdateManager()

@@ -1,4 +1,5 @@
 const api = getApp().api
+const errorHandler = getApp().errorHandler
 const pageLoading = require('../../../../behaviors/pageLoading')
 
 Page({
@@ -37,8 +38,7 @@ Page({
     api.request(this, `/result/v1/result/${this.options.resultId}`, {}, isPull).then(() => {
       _this.finishLoading()
     }).catch(() => {
-      _this.finishLoading()
-      setTimeout(() => wx.navigateBack(), 1500)
+      errorHandler.goBack(_this)
     })
   },
 })
