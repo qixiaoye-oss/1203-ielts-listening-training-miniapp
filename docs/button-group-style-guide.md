@@ -6,8 +6,8 @@
 > 通过 `@import` 引入样式后，直接在 wxml 中使用 CSS 类名即可。
 > 推荐配合 `tap-action` 组件使用，自动封装点击动效。
 
-**版本：** v2.0.0
-**更新日期：** 2025-12-09
+**版本：** v2.1.0
+**更新日期：** 2025-12-11
 **样式文件：** `style/button-group.wxss`
 **点击组件：** `components/tap-action`
 
@@ -78,24 +78,30 @@
 
 **颜色映射表**：
 
-| icon | 主色 | 背景色 | 对应图标 |
-|------|------|--------|----------|
-| `save` | #00A6ED | rgba(0,166,237,0.15) | save_bt.png |
-| `play` | #00A6ED | rgba(0,166,237,0.15) | play_bt.png |
-| `pause` | #00A6ED | rgba(0,166,237,0.15) | pause_bt.png |
-| `replay` | #00A6ED | rgba(0,166,237,0.15) | replay_bt.png |
-| `restart` | #00A6ED | rgba(0,166,237,0.15) | restart_bt.png |
-| `submit` | #00A6ED | rgba(0,166,237,0.15) | submit_bt.png |
-| `next` | #00A6ED | rgba(0,166,237,0.15) | next_bt.png |
-| `goto` | #00A6ED | rgba(0,166,237,0.15) | goto_bt.png |
-| `updown` | #00A6ED | rgba(0,166,237,0.15) | updown_bt.png |
-| `correct` | #00D26A | rgba(0,210,106,0.15) | correct_bt.png |
-| `flag` | #F8312F | rgba(248,49,47,0.15) | flag_bt.png |
-| `visible` | #7D4533 | rgba(125,69,51,0.15) | visible_bt.png |
-| `hidden` | #7D4533 | rgba(125,69,51,0.15) | hidden_bt.png |
-| `list` | #FFB02E | rgba(255,176,46,0.15) | list_bt.png |
-| `setting` | #998EA4 | rgba(153,142,164,0.15) | setting_bt.png |
-| `me` | #533566 | rgba(83,53,102,0.15) | me_active.png |
+| icon | 主色 | 背景色 | 用途 |
+|------|------|--------|------|
+| `save` | #00A6ED | rgba(0,166,237,0.15) | 保存 |
+| `play` | #00A6ED | rgba(0,166,237,0.15) | 播放 |
+| `pause` | #00A6ED | rgba(0,166,237,0.15) | 暂停 |
+| `replay` | #00A6ED | rgba(0,166,237,0.15) | 重播 |
+| `restart` | #00A6ED | rgba(0,166,237,0.15) | 重新开始 |
+| `submit` | #00A6ED | rgba(0,166,237,0.15) | 提交 |
+| `next` | #00A6ED | rgba(0,166,237,0.15) | 下一个 |
+| `goto` | #00A6ED | rgba(0,166,237,0.15) | 跳转 |
+| `updown` | #00A6ED | rgba(0,166,237,0.15) | 上下切换 |
+| `go` | #00A6ED | rgba(0,166,237,0.15) | 前往 |
+| `stop` | #00A6ED | rgba(0,166,237,0.15) | 停止 |
+| `down` | #00A6ED | rgba(0,166,237,0.15) | 下载 |
+| `correct` | #00D26A | rgba(0,210,106,0.15) | 正确答案 |
+| `flag` | #F8312F | rgba(248,49,47,0.15) | 标记 |
+| `medal` | #F8312F | rgba(248,49,47,0.15) | 勋章 |
+| `visible` | #7D4533 | rgba(125,69,51,0.15) | 显示 |
+| `hidden` | #7D4533 | rgba(125,69,51,0.15) | 隐藏 |
+| `list` | #FFB02E | rgba(255,176,46,0.15) | 列表 |
+| `setting` | #998EA4 | rgba(153,142,164,0.15) | 设置 |
+| `me` | #533566 | rgba(83,53,102,0.15) | 个人中心 |
+| `controller` | #433B6B | rgba(67,59,107,0.15) | 练习/打卡 |
+| `desktop_mic` | #212121 | rgba(33,33,33,0.15) | 录音 |
 
 ### 2.2 维护流程
 
@@ -105,9 +111,69 @@
 
 ---
 
-## 三、按钮位置类
+## 三、按钮角标 (Corner Mark)
 
-### 3.1 位置类说明
+按钮角标用于显示数量提示（如录音数量）。
+
+### 3.1 基础用法
+
+```xml
+<tap-action icon="controller" bind:tap="handleTap">
+  <view>打卡/录音</view>
+  <image src="/images/v2/controller_bt.png"></image>
+  <view class="btn-corner-mark" wx:if="{{count > 0}}">{{count}}</view>
+</tap-action>
+```
+
+### 3.2 颜色自动继承
+
+角标颜色会**自动继承**父元素 `data-icon` 的主色，无需手动指定颜色类或 inline style。
+
+**CSS 规则：**
+
+```css
+/* 角标颜色 - 自动继承 data-icon 主色 */
+[data-icon="controller"] .btn-corner-mark {
+  color: #433B6B;
+  border-color: #433B6B;
+}
+
+[data-icon="desktop_mic"] .btn-corner-mark {
+  color: #212121;
+  border-color: #212121;
+}
+
+[data-icon="save"] .btn-corner-mark,
+[data-icon="play"] .btn-corner-mark,
+[data-icon="go"] .btn-corner-mark {
+  color: #00A6ED;
+  border-color: #00A6ED;
+}
+```
+
+### 3.3 角标颜色对照表
+
+| 父元素 icon | 角标颜色 | 色值 |
+|-------------|----------|------|
+| `controller` | 紫色 | #433B6B |
+| `desktop_mic` | 黑色 | #212121 |
+| `save` / `play` / `go` | 蓝色 | #00A6ED |
+
+### 3.4 兼容旧版（不推荐）
+
+旧版通过添加颜色类实现，现已不推荐使用：
+
+```xml
+<!-- 旧版写法 - 不推荐 -->
+<view class="btn-corner-mark btn--recording-corner-mark">{{count}}</view>
+<view class="btn-corner-mark btn--practice-corner-mark">{{count}}</view>
+```
+
+---
+
+## 四、按钮位置类
+
+### 4.1 位置类说明
 
 | 类名 | 用途 | 特性 |
 |------|------|------|
@@ -115,7 +181,7 @@
 | `.btn-pos-right` | 右侧按钮组 | 支持多个按钮，自动 15px 间距，整体靠右 |
 | `.btn-pos-center` | 居中按钮组 | 支持多个按钮，自动 15px 间距，整体居中 |
 
-### 3.2 使用场景
+### 4.2 使用场景
 
 **场景1：全部按钮居中**
 
@@ -161,7 +227,7 @@
 </view>
 ```
 
-### 3.3 灵活组合
+### 4.3 灵活组合
 
 位置类支持任意组合，左右各可放置单个或多个按钮：
 
@@ -174,9 +240,9 @@
 
 ---
 
-## 四、标准数值
+## 五、标准数值
 
-### 4.1 按钮内部数值
+### 5.1 按钮内部数值
 
 | 属性 | 数值 | 说明 |
 |------|------|------|
@@ -186,7 +252,7 @@
 | 文字与图标间距 | **5px** | 同一按钮内文字和图标的间距 |
 | 按钮高度 | **35px** | 5px(上) + 25px(icon) + 5px(下) |
 
-### 4.2 按钮组容器数值
+### 5.2 按钮组容器数值
 
 | 属性 | 数值 | 说明 |
 |------|------|------|
@@ -196,7 +262,7 @@
 | 边框颜色 | **rgba(0,0,0,0.3)** | 灰色边框 |
 | 容器圆角 | **9px** | 按钮组容器圆角半径 |
 
-### 4.3 固定底部数值
+### 5.3 固定底部数值
 
 | 属性 | 数值 | 说明 |
 |------|------|------|
@@ -206,9 +272,9 @@
 
 ---
 
-## 五、按钮组布局
+## 六、按钮组布局
 
-### 5.1 一层结构
+### 6.1 一层结构
 
 ```xml
 <view class="btn-page-bottom">
@@ -221,7 +287,7 @@
 </view>
 ```
 
-### 5.2 两层结构
+### 6.2 两层结构
 
 ```xml
 <view class="btn-page-bottom">
@@ -252,7 +318,7 @@
 </view>
 ```
 
-### 5.3 纯文字层
+### 6.3 纯文字层
 
 ```xml
 <view class="btn-group-layout-split__header btn-text-content">
@@ -262,7 +328,7 @@
 
 ---
 
-## 六、完整示例
+## 七、完整示例
 
 ### 示例1：精听页面按钮组
 
@@ -337,9 +403,23 @@
 </tap-action>
 ```
 
+### 示例4：带角标的按钮
+
+```xml
+<tap-action icon="controller" bind:tap="handleTap">
+  <view>打卡/录音</view>
+  <image src="/images/v2/controller_bt.png"></image>
+  <view class="btn-corner-mark" wx:if="{{recordCount > 0}}">{{recordCount}}</view>
+</tap-action>
+```
+
 ---
 
-## 七、更新记录
+## 八、更新记录
+
+### v2.1.0 (2025-12-11)
+- **新增角标颜色继承**：角标颜色自动继承父元素 `data-icon` 主色
+- **新增 icon 映射**：`go`、`stop`、`down`（蓝色）、`medal`（红色）、`controller`（紫色）、`desktop_mic`（黑色）
 
 ### v2.0.0 (2025-12-09)
 - **重构位置类**：使用 `.btn-pos-left`、`.btn-pos-right`、`.btn-pos-center` 包裹类
@@ -363,6 +443,6 @@
 
 ---
 
-**文档版本：** v2.0.0
-**最后更新：** 2025-12-09
+**文档版本：** v2.1.0
+**最后更新：** 2025-12-11
 **维护者：** 开发团队
