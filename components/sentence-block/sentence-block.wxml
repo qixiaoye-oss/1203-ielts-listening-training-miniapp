@@ -12,6 +12,6 @@
   </view>
   <!-- 翻译部分：不可点击 -->
   <view class="sentence-block__translate {{hidden ? 'sentence-block__translate--hidden' : ''}}">
-    <text user-select="{{true}}">{{translate || '暂无翻译'}}</text>
+    <text class="sentence-block__translate-text" user-select="{{true}}">{{translate || '暂无翻译'}}</text>
   </view>
 </view>
