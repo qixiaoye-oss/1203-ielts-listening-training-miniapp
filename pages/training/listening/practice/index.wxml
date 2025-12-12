@@ -6,12 +6,24 @@
   </view>
   <view class="parctice">
     <block wx:for="{{part.groups}}" wx:for-item="group" wx:for-index="groupIndex" wx:key="id">
-      <view wx:for="{{group.questions}}" wx:key="id" class="question">
-        <view class="question__num">{{item.qNumber}}</view>
-        <view class="question__input">
-          <textarea_auto_height bind:input="inputArea" data-part-index="{{partIndex}}" data-group-index="{{groupIndex}}" data-question-index="{{index}}" width=""></textarea_auto_height>
+      <!-- 多选题：整组显示一个输入框 -->
+      <block wx:if="{{group.type === 'multiple-choice'}}">
+        <view class="question">
+          <view class="question__num question__num--range">{{group.questions[0].qNumber}}-{{group.questions[group.questions.length - 1].qNumber}}</view>
+          <view class="question__input">
+            <textarea_auto_height bind:input="inputArea" data-part-index="{{partIndex}}" data-group-index="{{groupIndex}}" data-question-index="{{0}}" width=""></textarea_auto_height>
+          </view>
         </view>
-      </view>
+      </block>
+      <!-- 其他题型：每题单独输入 -->
+      <block wx:else>
+        <view wx:for="{{group.questions}}" wx:key="id" class="question">
+          <view class="question__num">{{item.qNumber}}</view>
+          <view class="question__input">
+            <textarea_auto_height bind:input="inputArea" data-part-index="{{partIndex}}" data-group-index="{{groupIndex}}" data-question-index="{{index}}" width=""></textarea_auto_height>
+          </view>
+        </view>
+      </block>
     </block>
   </view>
 </block>
