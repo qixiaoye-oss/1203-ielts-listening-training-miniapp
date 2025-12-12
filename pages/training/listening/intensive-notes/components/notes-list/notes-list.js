@@ -2,11 +2,18 @@ const api = getApp().api
 
 Component({
   properties: {
-    list: Array
+    list: Array,
+    // 从父页面接收的播放状态
+    nowPlayAudio: {
+      type: Number,
+      value: -1
+    },
+    nowPlaySmallAudio: {
+      type: Number,
+      value: -1
+    }
   },
   data: {
-    nowPlayAudio: -1,
-    nowPalySmallAudio: -1,
     showHidden: false
   },
   methods: {
@@ -15,16 +22,16 @@ Component({
       const { item } = e.currentTarget.dataset
       this.triggerEvent('edit', item)
     },
-    // 播放音频
+    // 播放音频（触发事件由父页面处理）
     playAudio(e) {
       const { index } = e.currentTarget.dataset
-      const { nowPlayAudio } = this.data
-      if (nowPlayAudio === index) {
-        this.setData({ nowPlayAudio: -1 })
-      } else {
-        // TODO: 实现音频播放逻辑
-        this.setData({ nowPlayAudio: index })
-      }
+      this.triggerEvent('playAudio', { index })
+    },
+    // 点击片段播放（触发事件由父页面处理）
+    onSegmentTap(e) {
+      const { sentenceIndex } = e.currentTarget.dataset
+      const segmentIndex = Number(e.detail?.index ?? e.detail?.idx ?? 0)
+      this.triggerEvent('playSegment', { sentenceIndex, segmentIndex })
     },
     // 显示/隐藏内容
     showContent(e) {
