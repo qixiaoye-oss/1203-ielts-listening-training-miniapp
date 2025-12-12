@@ -10,39 +10,43 @@
       <view class="report-card">
         <block wx:for="{{part.groups}}" wx:for-item="group" wx:for-index="groupIndex" wx:key="id">
           <!-- 多选题：整组显示在一行 -->
-          <view class="report-card__item" wx:if="{{group.type === 'multiple-choice'}}">
-            <view class="question">
-              <view class="question__no question__no--range">{{group.questions[0].qNumber}}-{{group.questions[group.questions.length - 1].qNumber}}</view>
-              <view class="question__user-answer {{group.questions[0].state != 1?'answer_wrong':''}}">{{wxsUtil.formatNull(group.questions[0].userAnswer,'未填写')}}</view>
-              <tap-action icon="correct" wx:if="{{group.questions[0].state == 1}}">
-                <image src="/images/v2/correct_bt.png"></image>
-              </tap-action>
-              <tap-action icon="flag" wx:else>
-                <image src="/images/v2/wrong.png"></image>
-              </tap-action>
-              <tap-action icon="next" bind:tap="change" data-part-index="{{partIndex}}" data-group-index="{{groupIndex}}" data-question-index="{{0}}">
-                <image src="/images/v2/next_bt.png"></image>
-              </tap-action>
+          <block wx:if="{{group.type === 'multiple-choice'}}">
+            <view class="report-card__item">
+              <view class="question">
+                <view class="question__no question__no--range">{{group.questions[0].qNumber}}-{{group.questions[group.questions.length - 1].qNumber}}</view>
+                <view class="question__user-answer {{group.questions[0].state != 1?'answer_wrong':''}}">{{wxsUtil.formatNull(group.questions[0].userAnswer,'未填写')}}</view>
+                <tap-action icon="correct" wx:if="{{group.questions[0].state == 1}}">
+                  <image src="/images/v2/correct_bt.png"></image>
+                </tap-action>
+                <tap-action icon="flag" wx:else>
+                  <image src="/images/v2/wrong.png"></image>
+                </tap-action>
+                <tap-action icon="next" bind:tap="change" data-part-index="{{partIndex}}" data-group-index="{{groupIndex}}" data-question-index="{{0}}">
+                  <image src="/images/v2/next_bt.png"></image>
+                </tap-action>
+              </view>
+              <view class="right-answers">{{group.questions[0].rightAnswer}}</view>
             </view>
-            <view class="right-answers">{{group.questions[0].rightAnswer}}</view>
-          </view>
+          </block>
           <!-- 其他题型：每题单独一行 -->
-          <view class="report-card__item" wx:for="{{group.questions}}" wx:key="id" wx:else>
-            <view class="question">
-              <view class="question__no">{{item.qNumber}}</view>
-              <view class="question__user-answer {{item.state != 1?'answer_wrong':''}}">{{wxsUtil.formatNull(item.userAnswer,'未填写')}}</view>
-              <tap-action icon="correct" wx:if="{{item.state == 1}}">
-                <image src="/images/v2/correct_bt.png"></image>
-              </tap-action>
-              <tap-action icon="flag" wx:else>
-                <image src="/images/v2/wrong.png"></image>
-              </tap-action>
-              <tap-action icon="next" bind:tap="change" data-part-index="{{partIndex}}" data-group-index="{{groupIndex}}" data-question-index="{{index}}">
-                <image src="/images/v2/next_bt.png"></image>
-              </tap-action>
+          <block wx:else>
+            <view class="report-card__item" wx:for="{{group.questions}}" wx:key="id">
+              <view class="question">
+                <view class="question__no">{{item.qNumber}}</view>
+                <view class="question__user-answer {{item.state != 1?'answer_wrong':''}}">{{wxsUtil.formatNull(item.userAnswer,'未填写')}}</view>
+                <tap-action icon="correct" wx:if="{{item.state == 1}}">
+                  <image src="/images/v2/correct_bt.png"></image>
+                </tap-action>
+                <tap-action icon="flag" wx:else>
+                  <image src="/images/v2/wrong.png"></image>
+                </tap-action>
+                <tap-action icon="next" bind:tap="change" data-part-index="{{partIndex}}" data-group-index="{{groupIndex}}" data-question-index="{{index}}">
+                  <image src="/images/v2/next_bt.png"></image>
+                </tap-action>
+              </view>
+              <view class="right-answers">{{item.rightAnswer}}</view>
             </view>
-            <view class="right-answers">{{item.rightAnswer}}</view>
-          </view>
+          </block>
         </block>
       </view>
     </block>
