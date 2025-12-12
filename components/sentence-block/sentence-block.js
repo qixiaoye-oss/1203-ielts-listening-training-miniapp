@@ -24,6 +24,11 @@ Component({
     idPrefix: {
       type: String,
       value: 'T'
+    },
+    // 句子索引（用于多句子场景，区分是哪个句子被点击）
+    sentenceIdx: {
+      type: Number,
+      value: 0
     }
   },
   methods: {
@@ -32,6 +37,7 @@ Component({
       const index = e.currentTarget.dataset.idx
       this.triggerEvent('tap', {
         index: index,
+        sentenceIdx: this.data.sentenceIdx,
         ...e.currentTarget.dataset
       })
     }

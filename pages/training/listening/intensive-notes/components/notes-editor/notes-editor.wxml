@@ -5,7 +5,7 @@
       <sentence-block
         list="{{detail.list}}"
         translate="{{wxsUtil.getTranslate(detail)}}"
-        activeIndex="{{selected}}"
+        activeIndex="{{nowPlayAudio == detailIndex ? nowPlaySmallAudio : -1}}"
         idPrefix="T"
         bind:tap="listenSentenceAgain"
       />

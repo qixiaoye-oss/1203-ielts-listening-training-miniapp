@@ -9,8 +9,11 @@
             <sentence-block
               list="{{item.list}}"
               translate="{{wxsUtil.getTranslate(item)}}"
-              activeIndex="{{nowPlayAudio == index ? nowPalySmallAudio : -1}}"
+              activeIndex="{{nowPlayAudio == index ? nowPlaySmallAudio : -1}}"
               hidden="{{!item.show}}"
+              sentenceIdx="{{index}}"
+              bind:tap="onSegmentTap"
+              data-sentence-index="{{index}}"
             />
           </view>
           <view class="answer-cell" bind:tap="toEditPage" data-item="{{item}}">

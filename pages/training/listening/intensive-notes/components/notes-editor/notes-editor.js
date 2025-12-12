@@ -2,14 +2,27 @@ const api = getApp().api
 
 Component({
   properties: {
-    detail: Object
+    detail: Object,
+    // 当前 detail 在 list 中的索引
+    detailIndex: {
+      type: Number,
+      value: -1
+    },
+    // 从父页面接收的播放状态
+    nowPlayAudio: {
+      type: Number,
+      value: -1
+    },
+    nowPlaySmallAudio: {
+      type: Number,
+      value: -1
+    }
   },
   data: {
     formats: {},
     editorCtx: null,
     editorKey: true,
-    showPl: true,
-    selected: -1
+    showPl: true
   },
   observers: {
     // 正确监听写法（注意这里是对象属性路径）
@@ -23,11 +36,14 @@ Component({
     },
   },
   methods: {
-    // 点击句子高亮
+    // 点击片段播放（触发事件由父页面处理）
     listenSentenceAgain(e) {
-      // 兼容组件事件（e.detail）和原生事件（e.currentTarget.dataset）
-      const idx = e.detail?.idx ?? e.currentTarget?.dataset?.idx
-      this.setData({ selected: idx })
+      const segmentIndex = Number(e.detail?.index ?? e.detail?.idx ?? 0)
+      const { detailIndex } = this.properties
+      this.triggerEvent('playSegment', {
+        sentenceIndex: detailIndex,
+        segmentIndex
+      })
     },
     // 保存并返回
     saveUserAnswer() {
