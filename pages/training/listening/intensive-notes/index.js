@@ -33,7 +33,11 @@ Page({
   listData() {
     api.request(this, '/record/v1/list/label', {
       ...this.options
-    }, true).then(() => {
+    }, true).then((res) => {
+      console.log('[intensive-notes] API 返回数据:', res)
+      console.log('[intensive-notes] audioUrl:', res?.audioUrl)
+      console.log('[intensive-notes] list[0]:', res?.list?.[0])
+      console.log('[intensive-notes] list[0].list[0]:', res?.list?.[0]?.list?.[0])
       this.setData({ isAllRady: true })
       this.finishLoading()
     }).catch(() => {
