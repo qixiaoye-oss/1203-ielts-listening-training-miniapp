@@ -12,7 +12,7 @@
               activeIndex="{{nowPlayAudio == index ? nowPlaySmallAudio : -1}}"
               hidden="{{!item.show}}"
               sentenceIdx="{{index}}"
-              bind:tap="onSegmentTap"
+              bind:segmenttap="onSegmentTap"
               data-sentence-index="{{index}}"
             />
           </view>

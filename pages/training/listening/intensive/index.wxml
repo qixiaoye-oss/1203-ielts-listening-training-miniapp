@@ -17,7 +17,7 @@
             activeIndex="{{playingSmallIndex}}"
             hidden="{{!baseShowArticle && !showArticle}}"
             idPrefix="T"
-            bind:tap="listenSentenceAgain"
+            bind:segmenttap="listenSentenceAgain"
           />
         </view>
         <view class="writing-cell">

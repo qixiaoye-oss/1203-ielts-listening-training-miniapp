@@ -35,7 +35,7 @@ Component({
     // 点击原文片段触发
     handleTap(e) {
       const index = e.currentTarget.dataset.idx
-      this.triggerEvent('tap', {
+      this.triggerEvent('segmenttap', {
         index: index,
         sentenceIdx: this.data.sentenceIdx,
         ...e.currentTarget.dataset

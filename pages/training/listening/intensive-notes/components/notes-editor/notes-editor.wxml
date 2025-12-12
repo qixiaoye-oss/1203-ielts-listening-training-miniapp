@@ -7,7 +7,7 @@
         translate="{{wxsUtil.getTranslate(detail)}}"
         activeIndex="{{nowPlayAudio == detailIndex ? nowPlaySmallAudio : -1}}"
         idPrefix="T"
-        bind:tap="listenSentenceAgain"
+        bind:segmenttap="listenSentenceAgain"
       />
     </view>
     <view class="review-result" wx:if="{{enableScore == 1}}">
