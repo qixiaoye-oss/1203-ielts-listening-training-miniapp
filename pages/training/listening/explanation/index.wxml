@@ -29,7 +29,7 @@
           hidden="{{!showHidden}}"
           activeIndex="{{currentSentenceIdx === sentenceIdx ? playingSmallIndex : -1}}"
           sentenceIdx="{{sentenceIdx}}"
-          bind:tap="listenSentenceAgain"
+          bind:segmenttap="listenSentenceAgain"
         />
         <view class="font_color_base" style="margin-bottom: 15px;" wx:if="{{sentence.keyPoints}}">{{wxsUtil.formatNull(sentence.keyPoints,'')}}</view>
         <view class="sentence_analysis_cell" wx:if="{{sentence.analysisList.length > 0}}">
