@@ -83,7 +83,7 @@ Page({
       })
     })
     audio.onError(res => {
-      console.log(res)
+      console.error('[explanation] 音频错误:', res)
     })
   },
   stopAudio() {
@@ -108,34 +108,20 @@ Page({
   listenSentenceAgain(e) {
     this.stopAudio()
     const { question } = this.data
-    if (!question || !question.sentenceList) {
-      console.log('[listenSentenceAgain] question 或 sentenceList 不存在')
-      return
-    }
+    if (!question || !question.sentenceList) return
 
     const sentenceIdx = Number(e.detail?.sentenceIdx ?? 0)
     const idx = Number(e.detail?.index ?? e.detail?.idx ?? 0)
 
-    console.log('[listenSentenceAgain] sentenceIdx:', sentenceIdx, 'idx:', idx)
-
     // 找到对应的句子和片段
     const sentenceList = question.sentenceList
-    if (!sentenceList[sentenceIdx] || !sentenceList[sentenceIdx].list) {
-      console.log('[listenSentenceAgain] 找不到对应的句子', sentenceIdx)
-      return
-    }
+    if (!sentenceList[sentenceIdx] || !sentenceList[sentenceIdx].list) return
 
     const sentence = sentenceList[sentenceIdx].list[idx]
-    console.log('[listenSentenceAgain] 片段数据:', sentence)
-
-    if (!sentence) {
-      console.log('[listenSentenceAgain] 找不到对应的片段', idx)
-      return
-    }
+    if (!sentence) return
 
     // 如果没有时间戳数据，只做高亮不播放
     if (sentence.startTimeMillis === undefined || sentence.startTimeMillis === null) {
-      console.log('[listenSentenceAgain] 片段没有时间戳数据，仅高亮')
       this.setData({
         playingSmallIndex: idx,
         currentSentenceIdx: sentenceIdx
@@ -152,8 +138,6 @@ Page({
 
     let startTime = audioApi.millis2Seconds(sentence.startTimeMillis)
     startTime = startTime === 0 ? startTime : (startTime - 0.1)
-
-    console.log('[listenSentenceAgain] 播放时间:', startTime, '->', audioApi.millis2Seconds(sentence.endTimeMillis))
 
     audio.seek(startTime)
     audio.play()
@@ -200,7 +184,6 @@ Page({
     const _this = this
     api.request(this, '/question/v1/analysis/question/miniapp', { ...this.options }, isPull).then(res => {
       let startTime = audioApi.millis2Seconds(res.question.startTimeMillis)
-      console.log(res)
       audio.src = res.audioUrl
       audio.startTime = startTime
       audio.seek(startTime)

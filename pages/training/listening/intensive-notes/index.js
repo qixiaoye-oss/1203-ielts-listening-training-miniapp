@@ -50,18 +50,12 @@ Page({
     api.request(this, '/record/v1/list/label', {
       ...this.options
     }, true).then((res) => {
-      console.log('[intensive-notes] API 返回数据:', res)
-      console.log('[intensive-notes] audioUrl:', res?.audioUrl)
-      console.log('[intensive-notes] list[0]:', res?.list?.[0])
-      console.log('[intensive-notes] list[0].list[0]:', res?.list?.[0]?.list?.[0])
-
       // 如果有 audioUrl，预加载音频
       if (res?.audioUrl) {
         return audioApi.initAudio(res.audioUrl, (progress) => {
           _this.updateAudioProgress(progress)
         })
       } else {
-        console.log('[intensive-notes] 没有 audioUrl，跳过音频预加载')
         return Promise.resolve(null)
       }
     }).then((audio) => {
@@ -80,9 +74,7 @@ Page({
   audioContextListener() {
     if (!audioContext) return
 
-    audioContext.onPlay(() => {
-      console.log('[intensive-notes] 音频开始播放')
-    })
+    audioContext.onPlay(() => {})
     audioContext.onStop(() => {
       this.setData({
         nowPlayAudio: -1,
@@ -111,7 +103,7 @@ Page({
       }
     })
     audioContext.onError((err) => {
-      console.log('[intensive-notes] 音频错误:', err)
+      console.error('[intensive-notes] 音频错误:', err)
     })
   },
 
@@ -161,10 +153,7 @@ Page({
     if (!audioContext || !list || !list[index]) return
 
     const paragraph = list[index]
-    if (!paragraph.startTimeMillis) {
-      console.log('[intensive-notes] 句子没有时间戳')
-      return
-    }
+    if (!paragraph.startTimeMillis) return
 
     let startTime = audioApi.millis2Seconds(paragraph.startTimeMillis)
     startTime = startTime === 0 ? startTime : (startTime - 0.1)
@@ -189,7 +178,6 @@ Page({
 
     const segment = list[sentenceIndex].list?.[segmentIndex]
     if (!segment || !segment.startTimeMillis) {
-      console.log('[intensive-notes] 片段没有时间戳')
       // 仅高亮
       this.setData({
         nowPlayAudio: sentenceIndex,
