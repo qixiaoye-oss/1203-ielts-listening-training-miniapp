@@ -56,6 +56,13 @@
   font-size: 12px;
 }
 
+/* 多选题题号范围样式 */
+.question__no--range {
+  width: auto;
+  padding: 0 8px;
+  min-width: 28px;
+}
+
 .question__user-answer {
   flex-grow: 1;
   font-size: 14px;

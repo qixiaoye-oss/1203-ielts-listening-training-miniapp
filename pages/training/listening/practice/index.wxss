@@ -44,6 +44,13 @@
   margin-top: 5px;
 }
 
+/* 多选题题号范围样式 */
+.question__num--range {
+  width: auto;
+  padding: 0 8px;
+  min-width: 28px;
+}
+
 .question__input {
   width: 0;
   flex: 1;
