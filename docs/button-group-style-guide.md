@@ -6,8 +6,8 @@
 > 通过 `@import` 引入样式后，直接在 wxml 中使用 CSS 类名即可。
 > 推荐配合 `tap-action` 组件使用，自动封装点击动效。
 
-**版本：** v2.1.0
-**更新日期：** 2025-12-11
+**版本：** v2.2.0
+**更新日期：** 2025-12-13
 **样式文件：** `style/button-group.wxss`
 **点击组件：** `components/tap-action`
 
@@ -113,9 +113,19 @@
 
 ## 三、按钮角标 (Corner Mark)
 
-按钮角标用于显示数量提示（如录音数量）。
+按钮角标用于显示数量提示（如录音数量、倍速等）。
 
-### 3.1 基础用法
+### 3.1 尺寸与间距规范
+
+| 属性 | 值 | 说明 |
+|------|-----|------|
+| `padding` | 2px | 文字与边框四周间距 |
+| `font-size` | 10px | 字体大小 |
+| `border-radius` | 3px | 圆角 |
+
+**注意：** 角标尺寸由文字内容自适应，仅通过 `padding: 2px` 控制文字与边框的间距。
+
+### 3.2 基础用法
 
 ```xml
 <tap-action icon="controller" bind:tap="handleTap">
@@ -125,7 +135,7 @@
 </tap-action>
 ```
 
-### 3.2 颜色自动继承
+### 3.3 颜色自动继承
 
 角标颜色会**自动继承**父元素 `data-icon` 的主色，无需手动指定颜色类或 inline style。
 
@@ -145,21 +155,23 @@
 
 [data-icon="save"] .btn-corner-mark,
 [data-icon="play"] .btn-corner-mark,
+[data-icon="pause"] .btn-corner-mark,
+[data-icon="replay"] .btn-corner-mark,
 [data-icon="go"] .btn-corner-mark {
   color: #00A6ED;
   border-color: #00A6ED;
 }
 ```
 
-### 3.3 角标颜色对照表
+### 3.4 角标颜色对照表
 
 | 父元素 icon | 角标颜色 | 色值 |
 |-------------|----------|------|
 | `controller` | 紫色 | #433B6B |
 | `desktop_mic` | 黑色 | #212121 |
-| `save` / `play` / `go` | 蓝色 | #00A6ED |
+| `save` / `play` / `pause` / `replay` / `go` | 蓝色 | #00A6ED |
 
-### 3.4 兼容旧版（不推荐）
+### 3.5 兼容旧版（不推荐）
 
 旧版通过添加颜色类实现，现已不推荐使用：
 
