@@ -62,8 +62,6 @@ text {
 }
 
 .toggle_slider_btn {
-  width: 20px;
-  height: 20px;
   transform: rotate(180deg);
   transition: transform 0.3s ease;
 }

@@ -11,11 +11,13 @@
           <view>注意此为单项</view>
           <image src="/images/like.png"></image>
         </view>
-        <image
-          class="toggle_slider_btn {{showSlider ? 'rotate_down' : ''}}"
-          src="/images/v2/down_bt.png"
+        <view
+          class="btn-action-icon toggle_slider_btn {{showSlider ? 'rotate_down' : ''}}"
+          data-icon="down"
           bindtap="toggleSlider"
-        ></image>
+        >
+          <image src="/images/v2/down_bt.png"></image>
+        </view>
       </view>
     </view>
     <view class="header_divider" wx:if="{{showSlider}}"></view>
