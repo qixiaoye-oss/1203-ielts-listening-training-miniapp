@@ -18,6 +18,7 @@ Page({
     saveFlag: true,
     showActionsheet: false,
     playbackRate: '1.0',
+    showSlider: false,
     groups: [{
       text: '0.8倍速',
       value: 0.8
@@ -109,6 +110,11 @@ Page({
         audioStatus: 1
       })
     }, 100)
+  },
+  toggleSlider() {
+    this.setData({
+      showSlider: !this.data.showSlider
+    })
   },
   playSet() {
     this.setData({
