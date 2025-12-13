@@ -6,13 +6,20 @@
   <view class="header_container" wx:for="{{parts}}" wx:for-item="part" wx:for-index="partIndex" wx:key="id">
     <view class="header_title">
       <view>{{part.partNum}}</view>
-      <view class="information_bubble" wx:if="{{false}}">
-        <view>注意此为单项</view>
-        <image src="/images/like.png"></image>
+      <view class="header_title_right">
+        <view class="information_bubble" wx:if="{{false}}">
+          <view>注意此为单项</view>
+          <image src="/images/like.png"></image>
+        </view>
+        <image
+          class="toggle_slider_btn {{showSlider ? 'rotate_down' : ''}}"
+          src="/images/v2/down_bt.png"
+          bindtap="toggleSlider"
+        ></image>
       </view>
     </view>
-    <view class="header_divider"></view>
-    <view class="header_slider">
+    <view class="header_divider" wx:if="{{showSlider}}"></view>
+    <view class="header_slider" wx:if="{{showSlider}}">
       <slider class="slider_con" activeColor='#3478F6' backgroundColor='#D7D7D7' block-size='16' max="10000" block-color='#3478F6' value='{{part.schedule}}' bindchange='sliderChange' disabled="{{!part.draggable}}"></slider>
     </view>
   </view>

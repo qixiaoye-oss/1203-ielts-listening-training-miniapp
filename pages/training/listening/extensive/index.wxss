@@ -54,6 +54,24 @@ text {
   line-height: 1;
 }
 
+.header_title_right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle_slider_btn {
+  width: 20px;
+  height: 20px;
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.toggle_slider_btn.rotate_down {
+  transform: rotate(0deg);
+}
+
 .header_divider {
   width: 100%;
   height: var(--btn-border-width);
