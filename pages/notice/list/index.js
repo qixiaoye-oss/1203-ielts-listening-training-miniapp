@@ -16,9 +16,7 @@ Page({
   // 去往答题
   toDetail(e) {
     let item = e.currentTarget.dataset.item
-    wx.navigateTo({
-      url: `../detail/index?id=${item.id}`,
-    })
+    this.navigateTo(`../detail/index?id=${item.id}`, { checkReady: false })
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
@@ -26,6 +24,7 @@ Page({
   listData() {
     this.hideLoadError()
     api.request(this, '/popular/science/v1/miniapp/list', {}, true).then(() => {
+      this.setDataReady()
       this.finishLoading()
     }).catch(() => {
       pageGuard.showRetry(this)

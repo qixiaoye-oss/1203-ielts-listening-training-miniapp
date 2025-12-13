@@ -20,7 +20,7 @@ Page({
     const list = wx.getStorageSync('listenings')
     if (!list || list.length === 0) {
       wx.showToast({ title: '数据加载失败', icon: 'none' })
-      setTimeout(() => wx.navigateBack(), 1500)
+      pageGuard.goBack(this)
       return
     }
 
@@ -99,7 +99,7 @@ Page({
     list[nextIdx].audioPlay = 'play'
     this.setData({ list: list })
 
-    setTimeout(() => {
+    this.registerTimer('playAudio', () => {
       audio.play()
     }, 500)
   },

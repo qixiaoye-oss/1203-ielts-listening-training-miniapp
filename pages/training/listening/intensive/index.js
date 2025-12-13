@@ -4,7 +4,6 @@ const pageGuard = require('../../../../behaviors/pageGuard')
 const audioPageLoading = require('../../../../behaviors/audioPageLoading')
 
 let audioContext
-let inputTimer
 
 Page({
   behaviors: [pageGuard.behavior, audioPageLoading],
@@ -304,8 +303,8 @@ Page({
     list[swiperCurrent].status = '3'
     wx.setStorageSync('listenings', list)
 
-    clearTimeout(inputTimer)
-    inputTimer = setTimeout(() => {
+    this.cancelTimer('inputVal')
+    this.registerTimer('inputVal', () => {
       _this.validateNotes()
     }, 500)
   },

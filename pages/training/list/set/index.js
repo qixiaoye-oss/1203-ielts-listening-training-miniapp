@@ -87,14 +87,10 @@ Page({
   },
   // 泛听/做题模式处理函数
   handleGeneralMode(params) {
-    console.log('执行泛听/做题模式，参数：', params);
-    wx.navigateTo({
-      url: '/pages/training/listening/extensive/index' + api.parseParams(params),
-    })
+    this.navigateTo('/pages/training/listening/extensive/index' + api.parseParams(params), { checkReady: false })
   },
   // 精听模式处理函数（支持多个模式，可判断 resultId 是否存在）
   handleIntensiveMode(params) {
-    console.log('执行精听模式，参数：', params);
     // 判断是否存在历史记录
     if (params.progressId) {
       wx.showModal({
@@ -117,27 +113,18 @@ Page({
   },
   // 答题记录处理函数
   handleAnswerRecord(params) {
-    console.log('查看答题记录，参数：', params);
-    wx.navigateTo({
-      url: '/pages/training/listening/report-card/index' + api.parseParams(params),
-    })
+    this.navigateTo('/pages/training/listening/report-card/index' + api.parseParams(params), { checkReady: false })
   },
   toIntensivePage(params) {
-    wx.navigateTo({
-      url: '/pages/training/listening/intensive/index' + api.parseParams(params),
-    })
+    this.navigateTo('/pages/training/listening/intensive/index' + api.parseParams(params), { checkReady: false })
   },
   handleIntensiveLabelMode(params) {
-    wx.navigateTo({
-      url: '/pages/training/listening/intensive-notes/index' + api.parseParams(params),
-    })
+    this.navigateTo('/pages/training/listening/intensive-notes/index' + api.parseParams(params), { checkReady: false })
   },
   // 跳转到设置页面
   toPage() {
     const { subjectId, albumId } = this.options
-    wx.navigateTo({
-      url: `/pages/training/setting/set/index?subjectId=${subjectId}&albumId=${albumId}`,
-    })
+    this.navigateTo(`/pages/training/setting/set/index?subjectId=${subjectId}&albumId=${albumId}`, { checkReady: false })
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========

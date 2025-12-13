@@ -23,13 +23,12 @@ Page({
     return api.share('用户中心', this)
   },
   toUpdateUserInfo() {
-    wx.navigateTo({
-      url: '/pages/user/login/login',
-    })
+    this.navigateTo('/pages/user/login/login', { checkReady: false })
   },
   getUser() {
     this.hideLoadError()
     api.request(this, '/user/v1/user/info', {}, true).then(() => {
+      this.setDataReady()
       this.finishLoading()
     }).catch(() => {
       pageGuard.showRetry(this)

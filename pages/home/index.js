@@ -36,22 +36,16 @@ Page({
     const {
       url
     } = this.data
-    wx.navigateTo({
-      url: `${url[type]}?subjectId=${id}`
-    })
+    this.navigateTo(`${url[type]}?subjectId=${id}`, { checkReady: false })
   },
   // 进入补充说明列表
   toNoticeListPage() {
-    wx.navigateTo({
-      url: '../notice/list/index',
-    })
+    this.navigateTo('../notice/list/index', { checkReady: false })
   },
   // 进入补充说明详情
   toNoticePage(e) {
     const id = e.currentTarget.dataset.id
-    wx.navigateTo({
-      url: `../notice/detail/index?id=${id}`,
-    })
+    this.navigateTo(`../notice/detail/index?id=${id}`, { checkReady: false })
   },
   // 点击说明徽章（暂未连接API）
   onNoticeTap() {
@@ -62,6 +56,7 @@ Page({
   listData() {
     this.hideLoadError()
     api.request(this, '/home/v1/list', {}, true).then(() => {
+      this.setDataReady()
       this.finishLoading()
     }).catch(() => {
       pageGuard.showRetry(this)

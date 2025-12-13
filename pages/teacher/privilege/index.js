@@ -2,7 +2,6 @@ const api = getApp().api
 const pageGuard = require('../../../behaviors/pageGuard')
 const pageLoading = require('../../../behaviors/pageLoading')
 
-var timer
 Page({
   behaviors: [pageGuard.behavior, pageLoading],
   data: {
@@ -21,15 +20,14 @@ Page({
   onHide() { },
   onUnload() { },
   inputTyping(e) {
-    clearTimeout(timer)
+    this.cancelTimer('searchUser')
     this.setData({
       inputVal: e.detail.value,
       hideScroll: false,
       inputShowed: true
     })
-    let that = this
-    timer = setTimeout(function () {
-      that.listUser()
+    this.registerTimer('searchUser', () => {
+      this.listUser()
     }, 1000)
   },
   clearInput() {

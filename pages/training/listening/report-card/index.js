@@ -15,9 +15,7 @@ Page({
   // ===========业务操作 Start===========
   returnPage() {
     const { subjectId, moduleId } = this.options
-    wx.redirectTo({
-      url: `/pages/training/list/set/index?subjectId=${subjectId}&moduleId=${moduleId}`
-    })
+    this.redirectTo(`/pages/training/list/set/index?subjectId=${subjectId}&moduleId=${moduleId}`)
   },
   change(e) {
     const { partIndex, groupIndex, questionIndex } = e.currentTarget.dataset
@@ -27,9 +25,7 @@ Page({
       groupId: parts[partIndex].groups[groupIndex].id,
       questionId: parts[partIndex].groups[groupIndex].questions[questionIndex].id
     }
-    wx.navigateTo({
-      url: '../explanation/index' + api.parseParams(param),
-    })
+    this.navigateTo('../explanation/index' + api.parseParams(param), { checkReady: false })
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
