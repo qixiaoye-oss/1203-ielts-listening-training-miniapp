@@ -20,9 +20,7 @@ Page({
     const {
       subjectId
     } = this.options
-    wx.navigateTo({
-      url: `/pages/training/setting/album/index?subjectId=${subjectId}`,
-    })
+    this.navigateTo(`/pages/training/setting/album/index?subjectId=${subjectId}`, { checkReady: false })
   },
   toChapter({
     currentTarget: {
@@ -34,9 +32,7 @@ Page({
     const {
       subjectId
     } = this.options
-    wx.navigateTo({
-      url: `../set/index?moduleId=${id}&subjectId=${subjectId}`
-    })
+    this.navigateTo(`../set/index?moduleId=${id}&subjectId=${subjectId}`, { checkReady: false })
   },
   // ===========业务操作 End===========
   // ===========数据获取 Start===========
@@ -45,6 +41,7 @@ Page({
     api.request(this, '/module/v1/list', {
       ...this.options
     }, true).then(() => {
+      this.setDataReady()
       this.finishLoading()
     }).catch(() => {
       pageGuard.showRetry(this)

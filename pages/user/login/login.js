@@ -1,5 +1,8 @@
 const api = getApp().api
+const pageGuard = require('../../../behaviors/pageGuard')
+
 Page({
+  behaviors: [pageGuard.behavior],
   data: {
     checked: false
   },
@@ -44,9 +47,7 @@ Page({
       nickName: nickName,
       avatarUrl: headUrl
     }, true, "POST").then(res => {
-      wx.navigateBack({
-        delta: 1,
-      })
+      this.navigateBack()
     }).catch(() => {
       // 保存失败仅提示，保留表单数据
     })

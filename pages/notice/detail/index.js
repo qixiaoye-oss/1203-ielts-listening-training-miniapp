@@ -27,10 +27,10 @@ Page({
 
     // 每次点击都触发 shake 动画
     // 等 hover 效果结束后再触发 shake 动画
-    setTimeout(() => {
+    this.registerTimer('shakeStart', () => {
       this.setData({ shaking: true })
       // 动画结束后移除 shake 类
-      setTimeout(() => {
+      this.registerTimer('shakeEnd', () => {
         this.setData({ shaking: false })
       }, 600)
     }, 150)

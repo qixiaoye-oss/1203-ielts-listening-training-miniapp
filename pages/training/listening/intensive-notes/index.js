@@ -250,6 +250,6 @@ Page({
     }
   },
   returnPage() {
-    wx.navigateBack()
+    this.navigateBack()
   }
 })

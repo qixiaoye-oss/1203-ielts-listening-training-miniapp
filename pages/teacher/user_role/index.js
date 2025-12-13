@@ -1,7 +1,8 @@
 const api = getApp().api
+const pageGuard = require('../../../behaviors/pageGuard')
 
-var timer
 Page({
+  behaviors: [pageGuard.behavior],
   data: {
     inputVal: "",
     hideScroll: true,
@@ -10,15 +11,14 @@ Page({
     roleList: [],
   },
   inputTyping(e) {
-    clearTimeout(timer)
+    this.cancelTimer('searchUser')
     this.setData({
       inputVal: e.detail.value,
       hideScroll: false,
       inputShowed: true
     })
-    let that = this
-    timer = setTimeout(function () {
-      that.listUser()
+    this.registerTimer('searchUser', () => {
+      this.listUser()
     }, 1000)
   },
   clearInput() {

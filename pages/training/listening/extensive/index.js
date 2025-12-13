@@ -55,12 +55,12 @@ Page({
       [`parts[0].playing`]: true,
       [`parts[0].draggable`]: true
     })
-    setTimeout(() => {
+    this.registerTimer('playAudio', () => {
       innerAudioContext.play()
       this.setData({
         lastRecordingTime: Date.now(),
       })
-    }, 500);
+    }, 500)
   },
   pauseAudio() {
     innerAudioContext.pause()
@@ -88,14 +88,14 @@ Page({
     }
   },
   refreshAudio() {
-    setTimeout(() => {
+    this.registerTimer('refreshAudio', () => {
       innerAudioContext.startTime = 0
       innerAudioContext.seek(0)
       innerAudioContext.play()
       this.setData({
         audioStatus: 1,
       })
-    }, 100);
+    }, 100)
   },
   sliderChange(e) {
     innerAudioContext.stop()
@@ -103,12 +103,12 @@ Page({
     let startTime = audioApi.formatAudioTime(((innerAudioContext.duration * schedule) / 100))
     innerAudioContext.seek(startTime)
     innerAudioContext.startTime = startTime
-    setTimeout(() => {
+    this.registerTimer('sliderChange', () => {
       innerAudioContext.play()
       this.setData({
         audioStatus: 1
       })
-    }, 100);
+    }, 100)
   },
   playSet() {
     this.setData({
@@ -201,14 +201,10 @@ Page({
     this.setData({
       audioStatus: 0
     })
-    wx.navigateTo({
-      url: '../practice/index' + api.parseParams(this.options),
-    })
+    this.navigateTo('../practice/index' + api.parseParams(this.options), { checkReady: false })
   },
   toList() {
     const { parts, underwayIndex } = this.data
-    wx.navigateTo({
-      url: `../article/index?partId=${parts[underwayIndex].id}`,
-    })
+    this.navigateTo(`../article/index?partId=${parts[underwayIndex].id}`, { checkReady: false })
   },
 })

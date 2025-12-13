@@ -39,12 +39,10 @@ Page({
       ...this.options,
       parts: this.data.parts
     }, false, 'POST').then(res => {
-      wx.redirectTo({
-        url: '../report-card/index' + api.parseParams({
-          ...res,
-          ...this.options
-        })
-      })
+      this.redirectTo('../report-card/index' + api.parseParams({
+        ...res,
+        ...this.options
+      }))
     }).catch(() => {
       this.setData({ saveLoading: false })
       // 提交失败仅提示，保留答案
