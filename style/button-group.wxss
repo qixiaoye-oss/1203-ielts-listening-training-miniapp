@@ -485,6 +485,8 @@ page {
 
 [data-icon="save"] .btn-corner-mark,
 [data-icon="play"] .btn-corner-mark,
+[data-icon="pause"] .btn-corner-mark,
+[data-icon="replay"] .btn-corner-mark,
 [data-icon="go"] .btn-corner-mark {
   color: #00A6ED;
   border-color: #00A6ED;
