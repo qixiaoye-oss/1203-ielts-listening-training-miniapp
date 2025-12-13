@@ -113,9 +113,21 @@
 
 ## 三、按钮角标 (Corner Mark)
 
-按钮角标用于显示数量提示（如录音数量）。
+按钮角标用于显示数量提示（如录音数量、倍速等）。
 
-### 3.1 基础用法
+### 3.1 尺寸与间距规范
+
+| 属性 | 值 | 说明 |
+|------|-----|------|
+| `min-width` | 22px | 最小宽度 |
+| `min-height` | 22px | 最小高度 |
+| `padding` | 2px | 文字与边框四周间距 |
+| `font-size` | 10px | 字体大小 |
+| `border-radius` | 3px | 圆角 |
+
+**注意：** 角标使用 `min-width/min-height` + `padding` 而非固定宽高，以适应不同长度的内容（如 "1.0x"、"99" 等）。
+
+### 3.2 基础用法
 
 ```xml
 <tap-action icon="controller" bind:tap="handleTap">
@@ -125,7 +137,7 @@
 </tap-action>
 ```
 
-### 3.2 颜色自动继承
+### 3.3 颜色自动继承
 
 角标颜色会**自动继承**父元素 `data-icon` 的主色，无需手动指定颜色类或 inline style。
 
@@ -145,21 +157,23 @@
 
 [data-icon="save"] .btn-corner-mark,
 [data-icon="play"] .btn-corner-mark,
+[data-icon="pause"] .btn-corner-mark,
+[data-icon="replay"] .btn-corner-mark,
 [data-icon="go"] .btn-corner-mark {
   color: #00A6ED;
   border-color: #00A6ED;
 }
 ```
 
-### 3.3 角标颜色对照表
+### 3.4 角标颜色对照表
 
 | 父元素 icon | 角标颜色 | 色值 |
 |-------------|----------|------|
 | `controller` | 紫色 | #433B6B |
 | `desktop_mic` | 黑色 | #212121 |
-| `save` / `play` / `go` | 蓝色 | #00A6ED |
+| `save` / `play` / `pause` / `replay` / `go` | 蓝色 | #00A6ED |
 
-### 3.4 兼容旧版（不推荐）
+### 3.5 兼容旧版（不推荐）
 
 旧版通过添加颜色类实现，现已不推荐使用：
 
